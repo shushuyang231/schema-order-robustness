@@ -1,0 +1,57 @@
+{
+  "decision": "DECOMPOSED_CONFIRMATION_NOT_FOUND",
+  "analysis_stage": "preregistered_official_deepseek_replication",
+  "model_alias": "deepseek-v4-flash",
+  "record_count": 200,
+  "successful_response_count": 3000,
+  "overall_schema_pass_rate": 0.9963333333333333,
+  "returned_model_counts": {
+    "deepseek-v4-flash": 3000
+  },
+  "operational_gate": true,
+  "minimum_practical_effect": 0.05,
+  "multiple_testing_family": [
+    "property_order",
+    "additional_keyword_order_given_reversed_properties"
+  ],
+  "contrasts": {
+    "property_order": {
+      "left": "original",
+      "right": "properties_reversed",
+      "normalized_excess_disagreement": 0.01325,
+      "normalized_excess_ci95": [
+        0.0014000000000000002,
+        0.02540124999999998
+      ],
+      "leaf_value_accuracy_difference": -0.0054259879009878964,
+      "leaf_accuracy_ci95": [
+        -0.021748153860028856,
+        0.010438891247641247
+      ],
+      "normalized_energy_permutation_p": 0.013197360527894421,
+      "normalized_energy_holm_p": 0.013197360527894421,
+      "leaf_accuracy_sign_flip_p": 0.5120975804839032,
+      "leaf_accuracy_holm_p": 0.7202559488102379,
+      "confirmed": false
+    },
+    "additional_keyword_order_given_reversed_properties": {
+      "left": "properties_reversed",
+      "right": "keywords_reversed",
+      "normalized_excess_disagreement": 0.018150000000000003,
+      "normalized_excess_ci95": [
+        0.005700000000000004,
+        0.0322
+      ],
+      "leaf_value_accuracy_difference": 0.007096323121323122,
+      "leaf_accuracy_ci95": [
+        -0.007348550616050617,
+        0.022187794011543978
+      ],
+      "normalized_energy_permutation_p": 0.0007998400319936012,
+      "normalized_energy_holm_p": 0.0015996800639872025,
+      "leaf_accuracy_sign_flip_p": 0.36012797440511896,
+      "leaf_accuracy_holm_p": 0.7202559488102379,
+      "confirmed": false
+    }
+  }
+}

@@ -1,0 +1,11 @@
+﻿system,representation,responses,applicable_records,schema_pass_rate,leaf_value_accuracy,token_f1,perfect_response_rate,within_normalized_disagreement
+Sonnet gateway alias,Original,500,100,1.0000,0.8110,0.8902,0.4640,0.2200
+Sonnet gateway alias,Properties reversed,500,100,1.0000,0.8026,0.8818,0.4540,0.2610
+Sonnet gateway alias,Required reversed,500,100,1.0000,0.7974,0.8781,0.4640,0.2360
+Sonnet gateway alias,Keywords reversed,500,100,0.9960,0.7988,0.8772,0.4540,0.2570
+Sonnet gateway alias,Descriptions first,500,98,1.0000,0.8213,0.8977,0.4780,0.2180
+GPT gateway alias,Original,500,100,1.0000,0.8474,0.9052,0.5320,0.2250
+GPT gateway alias,Properties reversed,500,100,0.9980,0.8459,0.9010,0.5420,0.2380
+GPT gateway alias,Required reversed,500,100,0.9980,0.8452,0.9058,0.5260,0.2300
+GPT gateway alias,Keywords reversed,500,100,0.9900,0.8275,0.8873,0.5180,0.2440
+GPT gateway alias,Descriptions first,500,98,1.0000,0.8485,0.9052,0.5240,0.2280

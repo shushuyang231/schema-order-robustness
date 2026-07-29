@@ -1,0 +1,5 @@
+﻿variant,sonnet_minus_gpt,ci95_low,ci95_high,holm_p,analysis_status
+Properties reversed,0.0442,-0.0030,0.0936,0.166167,post-hoc exploratory
+Required reversed,0.0219,-0.0051,0.0539,0.178364,post-hoc exploratory
+Keywords reversed,0.0416,-0.0001,0.0849,0.166167,post-hoc exploratory
+Descriptions first,0.0255,0.0039,0.0490,0.086383,post-hoc exploratory

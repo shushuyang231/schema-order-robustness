@@ -1,0 +1,55 @@
+{
+  "analysis_status": "POST_HOC_EXPLORATORY_ONLY",
+  "claim_boundary": "Direct paired model differences were specified after both formal reports were observed and do not alter either preregistered decision.",
+  "record_count": 200,
+  "left_label": "sonnet5",
+  "right_label": "gpt55",
+  "difference_direction": "sonnet5 minus gpt55",
+  "multiple_testing": "Holm across the two primary contrasts separately for distribution and accuracy difference families",
+  "contrasts": {
+    "property_order": {
+      "baseline": "original",
+      "treatment": "properties_reversed",
+      "left_distribution_effect": 0.05840000000000001,
+      "right_distribution_effect": 0.032850000000000004,
+      "distribution_difference": 0.025550000000000007,
+      "distribution_difference_ci95": [
+        -0.0026049999999999958,
+        0.05340249999999997
+      ],
+      "left_accuracy_contrast": -0.0006975718725718738,
+      "right_accuracy_contrast": -0.005926515151515146,
+      "accuracy_difference_of_differences": 0.005228943278943272,
+      "accuracy_difference_of_differences_ci95": [
+        -0.016564775779775786,
+        0.026735784007658973
+      ],
+      "distribution_difference_sign_flip_p": 0.06958608278344332,
+      "distribution_difference_holm_p": 0.06958608278344332,
+      "accuracy_difference_sign_flip_p": 0.6470705858828234,
+      "accuracy_difference_holm_p": 0.6470705858828234
+    },
+    "additional_keyword_order_given_reversed_properties": {
+      "baseline": "properties_reversed",
+      "treatment": "keywords_reversed",
+      "left_distribution_effect": 0.07680000000000001,
+      "right_distribution_effect": 0.037950000000000005,
+      "distribution_difference": 0.038849999999999996,
+      "distribution_difference_ci95": [
+        0.00425,
+        0.07400000000000001
+      ],
+      "left_accuracy_contrast": 3.5642135642137e-05,
+      "right_accuracy_contrast": -0.02482489177489178,
+      "accuracy_difference_of_differences": 0.02486053391053392,
+      "accuracy_difference_of_differences_ci95": [
+        -0.002634704184704175,
+        0.055367052669552656
+      ],
+      "distribution_difference_sign_flip_p": 0.033193361327734455,
+      "distribution_difference_holm_p": 0.06638672265546891,
+      "accuracy_difference_sign_flip_p": 0.08658268346330734,
+      "accuracy_difference_holm_p": 0.1731653669266147
+    }
+  }
+}

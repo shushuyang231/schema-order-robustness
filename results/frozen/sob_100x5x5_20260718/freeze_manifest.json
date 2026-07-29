@@ -1,0 +1,162 @@
+{
+  "freeze_name": "sob_100x5x5_20260718",
+  "generated_at": "2026-07-18T05:09:50.488480+00:00",
+  "purpose": "Immutable local snapshot of the completed two-model SOB 100x5x5 experiments.",
+  "claim_boundary": "The gateway aliases and returned model strings are recorded verbatim; upstream weights and provider identity are not independently verified.",
+  "restricted_material_policy": "Restricted gold is not copied. Only its local source path, size, and SHA256 are recorded.",
+  "paired_design_validated": true,
+  "record_count": 100,
+  "condition_count": 25,
+  "validations": {
+    "sonnet5_confirmatory": {
+      "expected_request_count": 2500,
+      "raw_log_line_count": 2511,
+      "successful_log_line_count": 2500,
+      "error_log_line_count": 11,
+      "unique_successful_request_key_count": 2500,
+      "provided_successful_response_id_count": 2500,
+      "unique_successful_response_id_count": 2500,
+      "error_types": {
+        "ConnectError": 7,
+        "RemoteProtocolError": 4
+      },
+      "report_prediction_count": 2500,
+      "report_decision": "CONFIRMED_FOR_SECOND_MODEL_REPLICATION",
+      "report_operational_gate_passed": true,
+      "returned_model_counts": {
+        "claude-sonnet-5": 2500
+      },
+      "coverage_passed": true,
+      "response_id_uniqueness_passed": true,
+      "all_validation_checks_passed": true
+    },
+    "gpt55_cross_model": {
+      "expected_request_count": 2500,
+      "raw_log_line_count": 2503,
+      "successful_log_line_count": 2500,
+      "error_log_line_count": 3,
+      "unique_successful_request_key_count": 2500,
+      "provided_successful_response_id_count": 2500,
+      "unique_successful_response_id_count": 2500,
+      "error_types": {
+        "ConnectError": 2,
+        "RemoteProtocolError": 1
+      },
+      "report_prediction_count": 2500,
+      "report_decision": "CROSS_MODEL_REPLICATION_NOT_FOUND",
+      "report_operational_gate_passed": true,
+      "returned_model_counts": {
+        "gpt-5.5": 2500
+      },
+      "coverage_passed": true,
+      "response_id_uniqueness_passed": true,
+      "all_validation_checks_passed": true
+    }
+  },
+  "files": [
+    {
+      "source_path": "data/processed/sob_mve_100_public.jsonl",
+      "size_bytes": 1087448,
+      "sha256": "a09e7a4cf828eabdc1b76b51e2e2c72f8033560bc64979809b7c907680560b26",
+      "copied": true,
+      "frozen_path": "snapshot/data/processed/sob_mve_100_public.jsonl"
+    },
+    {
+      "source_path": "protocol/13_confirmatory_repeated_mve.md",
+      "size_bytes": 3143,
+      "sha256": "9beae253f30c57737c878eba53c88495bbb9960335fbf302f499e488bde43d5f",
+      "copied": true,
+      "frozen_path": "snapshot/protocol/13_confirmatory_repeated_mve.md"
+    },
+    {
+      "source_path": "protocol/14_gpt55_cross_model_replication.md",
+      "size_bytes": 2587,
+      "sha256": "38a591a7e3d35d2ddb2aec97b375e13c591482016a7c1c227c245849f3faa860",
+      "copied": true,
+      "frozen_path": "snapshot/protocol/14_gpt55_cross_model_replication.md"
+    },
+    {
+      "source_path": "protocol/sonnet5_confirmatory_manifest.json",
+      "size_bytes": 10986,
+      "sha256": "85c58fa02579da9d1da39cb59c8e1071207f0886403a2911ac5c939c1f41dd88",
+      "copied": true,
+      "frozen_path": "snapshot/protocol/sonnet5_confirmatory_manifest.json"
+    },
+    {
+      "source_path": "protocol/gpt55_cross_model_manifest.json",
+      "size_bytes": 11095,
+      "sha256": "f8bdb788db30728c8220cae5ef085aaa5b5e5f47f7d33185de7033f6a5ac981d",
+      "copied": true,
+      "frozen_path": "snapshot/protocol/gpt55_cross_model_manifest.json"
+    },
+    {
+      "source_path": "results/api/sob_sonnet5_confirmatory.jsonl",
+      "size_bytes": 3302581,
+      "sha256": "afd84592c369bfae7f4f0f6bbd1c46d1816ff1be7e4d77cb0acc7ad002a3c239",
+      "copied": true,
+      "frozen_path": "snapshot/results/api/sob_sonnet5_confirmatory.jsonl"
+    },
+    {
+      "source_path": "results/api/sob_sonnet5_confirmatory_report.json",
+      "size_bytes": 8990,
+      "sha256": "fd25eedf80cf9ac1a2b198f6b34a1782b823b9e5f2a595078ce917d873a09c41",
+      "copied": true,
+      "frozen_path": "snapshot/results/api/sob_sonnet5_confirmatory_report.json"
+    },
+    {
+      "source_path": "results/api/sob_sonnet5_confirmatory_report.md",
+      "size_bytes": 1136,
+      "sha256": "0445899d5912d2b2f12421acdc97b360a11fffaeb9f07a141e4cb52276d7e9ba",
+      "copied": true,
+      "frozen_path": "snapshot/results/api/sob_sonnet5_confirmatory_report.md"
+    },
+    {
+      "source_path": "results/api/sob_gpt55_cross_model.jsonl",
+      "size_bytes": 3233265,
+      "sha256": "c4c5fc61616b13463b58b4fbac850b9eea686dd706222a4c99fa5e13cfd3ab33",
+      "copied": true,
+      "frozen_path": "snapshot/results/api/sob_gpt55_cross_model.jsonl"
+    },
+    {
+      "source_path": "results/api/sob_gpt55_cross_model_report.json",
+      "size_bytes": 8665,
+      "sha256": "071942adf26f4ec1c1e17b76cafd33ebe041e11465c5520c1b9dc8301571a880",
+      "copied": true,
+      "frozen_path": "snapshot/results/api/sob_gpt55_cross_model_report.json"
+    },
+    {
+      "source_path": "results/api/sob_gpt55_cross_model_report.md",
+      "size_bytes": 1116,
+      "sha256": "228933a768a5ae00e55effc153c64d5b7cd0b1751cf8ca097606fab2864bedcd",
+      "copied": true,
+      "frozen_path": "snapshot/results/api/sob_gpt55_cross_model_report.md"
+    },
+    {
+      "source_path": "src/evaluate_sob_repeated_pilot.py",
+      "size_bytes": 24837,
+      "sha256": "be3b7ef70bd2941b906bf6566d8a25b5a31c50d6f1d003ae9b4a27609d09a30d",
+      "copied": true,
+      "frozen_path": "snapshot/src/evaluate_sob_repeated_pilot.py"
+    },
+    {
+      "source_path": "src/run_sob_metamorphic.py",
+      "size_bytes": 12150,
+      "sha256": "8433c83db651d012ab0fb51de98e522653830c57824ca78836c0d29ac0fefbbc",
+      "copied": true,
+      "frozen_path": "snapshot/src/run_sob_metamorphic.py"
+    },
+    {
+      "source_path": "src/sob_metamorphic.py",
+      "size_bytes": 4442,
+      "sha256": "3de1800b1d92341e089c8ef3119cfa25c45662a85bd76657929d588e0d0fbd3f",
+      "copied": true,
+      "frozen_path": "snapshot/src/sob_metamorphic.py"
+    },
+    {
+      "source_path": "data/restricted/sob_mve_100_gold.jsonl",
+      "size_bytes": 35041,
+      "sha256": "932be6d8edacc2414cfebdddfc96ac3dfe15d32c236ede340f249b773fee313f",
+      "copied": false
+    }
+  ]
+}

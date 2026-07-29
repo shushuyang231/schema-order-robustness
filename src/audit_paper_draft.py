@@ -1,0 +1,138 @@
+"""Audit manuscript references, artifacts, and frozen headline numbers."""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import json
+import re
+from pathlib import Path
+from typing import Any
+
+from PIL import Image
+
+
+ROOT = Path(__file__).resolve().parents[1]
+PAPER = ROOT / "paper"
+
+
+def load_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def csv_rows(path: Path) -> list[dict[str, str]]:
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        return list(csv.DictReader(handle))
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, default=PAPER / "draft_audit.json")
+    args = parser.parse_args()
+
+    manuscript_path = PAPER / "manuscript.md"
+    bib_path = PAPER / "references.bib"
+    manuscript = manuscript_path.read_text(encoding="utf-8")
+    bib = bib_path.read_text(encoding="utf-8")
+    sonnet = load_json(ROOT / "results/api/sob_sonnet5_confirmatory_report.json")
+    gpt = load_json(ROOT / "results/api/sob_gpt55_cross_model_report.json")
+    dialect = load_json(PAPER / "robustness/dialect_validation_audit.json")
+
+    cited = set(re.findall(r"@([A-Za-z0-9_:-]+)", manuscript))
+    defined = set(re.findall(r"@[A-Za-z]+\{([^,\s]+)", bib))
+    missing_bib = sorted(cited - defined)
+    unused_bib = sorted(defined - cited)
+
+    image_refs = re.findall(r"!\[[^\]]*\]\(([^)]+)\)", manuscript)
+    image_audit: list[dict[str, Any]] = []
+    missing_images: list[str] = []
+    for ref in image_refs:
+        path = PAPER / ref
+        if not path.exists():
+            missing_images.append(ref)
+            continue
+        with Image.open(path) as image:
+            image_audit.append(
+                {"path": ref, "width": image.width, "height": image.height, "mode": image.mode}
+            )
+
+    expected_snippets = [
+        f"{sonnet['comparisons_vs_original']['properties_reversed']['normalized_excess_disagreement']:.3f}",
+        f"{sonnet['comparisons_vs_original']['keywords_reversed']['normalized_excess_disagreement']:.3f}",
+        f"{gpt['comparisons_vs_original']['properties_reversed']['normalized_excess_disagreement']:.3f}",
+        f"{gpt['comparisons_vs_original']['keywords_reversed']['normalized_excess_disagreement']:.3f}",
+        "14,000 successful black-box responses",
+        "100 record",
+        "not independently verified",
+        "does not evaluate a provider's native",
+    ]
+    missing_snippets = [value for value in expected_snippets if value not in manuscript]
+
+    effects = csv_rows(PAPER / "tables/table2_distribution_effects.csv")
+    quality = csv_rows(PAPER / "tables/table3_quality_metrics.csv")
+    table_checks = {
+        "distribution_effect_rows": len(effects) == 8,
+        "quality_metric_rows": len(quality) == 10,
+        "practical_threshold_yes_count": sum(
+            row["meets_0_05_practical_threshold"] == "yes" for row in effects
+        )
+        == 2,
+    }
+
+    required_sections = (
+        "## Abstract",
+        "## 1. Introduction",
+        "## 2. Background and Related Work",
+        "## 3. Study Design",
+        "## 4. Results",
+        "## 5. Discussion",
+        "## 6. Threats to Validity",
+        "## 7. Reproducibility and Artifact Scope",
+        "## 8. Ethics and Broader Impact",
+        "## 9. Conclusion",
+    )
+    missing_sections = [section for section in required_sections if section not in manuscript]
+    dialect_ok = (
+        dialect["schema_dialect_disagreement_count"] == 0
+        and dialect["total_prediction_dialect_disagreement_count"] == 0
+        and dialect["paper_metric_impact"] == "none"
+    )
+    word_count = len(re.findall(r"\b[\w'-]+\b", manuscript))
+
+    failures: list[str] = []
+    if missing_bib:
+        failures.append("missing bibliography entries")
+    if missing_images:
+        failures.append("missing manuscript images")
+    if missing_snippets:
+        failures.append("missing frozen headline statements")
+    if missing_sections:
+        failures.append("missing manuscript sections")
+    if not all(table_checks.values()):
+        failures.append("paper table shape mismatch")
+    if not dialect_ok:
+        failures.append("validator dialect audit not clean")
+
+    report = {
+        "status": "PASS" if not failures else "FAIL",
+        "word_count": word_count,
+        "citation_key_count": len(cited),
+        "missing_bibliography_keys": missing_bib,
+        "unused_bibliography_keys": unused_bib,
+        "image_audit": image_audit,
+        "missing_images": missing_images,
+        "missing_expected_snippets": missing_snippets,
+        "missing_required_sections": missing_sections,
+        "table_checks": table_checks,
+        "dialect_robustness_passed": dialect_ok,
+        "failures": failures,
+    }
+    args.output.write_text(
+        json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+    return 0 if not failures else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,253 @@
+{
+  "generated_at": "2026-07-17T16:13:22.079818+00:00",
+  "pilot_name": "sonnet5_schema_order_confirmatory_100x5x5_v1",
+  "analysis_stage": "confirmatory_repeated_measures",
+  "decision": "CONFIRMED_FOR_SECOND_MODEL_REPLICATION",
+  "confirmatory_statistics_allowed": true,
+  "prediction_count": 2500,
+  "record_count": 100,
+  "variants": [
+    "original",
+    "properties_reversed",
+    "required_reversed",
+    "keywords_reversed",
+    "descriptions_first"
+  ],
+  "repeats_per_variant": 5,
+  "overall_schema_pass_rate": 0.9992,
+  "returned_model_counts": {
+    "claude-sonnet-5": 2500
+  },
+  "provided_response_id_count": 2500,
+  "unique_response_id_count": 2500,
+  "response_id_uniqueness_gate_passed": true,
+  "operational_gate_passed": true,
+  "qualifying_signals": [
+    {
+      "variant": "properties_reversed",
+      "criterion": "normalized_distribution_shift"
+    },
+    {
+      "variant": "keywords_reversed",
+      "criterion": "normalized_distribution_shift"
+    }
+  ],
+  "primary_variants": [
+    "properties_reversed",
+    "keywords_reversed",
+    "descriptions_first"
+  ],
+  "exploratory_variants": [
+    "required_reversed"
+  ],
+  "replicated_primary_variants": [
+    "keywords_reversed",
+    "properties_reversed"
+  ],
+  "required_primary_replications": 2,
+  "variant_summary": {
+    "original": {
+      "response_count": 500,
+      "applicable_record_count": 100,
+      "schema_pass_rate": 1.0,
+      "perfect_response_rate": 0.464,
+      "leaf_value_accuracy": 0.8109898656898658,
+      "value_token_f1": 0.890154551609219,
+      "mean_within_exact_disagreement": 0.24600000000000002,
+      "mean_within_normalized_disagreement": 0.22
+    },
+    "properties_reversed": {
+      "response_count": 500,
+      "applicable_record_count": 100,
+      "schema_pass_rate": 1.0,
+      "perfect_response_rate": 0.454,
+      "leaf_value_accuracy": 0.8026069597069597,
+      "value_token_f1": 0.8818067640892827,
+      "mean_within_exact_disagreement": 0.307,
+      "mean_within_normalized_disagreement": 0.261
+    },
+    "required_reversed": {
+      "response_count": 500,
+      "applicable_record_count": 100,
+      "schema_pass_rate": 1.0,
+      "perfect_response_rate": 0.464,
+      "leaf_value_accuracy": 0.7973595238095238,
+      "value_token_f1": 0.8780637498315876,
+      "mean_within_exact_disagreement": 0.276,
+      "mean_within_normalized_disagreement": 0.23600000000000002
+    },
+    "keywords_reversed": {
+      "response_count": 500,
+      "applicable_record_count": 100,
+      "schema_pass_rate": 0.996,
+      "perfect_response_rate": 0.454,
+      "leaf_value_accuracy": 0.7988029914529915,
+      "value_token_f1": 0.877179873603038,
+      "mean_within_exact_disagreement": 0.312,
+      "mean_within_normalized_disagreement": 0.257
+    },
+    "descriptions_first": {
+      "response_count": 500,
+      "applicable_record_count": 98,
+      "schema_pass_rate": 1.0,
+      "perfect_response_rate": 0.478,
+      "leaf_value_accuracy": 0.821328083028083,
+      "value_token_f1": 0.8976925185093009,
+      "mean_within_exact_disagreement": 0.257,
+      "mean_within_normalized_disagreement": 0.218
+    }
+  },
+  "comparisons_vs_original": {
+    "properties_reversed": {
+      "exact_excess_disagreement": 0.09430000000000001,
+      "exact_excess_disagreement_ci95": [
+        0.05250000000000001,
+        0.14110999999999985
+      ],
+      "normalized_excess_disagreement": 0.08310000000000001,
+      "normalized_excess_disagreement_ci95": [
+        0.045992500000000006,
+        0.12790249999999997
+      ],
+      "leaf_value_accuracy_difference": -0.008382905982905982,
+      "leaf_value_accuracy_difference_ci95": [
+        -0.03365038461538462,
+        0.01565845390720391
+      ],
+      "perfect_response_rate_difference": -0.009999999999999998,
+      "perfect_response_rate_difference_ci95": [
+        -0.044,
+        0.022000000000000006
+      ],
+      "value_token_f1_difference": -0.00834778751993618,
+      "value_token_f1_difference_ci95": [
+        -0.03498518512991723,
+        0.015322831086212635
+      ],
+      "exact_energy_permutation_p": 0.0001999600079984003,
+      "exact_energy_holm_p": 0.0007998400319936012,
+      "normalized_energy_permutation_p": 0.0001999600079984003,
+      "normalized_energy_holm_p": 0.0007998400319936012,
+      "leaf_accuracy_permutation_p": 0.4957008598280344,
+      "leaf_accuracy_holm_p": 1.0,
+      "perfect_response_permutation_p": 0.6360727854429115,
+      "perfect_response_holm_p": 1.0
+    },
+    "required_reversed": {
+      "exact_excess_disagreement": 0.0458,
+      "exact_excess_disagreement_ci95": [
+        0.017995,
+        0.0794
+      ],
+      "normalized_excess_disagreement": 0.03280000000000001,
+      "normalized_excess_disagreement_ci95": [
+        0.009100000000000002,
+        0.062
+      ],
+      "leaf_value_accuracy_difference": -0.013630341880341878,
+      "leaf_value_accuracy_difference_ci95": [
+        -0.039340088522588516,
+        0.007184499389499386
+      ],
+      "perfect_response_rate_difference": 2.220446049250313e-18,
+      "perfect_response_rate_difference_ci95": [
+        -0.032,
+        0.032
+      ],
+      "value_token_f1_difference": -0.012090801777631333,
+      "value_token_f1_difference_ci95": [
+        -0.03946295867646265,
+        0.008270895983777973
+      ],
+      "exact_energy_permutation_p": 0.0001999600079984003,
+      "exact_energy_holm_p": 0.0007998400319936012,
+      "normalized_energy_permutation_p": 0.0001999600079984003,
+      "normalized_energy_holm_p": 0.0007998400319936012,
+      "leaf_accuracy_permutation_p": 0.3375324935012997,
+      "leaf_accuracy_holm_p": 1.0,
+      "perfect_response_permutation_p": 1.0,
+      "perfect_response_holm_p": 1.0
+    },
+    "keywords_reversed": {
+      "exact_excess_disagreement": 0.0814,
+      "exact_excess_disagreement_ci95": [
+        0.04789749999999999,
+        0.12200499999999992
+      ],
+      "normalized_excess_disagreement": 0.0703,
+      "normalized_excess_disagreement_ci95": [
+        0.03909750000000001,
+        0.1067
+      ],
+      "leaf_value_accuracy_difference": -0.012186874236874236,
+      "leaf_value_accuracy_difference_ci95": [
+        -0.035138519536019534,
+        0.011189246031746028
+      ],
+      "perfect_response_rate_difference": -0.009999999999999998,
+      "perfect_response_rate_difference_ci95": [
+        -0.038,
+        0.016000000000000004
+      ],
+      "value_token_f1_difference": -0.012974678006180917,
+      "value_token_f1_difference_ci95": [
+        -0.04008406106125159,
+        0.01276091622260385
+      ],
+      "exact_energy_permutation_p": 0.0001999600079984003,
+      "exact_energy_holm_p": 0.0007998400319936012,
+      "normalized_energy_permutation_p": 0.0001999600079984003,
+      "normalized_energy_holm_p": 0.0007998400319936012,
+      "leaf_accuracy_permutation_p": 0.33733253349330133,
+      "leaf_accuracy_holm_p": 1.0,
+      "perfect_response_permutation_p": 0.5874825034993001,
+      "perfect_response_holm_p": 1.0
+    },
+    "descriptions_first": {
+      "exact_excess_disagreement": 0.0433,
+      "exact_excess_disagreement_ci95": [
+        0.016700000000000003,
+        0.07480499999999994
+      ],
+      "normalized_excess_disagreement": 0.027000000000000003,
+      "normalized_excess_disagreement_ci95": [
+        0.008800000000000002,
+        0.0495
+      ],
+      "leaf_value_accuracy_difference": 0.010338217338217342,
+      "leaf_value_accuracy_difference_ci95": [
+        -0.001588508852258851,
+        0.02714402777777777
+      ],
+      "perfect_response_rate_difference": 0.014000000000000002,
+      "perfect_response_rate_difference_ci95": [
+        -0.013999999999999999,
+        0.048000000000000015
+      ],
+      "value_token_f1_difference": 0.00753796690008191,
+      "value_token_f1_difference_ci95": [
+        -0.003927694788216645,
+        0.025454751503340478
+      ],
+      "exact_energy_permutation_p": 0.0001999600079984003,
+      "exact_energy_holm_p": 0.0007998400319936012,
+      "normalized_energy_permutation_p": 0.0001999600079984003,
+      "normalized_energy_holm_p": 0.0007998400319936012,
+      "leaf_accuracy_permutation_p": 0.17176564687062587,
+      "leaf_accuracy_holm_p": 0.6870625874825035,
+      "perfect_response_permutation_p": 0.4877024595080984,
+      "perfect_response_holm_p": 1.0
+    }
+  },
+  "statistical_settings": {
+    "cluster_bootstrap_samples": 5000,
+    "permutation_samples": 5000,
+    "seed": 20260717,
+    "multiple_testing": "Holm within each four-variant metric family",
+    "resampling_unit": "record"
+  },
+  "signal_rule": {
+    "normalized_distribution_shift": "effect >= 0.05, bootstrap lower > 0, Holm permutation p < 0.05",
+    "leaf_accuracy_shift": "absolute effect >= 0.03, bootstrap CI excludes 0, Holm sign-flip p < 0.05"
+  }
+}

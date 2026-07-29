@@ -1,0 +1,47 @@
+{
+  "status": "PASS_SAFE_TO_CITE",
+  "intended_grain": "one successful response per record_id and condition_name",
+  "record_count": 200,
+  "conditions_per_record": 15,
+  "expected_successful_responses": 3000,
+  "raw_line_count": 3001,
+  "successful_response_count": 3000,
+  "transient_error_count": 1,
+  "transient_error": {
+    "record_id": "282089813ad19458d6fff5e58ced92dbb1a4c437ecf1c5d25658d5fc52226311",
+    "condition": "properties_reversed__r3",
+    "type": "RemoteProtocolError",
+    "subsequently_recovered": true
+  },
+  "condition_counts": {
+    "original": 1000,
+    "properties_reversed": 1000,
+    "keywords_reversed": 1000
+  },
+  "unique_record_count": 200,
+  "duplicate_successful_cell_count": 0,
+  "duplicate_request_key_count": 0,
+  "duplicate_response_id_count": 0,
+  "bad_repeat_prompt_group_count": 0,
+  "returned_model_counts": {
+    "claude-sonnet-5": 3000
+  },
+  "overall_schema_pass_rate": 0.997,
+  "first_success_timestamp_utc": "2026-07-19T07:50:54.376170+00:00",
+  "last_success_timestamp_utc": "2026-07-19T13:39:48.923782+00:00",
+  "independent_recalculation_matches_original_report": true,
+  "original_report_sha256": "37efb3f23a6ce88acfa239f084de83a4250035f214595c064e3d93577d89caab",
+  "recalculated_report_sha256": "37efb3f23a6ce88acfa239f084de83a4250035f214595c064e3d93577d89caab",
+  "raw_log_sha256": "83bfb631498394f75a215c6df80cdade455c58cb1d6ecda8a12b785acd2cff1a",
+  "manifest_sha256": "fb35ad370b6c3623e8680c6095f6cf1bc98fae70064fe7bb05614473930b54c8",
+  "public_input_sha256": "1553aa33a5cd76696acfa7c4ec6a00caab5b0858dee76be330db2d7f0a2a40c2",
+  "restricted_gold_sha256": "ae7c96e2d10f339c23475f7b7b9c8a7b84bf139f0224d769553b1c1f15e8a9ab",
+  "severity_findings": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 1
+  },
+  "low_severity_note": "One retained transient transport error is expected in a resumable API run and was successfully recovered without duplicate successful cells.",
+  "claim_boundary": "Safe to cite as evidence about the observed gateway alias during the recorded execution window; not evidence of independently verified upstream model identity or weights."
+}

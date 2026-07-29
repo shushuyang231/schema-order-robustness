@@ -1,0 +1,81 @@
+{
+  "generated_by": "src/build_paper_artifacts.py",
+  "source_reports": [
+    {
+      "path": "results\\api\\sob_sonnet5_confirmatory_report.json",
+      "sha256": "fd25eedf80cf9ac1a2b198f6b34a1782b823b9e5f2a595078ce917d873a09c41"
+    },
+    {
+      "path": "results\\api\\sob_gpt55_cross_model_report.json",
+      "sha256": "071942adf26f4ec1c1e17b76cafd33ebe041e11465c5520c1b9dc8301571a880"
+    },
+    {
+      "path": "results\\analysis\\sob_cross_model_exploratory.json",
+      "sha256": "e10696adeaaa7fae18d076e2e1e84d8c3419f87de74df5a9d620ef3ae0fb5c44"
+    },
+    {
+      "path": "results\\api\\sob_decomposed_sonnet5_report.json",
+      "sha256": "37efb3f23a6ce88acfa239f084de83a4250035f214595c064e3d93577d89caab"
+    },
+    {
+      "path": "results\\api\\sob_decomposed_gpt55_report.json",
+      "sha256": "3524a032fbcc12a9568b93536704d9d6ca79a5740b0ea2ffda1723b5e6d0d533"
+    },
+    {
+      "path": "results\\api\\sob_official_deepseek_v4_flash_report.json",
+      "sha256": "1caa7bf4d6ee4e74d1b009770aeb6a2f3805c02dd9b08a97673753297061457a"
+    },
+    {
+      "path": "results\\analysis\\sob_decomposed_cross_model.json",
+      "sha256": "bd5081628a426bfaad3a1a5fbfb646e90ffed7bb65820431426993e2f71eebaa"
+    }
+  ],
+  "frozen_results_recomputed": false,
+  "outputs": [
+    {
+      "path": "paper\\tables\\table1_experimental_design.csv",
+      "sha256": "65f80fd01c0f3af815e6d238e630eb47c5a52a010b068079ef64239e4226cd4a",
+      "bytes": 349
+    },
+    {
+      "path": "paper\\tables\\table2_distribution_effects.csv",
+      "sha256": "5cabd4fb4cccd73ab2609c4022f842a5ecb0fd24d93e220d6e39e6fe2172b4d0",
+      "bytes": 768
+    },
+    {
+      "path": "paper\\tables\\table3_quality_metrics.csv",
+      "sha256": "2c3d9655ee2e938542ed3f954f22b8083d5279f930eb95877370477cd603ba9a",
+      "bytes": 955
+    },
+    {
+      "path": "paper\\tables\\table4_paired_model_differences.csv",
+      "sha256": "e7450d434817f0ff824ab9cdd695b5db682e596770da5b74e8f34582f43f7ead",
+      "bytes": 357
+    },
+    {
+      "path": "paper\\tables\\table5_decomposed_confirmation.csv",
+      "sha256": "6ac62330d60dc2e8443dc2be2289418669c19d1794898c036800a5f77c7cffb7",
+      "bytes": 861
+    },
+    {
+      "path": "paper\\tables\\table6_decomposed_cross_model.csv",
+      "sha256": "8b26fb0a45989aed489f24c53f04143815424ce2100173f7e9a0187e54f13d24",
+      "bytes": 418
+    },
+    {
+      "path": "paper\\figures\\figure1_method.png",
+      "sha256": "c198bc21315159b1c43e85717be63c9f538742d4052dd8fba246ed3d7c6da500",
+      "bytes": 96252
+    },
+    {
+      "path": "paper\\figures\\figure2_forest.png",
+      "sha256": "a242d4eaafa53763a3682e398dc5c5029600f2c60376980c5b899bf002383fb5",
+      "bytes": 68078
+    },
+    {
+      "path": "paper\\figures\\figure3_decomposed_confirmation.png",
+      "sha256": "00a9aeb21be06ffeb6a0e8c62b3528c341978319a2f0a1887ce0744aa4c0deb7",
+      "bytes": 60281
+    }
+  ]
+}

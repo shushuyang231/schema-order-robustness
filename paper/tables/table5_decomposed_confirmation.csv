@@ -1,0 +1,7 @@
+﻿system,contrast,normalized_excess,normalized_ci95_low,normalized_ci95_high,normalized_holm_p,meets_preregistered_rule,leaf_accuracy_difference,leaf_accuracy_ci95_low,leaf_accuracy_ci95_high,leaf_accuracy_holm_p
+Sonnet gateway alias,Property order,0.0584,0.0363,0.0845,0.000400,yes,-0.0007,-0.0199,0.0174,1.000000
+Sonnet gateway alias,Additional member order,0.0768,0.0498,0.1061,0.000400,yes,0.0000,-0.0167,0.0166,1.000000
+GPT gateway alias,Property order,0.0329,0.0140,0.0548,0.000400,no,-0.0059,-0.0167,0.0046,0.292142
+GPT gateway alias,Additional member order,0.0380,0.0159,0.0631,0.000400,no,-0.0248,-0.0463,-0.0067,0.020796
+DeepSeek official endpoint,Property order,0.0132,0.0014,0.0254,0.013197,no,-0.0054,-0.0217,0.0104,0.720256
+DeepSeek official endpoint,Additional member order,0.0182,0.0057,0.0322,0.001600,no,0.0071,-0.0073,0.0222,0.720256

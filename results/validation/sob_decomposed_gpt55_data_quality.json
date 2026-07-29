@@ -1,0 +1,61 @@
+{
+  "status": "PASS_SAFE_TO_CITE_WITH_SECONDARY_ACCURACY_CAVEAT",
+  "intended_grain": "one successful response per record_id and condition_name",
+  "record_count": 200,
+  "conditions_per_record": 15,
+  "expected_successful_responses": 3000,
+  "raw_line_count": 3002,
+  "successful_response_count": 3000,
+  "transient_error_count": 2,
+  "transient_errors": [
+    {
+      "record_id": "e377ba254c2cfb2a050f3f3557cd3ab95a1928505028d2cb92f2b2c7fd00a49a",
+      "condition": "keywords_reversed__r3",
+      "type": "RemoteProtocolError",
+      "subsequently_recovered": true
+    },
+    {
+      "record_id": "8ec0118afbfb22c7f190b018fdc13c06badbb8fc3f7df000a6ced3c79a5eb11f",
+      "condition": "keywords_reversed__r2",
+      "type": "RemoteProtocolError",
+      "subsequently_recovered": true
+    }
+  ],
+  "condition_counts": {
+    "original": 1000,
+    "properties_reversed": 1000,
+    "keywords_reversed": 1000
+  },
+  "unique_record_count": 200,
+  "duplicate_successful_cell_count": 0,
+  "duplicate_request_key_count": 0,
+  "duplicate_response_id_count": 0,
+  "bad_repeat_prompt_group_count": 0,
+  "returned_model_counts": {
+    "gpt-5.5": 3000
+  },
+  "overall_schema_pass_rate": 0.9933333333333333,
+  "first_success_timestamp_utc": "2026-07-19T13:48:27.590688+00:00",
+  "last_success_timestamp_utc": "2026-07-21T09:44:53.055957+00:00",
+  "independent_recalculation_matches_original_report": true,
+  "original_report_sha256": "3524a032fbcc12a9568b93536704d9d6ca79a5740b0ea2ffda1723b5e6d0d533",
+  "recalculated_report_sha256": "3524a032fbcc12a9568b93536704d9d6ca79a5740b0ea2ffda1723b5e6d0d533",
+  "raw_log_sha256": "d9c0764cb6cc0de696feb2b08b49fe867a66039912d265a172dad2d24783facb",
+  "manifest_sha256": "b82d092a4c6daae8580f77b5b30102b3114d173926f15fc8de5dcea66ea877822",
+  "secondary_accuracy_signal": {
+    "contrast": "additional_keyword_order_given_reversed_properties",
+    "leaf_value_accuracy_difference": -0.02482489177489178,
+    "ci95": [-0.04631163870851371, -0.006736438492063502],
+    "holm_p": 0.020795840831833633,
+    "interpretation": "Statistically detectable small negative signal; not a primary contrast and below the earlier 0.03 engineering-effect context threshold. Requires independent targeted replication before being called confirmed harm."
+  },
+  "severity_findings": {
+    "critical": 0,
+    "high": 0,
+    "medium": 1,
+    "low": 1
+  },
+  "medium_severity_note": "The secondary accuracy signal may matter for engineering use but does not invalidate the preregistered distribution decision.",
+  "low_severity_note": "Two retained transient transport errors are expected in a resumable API run and were successfully recovered without duplicate successful cells.",
+  "claim_boundary": "Safe to cite as evidence about the observed gateway alias during the recorded execution window; not evidence of independently verified upstream model identity or weights."
+}

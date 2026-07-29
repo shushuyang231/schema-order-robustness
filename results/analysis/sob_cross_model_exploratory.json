@@ -1,0 +1,457 @@
+{
+  "generated_at": "2026-07-18T05:10:29.795672+00:00",
+  "analysis_status": "POST_HOC_EXPLORATORY_ONLY",
+  "confirmatory_decisions_unchanged": {
+    "sonnet5": "CONFIRMED_FOR_SECOND_MODEL_REPLICATION",
+    "gpt55": "CROSS_MODEL_REPLICATION_NOT_FOUND"
+  },
+  "claim_boundary": "All analyses in this file were specified after seeing the two formal reports. They generate hypotheses and do not rescue the failed preregistered replication gate.",
+  "model_identity_boundary": "Model names are gateway aliases/returned strings; upstream identity and weights were not independently verified.",
+  "record_count": 100,
+  "repeats_per_variant": 5,
+  "source_log_audit": {
+    "sonnet5": {
+      "raw_line_count": 2511,
+      "successful_line_count": 2500,
+      "error_line_count": 11,
+      "unique_successful_task_count": 2500
+    },
+    "gpt55": {
+      "raw_line_count": 2503,
+      "successful_line_count": 2500,
+      "error_line_count": 3,
+      "unique_successful_task_count": 2500
+    }
+  },
+  "schema_complexity_label_counts": {
+    "hard": 50,
+    "medium": 50
+  },
+  "schema_features": [
+    "schema_chars",
+    "total_properties",
+    "max_schema_depth",
+    "description_chars"
+  ],
+  "statistical_settings": {
+    "resamples": 5000,
+    "seed": 20260718,
+    "paired_difference_test": "two-sided record-level sign flip",
+    "correlation": "Spearman with record-level permutation p-value",
+    "multiple_testing": "Holm across four variants for paired differences and concordance; Holm across four fixed features within each model-variant family"
+  },
+  "paired_model_comparisons": {
+    "properties_reversed": {
+      "sonnet_mean_normalized_excess": 0.08310000000000001,
+      "gpt_mean_normalized_excess": 0.038900000000000004,
+      "sonnet_minus_gpt_mean_difference": 0.04420000000000001,
+      "difference_ci95": [
+        -0.003002499999999999,
+        0.09360000000000002
+      ],
+      "difference_sign_flip_p": 0.07998400319936012,
+      "record_direction_counts": {
+        "sonnet_greater": 27,
+        "equal": 54,
+        "gpt_greater": 19
+      },
+      "difference_holm_p": 0.16616676664667068
+    },
+    "required_reversed": {
+      "sonnet_mean_normalized_excess": 0.03280000000000001,
+      "gpt_mean_normalized_excess": 0.010899999999999998,
+      "sonnet_minus_gpt_mean_difference": 0.02190000000000001,
+      "difference_ci95": [
+        -0.005099999999999993,
+        0.0539
+      ],
+      "difference_sign_flip_p": 0.1783643271345731,
+      "record_direction_counts": {
+        "sonnet_greater": 20,
+        "equal": 60,
+        "gpt_greater": 20
+      },
+      "difference_holm_p": 0.1783643271345731
+    },
+    "keywords_reversed": {
+      "sonnet_mean_normalized_excess": 0.0703,
+      "gpt_mean_normalized_excess": 0.0287,
+      "sonnet_minus_gpt_mean_difference": 0.0416,
+      "difference_ci95": [
+        -0.0001025000000000018,
+        0.08490499999999994
+      ],
+      "difference_sign_flip_p": 0.05538892221555689,
+      "record_direction_counts": {
+        "sonnet_greater": 31,
+        "equal": 53,
+        "gpt_greater": 16
+      },
+      "difference_holm_p": 0.16616676664667068
+    },
+    "descriptions_first": {
+      "sonnet_mean_normalized_excess": 0.027000000000000003,
+      "gpt_mean_normalized_excess": 0.0014999999999999963,
+      "sonnet_minus_gpt_mean_difference": 0.02550000000000001,
+      "difference_ci95": [
+        0.003900000000000005,
+        0.049000000000000016
+      ],
+      "difference_sign_flip_p": 0.021595680863827234,
+      "record_direction_counts": {
+        "sonnet_greater": 26,
+        "equal": 59,
+        "gpt_greater": 15
+      },
+      "difference_holm_p": 0.08638272345530894
+    }
+  },
+  "cross_model_record_concordance": {
+    "properties_reversed": {
+      "spearman_rho": -0.010730090630592076,
+      "rho_ci95": [
+        -0.24638126381492595,
+        0.23284624265404588
+      ],
+      "permutation_p": 0.9118176364727054,
+      "holm_p": 1.0
+    },
+    "required_reversed": {
+      "spearman_rho": 0.1413279242917964,
+      "rho_ci95": [
+        -0.10290477698327606,
+        0.3792715148626226
+      ],
+      "permutation_p": 0.16536692661467706,
+      "holm_p": 0.6614677064587082
+    },
+    "keywords_reversed": {
+      "spearman_rho": 0.03838308668266731,
+      "rho_ci95": [
+        -0.21400169987304105,
+        0.2859040004591887
+      ],
+      "permutation_p": 0.7030593881223756,
+      "holm_p": 1.0
+    },
+    "descriptions_first": {
+      "spearman_rho": 0.04521078066326291,
+      "rho_ci95": [
+        -0.2224272053131426,
+        0.29614900883956113
+      ],
+      "permutation_p": 0.6504699060187963,
+      "holm_p": 1.0
+    }
+  },
+  "feature_associations": {
+    "sonnet5": {
+      "properties_reversed": {
+        "schema_chars": {
+          "spearman_rho": -0.06294794831113265,
+          "rho_ci95": [
+            -0.2611704013838338,
+            0.1452840349265065
+          ],
+          "permutation_p": 0.5348930213957208,
+          "holm_p": 1.0
+        },
+        "total_properties": {
+          "spearman_rho": -0.07774040402278362,
+          "rho_ci95": [
+            -0.26955712229339285,
+            0.12678319256954623
+          ],
+          "permutation_p": 0.4471105778844231,
+          "holm_p": 1.0
+        },
+        "max_schema_depth": {
+          "spearman_rho": -0.07846524470399988,
+          "rho_ci95": [
+            -0.2565308657752157,
+            0.11124062251028731
+          ],
+          "permutation_p": 0.43691261747650467,
+          "holm_p": 1.0
+        },
+        "description_chars": {
+          "spearman_rho": -0.0013589141833307574,
+          "rho_ci95": [
+            -0.19983607343693857,
+            0.1992640763871698
+          ],
+          "permutation_p": 0.9888022395520896,
+          "holm_p": 1.0
+        }
+      },
+      "required_reversed": {
+        "schema_chars": {
+          "spearman_rho": 0.06180053135818695,
+          "rho_ci95": [
+            -0.11051798394152486,
+            0.2313986280074499
+          ],
+          "permutation_p": 0.525494901019796,
+          "holm_p": 1.0
+        },
+        "total_properties": {
+          "spearman_rho": 0.08858299015749427,
+          "rho_ci95": [
+            -0.07855019676669595,
+            0.2588116025526702
+          ],
+          "permutation_p": 0.3773245350929814,
+          "holm_p": 1.0
+        },
+        "max_schema_depth": {
+          "spearman_rho": -0.05398697172053418,
+          "rho_ci95": [
+            -0.23262272644737805,
+            0.1374925921167887
+          ],
+          "permutation_p": 0.5820835832833433,
+          "holm_p": 1.0
+        },
+        "description_chars": {
+          "spearman_rho": 0.017180388941666506,
+          "rho_ci95": [
+            -0.1623290566333534,
+            0.19924964318237587
+          ],
+          "permutation_p": 0.8650269946010798,
+          "holm_p": 1.0
+        }
+      },
+      "keywords_reversed": {
+        "schema_chars": {
+          "spearman_rho": 0.056469656859292595,
+          "rho_ci95": [
+            -0.1472360025198698,
+            0.2593067220319974
+          ],
+          "permutation_p": 0.5686862627474505,
+          "holm_p": 1.0
+        },
+        "total_properties": {
+          "spearman_rho": 0.03392320748763125,
+          "rho_ci95": [
+            -0.1613105431780926,
+            0.2306266990172189
+          ],
+          "permutation_p": 0.7448510297940412,
+          "holm_p": 1.0
+        },
+        "max_schema_depth": {
+          "spearman_rho": -0.07895056336060727,
+          "rho_ci95": [
+            -0.283448381000272,
+            0.1344970346408572
+          ],
+          "permutation_p": 0.4277144571085783,
+          "holm_p": 1.0
+        },
+        "description_chars": {
+          "spearman_rho": 0.08767859632069233,
+          "rho_ci95": [
+            -0.10937349228721056,
+            0.28613235428274214
+          ],
+          "permutation_p": 0.39132173565286943,
+          "holm_p": 1.0
+        }
+      },
+      "descriptions_first": {
+        "schema_chars": {
+          "spearman_rho": 0.08293651556778767,
+          "rho_ci95": [
+            -0.10163849104464655,
+            0.2705538988549132
+          ],
+          "permutation_p": 0.40871825634873027,
+          "holm_p": 1.0
+        },
+        "total_properties": {
+          "spearman_rho": 0.09771485295483232,
+          "rho_ci95": [
+            -0.08685435293749626,
+            0.28129326821578754
+          ],
+          "permutation_p": 0.3311337732453509,
+          "holm_p": 1.0
+        },
+        "max_schema_depth": {
+          "spearman_rho": -0.0636874587154186,
+          "rho_ci95": [
+            -0.2535901300198054,
+            0.1416598737532942
+          ],
+          "permutation_p": 0.5396920615876825,
+          "holm_p": 1.0
+        },
+        "description_chars": {
+          "spearman_rho": 0.10415997608029792,
+          "rho_ci95": [
+            -0.08963756800859386,
+            0.2903363475435787
+          ],
+          "permutation_p": 0.2969406118776245,
+          "holm_p": 1.0
+        }
+      }
+    },
+    "gpt55": {
+      "properties_reversed": {
+        "schema_chars": {
+          "spearman_rho": -0.0859676000679565,
+          "rho_ci95": [
+            -0.2790394230779607,
+            0.11962596466323061
+          ],
+          "permutation_p": 0.3833233353329334,
+          "holm_p": 1.0
+        },
+        "total_properties": {
+          "spearman_rho": -0.07456065784657721,
+          "rho_ci95": [
+            -0.26085883572291213,
+            0.1195375295630797
+          ],
+          "permutation_p": 0.46450709858028394,
+          "holm_p": 1.0
+        },
+        "max_schema_depth": {
+          "spearman_rho": -0.10801429759878832,
+          "rho_ci95": [
+            -0.30225787412183297,
+            0.09431894185033002
+          ],
+          "permutation_p": 0.28494301139772044,
+          "holm_p": 1.0
+        },
+        "description_chars": {
+          "spearman_rho": -0.08965442151672084,
+          "rho_ci95": [
+            -0.2879539958298941,
+            0.12948655271064635
+          ],
+          "permutation_p": 0.3765246950609878,
+          "holm_p": 1.0
+        }
+      },
+      "required_reversed": {
+        "schema_chars": {
+          "spearman_rho": 0.09963809118209625,
+          "rho_ci95": [
+            -0.09492593079874624,
+            0.2889926600895282
+          ],
+          "permutation_p": 0.32273545290941813,
+          "holm_p": 1.0
+        },
+        "total_properties": {
+          "spearman_rho": 0.08181760986590346,
+          "rho_ci95": [
+            -0.09377372652714377,
+            0.2522525618551585
+          ],
+          "permutation_p": 0.4303139372125575,
+          "holm_p": 1.0
+        },
+        "max_schema_depth": {
+          "spearman_rho": 0.04268244251886588,
+          "rho_ci95": [
+            -0.1744757842537986,
+            0.2675840732947325
+          ],
+          "permutation_p": 0.6670665866826635,
+          "holm_p": 1.0
+        },
+        "description_chars": {
+          "spearman_rho": 0.08955853222514457,
+          "rho_ci95": [
+            -0.1299790551556972,
+            0.3000237388821905
+          ],
+          "permutation_p": 0.384123175364927,
+          "holm_p": 1.0
+        }
+      },
+      "keywords_reversed": {
+        "schema_chars": {
+          "spearman_rho": 0.008400040863680876,
+          "rho_ci95": [
+            -0.1849021010749951,
+            0.20061193846042547
+          ],
+          "permutation_p": 0.9334133173365327,
+          "holm_p": 1.0
+        },
+        "total_properties": {
+          "spearman_rho": 0.06332960615275787,
+          "rho_ci95": [
+            -0.12451082173611171,
+            0.24743344418677868
+          ],
+          "permutation_p": 0.521495700859828,
+          "holm_p": 1.0
+        },
+        "max_schema_depth": {
+          "spearman_rho": -0.023061719448851922,
+          "rho_ci95": [
+            -0.2265145489360276,
+            0.1784031551111573
+          ],
+          "permutation_p": 0.8194361127774445,
+          "holm_p": 1.0
+        },
+        "description_chars": {
+          "spearman_rho": -0.031695169413126875,
+          "rho_ci95": [
+            -0.2395183776472127,
+            0.16989144335326115
+          ],
+          "permutation_p": 0.7458508298340332,
+          "holm_p": 1.0
+        }
+      },
+      "descriptions_first": {
+        "schema_chars": {
+          "spearman_rho": 0.022460015050581754,
+          "rho_ci95": [
+            -0.16974088256479858,
+            0.2196426742847371
+          ],
+          "permutation_p": 0.8240351929614077,
+          "holm_p": 1.0
+        },
+        "total_properties": {
+          "spearman_rho": 0.04699332530390638,
+          "rho_ci95": [
+            -0.1414256177648459,
+            0.23260932480755572
+          ],
+          "permutation_p": 0.6392721455708859,
+          "holm_p": 1.0
+        },
+        "max_schema_depth": {
+          "spearman_rho": -0.057376880895339516,
+          "rho_ci95": [
+            -0.2629490453234506,
+            0.15630248614535644
+          ],
+          "permutation_p": 0.5600879824035193,
+          "holm_p": 1.0
+        },
+        "description_chars": {
+          "spearman_rho": 0.014771705665163502,
+          "rho_ci95": [
+            -0.19545534064663173,
+            0.2217946889769361
+          ],
+          "permutation_p": 0.8834233153369326,
+          "holm_p": 1.0
+        }
+      }
+    }
+  }
+}

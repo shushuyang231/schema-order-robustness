@@ -1,0 +1,38 @@
+{
+  "status": "AMENDED_DEEPSEEK_ONLY_PENDING_OFFICIAL_ENDPOINT_GATE",
+  "frozen_date": "2026-07-24",
+  "amended_before_any_official_provider_calls": true,
+  "amended_at": "2026-07-24T13:12:52+08:00",
+  "protocol": "protocol/25_official_endpoint_model_panel.md",
+  "source_manifest": "protocol/sob_decomposed_sonnet5_manifest.json",
+  "source_manifest_sha256": "fb35ad370b6c3623e8680c6095f6cf1bc98fae70064fe7bb05614473930b54c8",
+  "manifests": [
+    {
+      "path": "protocol/sob_official_deepseek_v4_flash_manifest.json",
+      "provider_label": "deepseek_official",
+      "model_alias": "deepseek-v4-flash",
+      "base_url": "https://api.deepseek.com",
+      "sha256": "da6030811454b5b28fc54cdfae158cac66919196fea20eba06b989e5c40046c4"
+    }
+  ],
+  "superseded_candidate_manifests": [
+    {
+      "path": "protocol/sob_official_kimi_k3_manifest.json",
+      "model_alias": "kimi-k3",
+      "reason": "Superseded before calls; unavailable candidate not replaced by Kimi K2.x.",
+      "sha256": "051995c206a167fa3ec005d9eb2e667d8d6de61a00d1c563c9b7701ced4c771e"
+    },
+    {
+      "path": "protocol/sob_official_grok_4_3_manifest.json",
+      "model_alias": "grok-4.3",
+      "reason": "Superseded before calls when active scope narrowed to DeepSeek only.",
+      "sha256": "bd814f8b78f099ba9c57ab941cdf2be58bea4803c54ff6603d333656a23b7e63"
+    },
+    {
+      "path": "protocol/sob_official_gemini_3_6_flash_manifest.json",
+      "model_alias": "gemini-3.6-flash",
+      "reason": "Superseded before calls when active scope narrowed to DeepSeek only.",
+      "sha256": "9c4d79626a586b69f5ffe8210db93697707118b439e1c38c9f619c4a874e061a"
+    }
+  ]
+}

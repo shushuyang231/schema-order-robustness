@@ -1,0 +1,9 @@
+﻿system,variant,hypothesis_role,normalized_excess,ci95_low,ci95_high,holm_p,meets_0_05_practical_threshold
+Sonnet gateway alias,Properties reversed,primary,0.0831,0.0460,0.1279,0.000800,yes
+Sonnet gateway alias,Required reversed,exploratory,0.0328,0.0091,0.0620,0.000800,no
+Sonnet gateway alias,Keywords reversed,primary,0.0703,0.0391,0.1067,0.000800,yes
+Sonnet gateway alias,Descriptions first,primary,0.0270,0.0088,0.0495,0.000800,no
+GPT gateway alias,Properties reversed,primary,0.0389,0.0171,0.0626,0.000800,no
+GPT gateway alias,Required reversed,exploratory,0.0109,-0.0023,0.0276,0.099580,no
+GPT gateway alias,Keywords reversed,primary,0.0287,0.0055,0.0585,0.000800,no
+GPT gateway alias,Descriptions first,exploratory,0.0015,-0.0078,0.0124,0.404319,no

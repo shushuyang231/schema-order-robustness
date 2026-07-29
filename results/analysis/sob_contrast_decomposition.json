@@ -1,0 +1,211 @@
+{
+  "analysis_status": "POST_HOC_EXPLORATORY_ONLY",
+  "formal_decisions_unchanged": true,
+  "property_order_audit": {
+    "record_count": 100,
+    "matching_recursive_property_order_count": 100,
+    "property_order_mismatch_ids": [],
+    "byte_identical_schema_count": 0,
+    "interpretation": "The direct properties_reversed versus keywords_reversed contrast holds recursive property order fixed and changes additional JSON object-member ordering. It does not isolate one individual keyword."
+  },
+  "runs": [
+    {
+      "label": "sonnet5",
+      "record_count": 100,
+      "analysis_status": "POST_HOC_EXPLORATORY_ONLY",
+      "contrasts": {
+        "property_order": {
+          "left": "original",
+          "right": "properties_reversed",
+          "normalized_excess_disagreement": 0.08310000000000001,
+          "normalized_excess_ci95": [
+            0.044700000000000004,
+            0.1277
+          ],
+          "leaf_value_accuracy_difference": -0.008382905982905982,
+          "leaf_accuracy_ci95": [
+            -0.03329913461538462,
+            0.013927669413919402
+          ],
+          "perfect_response_rate_difference": -0.009999999999999998,
+          "perfect_response_ci95": [
+            -0.042,
+            0.022000000000000002
+          ],
+          "normalized_energy_permutation_p": 0.0001999600079984003,
+          "normalized_energy_holm_p": 0.0007998400319936012,
+          "leaf_accuracy_sign_flip_p": 0.5118976204759048,
+          "leaf_accuracy_holm_p": 1.0
+        },
+        "required_array_order": {
+          "left": "original",
+          "right": "required_reversed",
+          "normalized_excess_disagreement": 0.03280000000000001,
+          "normalized_excess_ci95": [
+            0.009800000000000007,
+            0.061402499999999964
+          ],
+          "leaf_value_accuracy_difference": -0.013630341880341878,
+          "leaf_accuracy_ci95": [
+            -0.04132571886446886,
+            0.0074992414529914475
+          ],
+          "perfect_response_rate_difference": 2.220446049250313e-18,
+          "perfect_response_ci95": [
+            -0.034,
+            0.032
+          ],
+          "normalized_energy_permutation_p": 0.0001999600079984003,
+          "normalized_energy_holm_p": 0.0007998400319936012,
+          "leaf_accuracy_sign_flip_p": 0.3275344931013797,
+          "leaf_accuracy_holm_p": 0.9826034793041392
+        },
+        "description_member_placement": {
+          "left": "original",
+          "right": "descriptions_first",
+          "normalized_excess_disagreement": 0.027000000000000003,
+          "normalized_excess_ci95": [
+            0.009097500000000003,
+            0.048600000000000004
+          ],
+          "leaf_value_accuracy_difference": 0.010338217338217342,
+          "leaf_accuracy_ci95": [
+            -0.001961388888888891,
+            0.02697168650793651
+          ],
+          "perfect_response_rate_difference": 0.014000000000000002,
+          "perfect_response_ci95": [
+            -0.013999999999999999,
+            0.04804999999999928
+          ],
+          "normalized_energy_permutation_p": 0.0001999600079984003,
+          "normalized_energy_holm_p": 0.0007998400319936012,
+          "leaf_accuracy_sign_flip_p": 0.16336732653469307,
+          "leaf_accuracy_holm_p": 0.6534693061387723
+        },
+        "additional_keyword_order_given_reversed_properties": {
+          "left": "properties_reversed",
+          "right": "keywords_reversed",
+          "normalized_excess_disagreement": 0.057800000000000004,
+          "normalized_excess_ci95": [
+            0.027197500000000003,
+            0.09380499999999994
+          ],
+          "leaf_value_accuracy_difference": -0.003803968253968254,
+          "leaf_accuracy_ci95": [
+            -0.02001123015873016,
+            0.013503214285714278
+          ],
+          "perfect_response_rate_difference": 5.551115123125783e-19,
+          "perfect_response_ci95": [
+            -0.027999999999999997,
+            0.03
+          ],
+          "normalized_energy_permutation_p": 0.0001999600079984003,
+          "normalized_energy_holm_p": 0.0007998400319936012,
+          "leaf_accuracy_sign_flip_p": 0.6524695060987803,
+          "leaf_accuracy_holm_p": 1.0
+        }
+      }
+    },
+    {
+      "label": "gpt55",
+      "record_count": 100,
+      "analysis_status": "POST_HOC_EXPLORATORY_ONLY",
+      "contrasts": {
+        "property_order": {
+          "left": "original",
+          "right": "properties_reversed",
+          "normalized_excess_disagreement": 0.038900000000000004,
+          "normalized_excess_ci95": [
+            0.0181975,
+            0.0634
+          ],
+          "leaf_value_accuracy_difference": -0.0015382173382173297,
+          "leaf_accuracy_ci95": [
+            -0.013561289682539675,
+            0.010069047619047618
+          ],
+          "perfect_response_rate_difference": 0.01,
+          "perfect_response_ci95": [
+            -0.027999999999999997,
+            0.05
+          ],
+          "normalized_energy_permutation_p": 0.0001999600079984003,
+          "normalized_energy_holm_p": 0.0007998400319936012,
+          "leaf_accuracy_sign_flip_p": 0.7934413117376524,
+          "leaf_accuracy_holm_p": 1.0
+        },
+        "required_array_order": {
+          "left": "original",
+          "right": "required_reversed",
+          "normalized_excess_disagreement": 0.010899999999999998,
+          "normalized_excess_ci95": [
+            -0.0021999999999999993,
+            0.0258
+          ],
+          "leaf_value_accuracy_difference": -0.002239010989010985,
+          "leaf_accuracy_ci95": [
+            -0.01070303571428571,
+            0.006613429487179491
+          ],
+          "perfect_response_rate_difference": -0.006,
+          "perfect_response_ci95": [
+            -0.032,
+            0.018
+          ],
+          "normalized_energy_permutation_p": 0.04899020195960808,
+          "normalized_energy_holm_p": 0.09798040391921616,
+          "leaf_accuracy_sign_flip_p": 0.615876824635073,
+          "leaf_accuracy_holm_p": 1.0
+        },
+        "description_member_placement": {
+          "left": "original",
+          "right": "descriptions_first",
+          "normalized_excess_disagreement": 0.0014999999999999963,
+          "normalized_excess_ci95": [
+            -0.007700000000000007,
+            0.012
+          ],
+          "leaf_value_accuracy_difference": 0.0010388888888888926,
+          "leaf_accuracy_ci95": [
+            -0.006328194444444437,
+            0.009017222222222215
+          ],
+          "perfect_response_rate_difference": -0.008,
+          "perfect_response_ci95": [
+            -0.03,
+            0.011999999999999997
+          ],
+          "normalized_energy_permutation_p": 0.41091781643671266,
+          "normalized_energy_holm_p": 0.41091781643671266,
+          "leaf_accuracy_sign_flip_p": 0.7956408718256349,
+          "leaf_accuracy_holm_p": 1.0
+        },
+        "additional_keyword_order_given_reversed_properties": {
+          "left": "properties_reversed",
+          "right": "keywords_reversed",
+          "normalized_excess_disagreement": 0.024600000000000004,
+          "normalized_excess_ci95": [
+            0.006100000000000003,
+            0.0453
+          ],
+          "leaf_value_accuracy_difference": -0.018418253968253973,
+          "leaf_accuracy_ci95": [
+            -0.04225361111111111,
+            0.00041708333333332736
+          ],
+          "perfect_response_rate_difference": -0.024,
+          "perfect_response_ci95": [
+            -0.05600000000000001,
+            0.006000000000000002
+          ],
+          "normalized_energy_permutation_p": 0.0021995600879824036,
+          "normalized_energy_holm_p": 0.0065986802639472104,
+          "leaf_accuracy_sign_flip_p": 0.08218356328734253,
+          "leaf_accuracy_holm_p": 0.3287342531493701
+        }
+      }
+    }
+  ]
+}

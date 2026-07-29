@@ -1,0 +1,3 @@
+﻿system,requested_alias,returned_alias,records,representations,repeats_per_representation,successful_responses,schema_pass_rate,formal_decision
+Sonnet gateway alias,claude-sonnet-5,claude-sonnet-5,100,5,5,2500,0.9992,CONFIRMED_FOR_SECOND_MODEL_REPLICATION
+GPT gateway alias,gpt-5.5,gpt-5.5,100,5,5,2500,0.9972,CROSS_MODEL_REPLICATION_NOT_FOUND

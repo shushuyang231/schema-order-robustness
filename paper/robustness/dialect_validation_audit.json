@@ -1,0 +1,34 @@
+{
+  "public_input": "data\\processed\\sob_mve_100_public.jsonl",
+  "public_input_sha256": "a09e7a4cf828eabdc1b76b51e2e2c72f8033560bc64979809b7c907680560b26",
+  "schema_representation_count": 500,
+  "schema_dialect_outcome_counts": {
+    "draft7_True_draft2020_True": 500
+  },
+  "schema_dialect_disagreement_count": 0,
+  "prediction_sources": [
+    {
+      "path": "results\\api\\sob_sonnet5_confirmatory.jsonl",
+      "sha256": "afd84592c369bfae7f4f0f6bbd1c46d1816ff1be7e4d77cb0acc7ad002a3c239",
+      "unique_successful_requests": 2500,
+      "outcome_counts": {
+        "draft7_False_draft2020_False": 2,
+        "draft7_True_draft2020_True": 2498
+      },
+      "dialect_disagreement_count": 0
+    },
+    {
+      "path": "results\\api\\sob_gpt55_cross_model.jsonl",
+      "sha256": "c4c5fc61616b13463b58b4fbac850b9eea686dd706222a4c99fa5e13cfd3ab33",
+      "unique_successful_requests": 2500,
+      "outcome_counts": {
+        "draft7_False_draft2020_False": 7,
+        "draft7_True_draft2020_True": 2493
+      },
+      "dialect_disagreement_count": 0
+    }
+  ],
+  "total_prediction_dialect_disagreement_count": 0,
+  "disagreements": [],
+  "paper_metric_impact": "none"
+}

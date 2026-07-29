@@ -1,0 +1,37 @@
+{
+  "status": "PASS",
+  "word_count": 6248,
+  "citation_key_count": 17,
+  "missing_bibliography_keys": [],
+  "unused_bibliography_keys": [],
+  "image_audit": [
+    {
+      "path": "figures/figure1_method.png",
+      "width": 1800,
+      "height": 560,
+      "mode": "RGB"
+    },
+    {
+      "path": "figures/figure2_forest.png",
+      "width": 1900,
+      "height": 1080,
+      "mode": "RGB"
+    },
+    {
+      "path": "figures/figure3_decomposed_confirmation.png",
+      "width": 1900,
+      "height": 900,
+      "mode": "RGB"
+    }
+  ],
+  "missing_images": [],
+  "missing_expected_snippets": [],
+  "missing_required_sections": [],
+  "table_checks": {
+    "distribution_effect_rows": true,
+    "quality_metric_rows": true,
+    "practical_threshold_yes_count": true
+  },
+  "dialect_robustness_passed": true,
+  "failures": []
+}
