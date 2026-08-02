@@ -50,7 +50,7 @@ The Google Antigravity managed agent is excluded. It starts an autonomous
 tool-use loop and therefore is not comparable to the prompt-only Chat
 Completions design.
 
-The Prism `grok-4.20-multi-agent-*` aliases are excluded from the formal
+The third-party gateway's `grok-4.20-multi-agent-*` aliases are excluded from the formal
 official-endpoint panel because both provider provenance and the agent harness
 would be confounded with the model. They may be reported only as a separately
 labelled exploratory gateway result under a later protocol.

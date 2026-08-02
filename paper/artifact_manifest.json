@@ -26,6 +26,22 @@
       "sha256": "1caa7bf4d6ee4e74d1b009770aeb6a2f3805c02dd9b08a97673753297061457a"
     },
     {
+      "path": "results\\api\\sob_official_qwen_plus_resource_full160_report.json",
+      "sha256": "360d6b14e0bdbe42d180c65c807467e9ec7fe39108fcc46a7844c730c29f8f4d"
+    },
+    {
+      "path": "results\\api\\sob_official_qwen_plus_json_mode_100_report.json",
+      "sha256": "c86990e79544f86f3e628349f3cabbaad2e3cb6db626ae1212e5eaa6ed8fd716"
+    },
+    {
+      "path": "results\\api\\sob_official_qwen_plus_mode_interaction_100_report.json",
+      "sha256": "f9de7f43a86e18567ab0b4cde2cf538b06286148f68cea9ca666a2017294c55b"
+    },
+    {
+      "path": "results\\api\\sob_decomposed_robustness_audit.json",
+      "sha256": "ddda28c317f47ad43bc160b199d7adefb6baad88473dfed598927ec1fd93be77"
+    },
+    {
       "path": "results\\analysis\\sob_decomposed_cross_model.json",
       "sha256": "bd5081628a426bfaad3a1a5fbfb646e90ffed7bb65820431426993e2f71eebaa"
     }
@@ -54,8 +70,8 @@
     },
     {
       "path": "paper\\tables\\table5_decomposed_confirmation.csv",
-      "sha256": "6ac62330d60dc2e8443dc2be2289418669c19d1794898c036800a5f77c7cffb7",
-      "bytes": 861
+      "sha256": "44613caab47d4a8619340a028184cd6bb9016074949fa0a86fa9775f5e3ef9e5",
+      "bytes": 1089
     },
     {
       "path": "paper\\tables\\table6_decomposed_cross_model.csv",
@@ -63,19 +79,39 @@
       "bytes": 418
     },
     {
+      "path": "paper\\tables\\table7_qwen_mode_interaction.csv",
+      "sha256": "876fb2da5ef7c2487d991a6339fb199efd8f8416c78baf4957c3fd6ba887821f",
+      "bytes": 373
+    },
+    {
+      "path": "paper\\tables\\table8_effect_concentration.csv",
+      "sha256": "745c8269340cf3182eeba6cba795eb8b8267662f31a525f84fa77de60cbb6e8d",
+      "bytes": 1289
+    },
+    {
+      "path": "paper\\tables\\table9_record_concordance.csv",
+      "sha256": "5ca68ece69b7b6ee83c8372d0c015f595291a2578e9b0ecfbe87eb487c17e119",
+      "bytes": 2306
+    },
+    {
       "path": "paper\\figures\\figure1_method.png",
-      "sha256": "c198bc21315159b1c43e85717be63c9f538742d4052dd8fba246ed3d7c6da500",
-      "bytes": 96252
+      "sha256": "af3b57376279a7af3658ba5e894fe344db9bfc9dee5a812db3d6d611ef1b077c",
+      "bytes": 81532
     },
     {
       "path": "paper\\figures\\figure2_forest.png",
-      "sha256": "a242d4eaafa53763a3682e398dc5c5029600f2c60376980c5b899bf002383fb5",
-      "bytes": 68078
+      "sha256": "819cb93c101d7b5e6fea7de164422d0c8a0663605ac1f4f5eca08e7a40d54e64",
+      "bytes": 49937
     },
     {
       "path": "paper\\figures\\figure3_decomposed_confirmation.png",
-      "sha256": "00a9aeb21be06ffeb6a0e8c62b3528c341978319a2f0a1887ce0744aa4c0deb7",
-      "bytes": 60281
+      "sha256": "9871d4785d17dbe4da7c40da333a0f496d779fa7bcf24b8274a4c325b4c9354b",
+      "bytes": 44799
+    },
+    {
+      "path": "paper\\figures\\figure4_qwen_mode_interaction.png",
+      "sha256": "3b28a06b31daae5023af4c4eac67264e7510ed7584760855bc5156efb832bc5c",
+      "bytes": 41815
     }
   ]
 }

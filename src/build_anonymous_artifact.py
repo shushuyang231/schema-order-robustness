@@ -12,6 +12,7 @@ OUTPUT_DIR = ROOT / "output" / "artifact"
 ZIP_PATH = OUTPUT_DIR / "schema_order_tmlr_anonymous_artifact.zip"
 MANIFEST_PATH = OUTPUT_DIR / "artifact_manifest.json"
 ARCHIVE_ROOT = "schema-order-artifact"
+ARTIFACT_NAME = "schema_order_tmlr_anonymous_artifact"
 
 EXPLICIT_FILES = (
     "LICENSE",
@@ -187,7 +188,7 @@ def main() -> int:
         for path in files
     ]
     manifest = {
-        "artifact": "schema_order_tmlr_anonymous_artifact",
+        "artifact": ARTIFACT_NAME,
         "offline_only": True,
         "contains_raw_provider_responses": False,
         "contains_restricted_gold": False,

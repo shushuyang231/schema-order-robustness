@@ -5,3 +5,5 @@ GPT gateway alias,Property order,0.0329,0.0140,0.0548,0.000400,no,-0.0059,-0.016
 GPT gateway alias,Additional member order,0.0380,0.0159,0.0631,0.000400,no,-0.0248,-0.0463,-0.0067,0.020796
 DeepSeek official endpoint,Property order,0.0132,0.0014,0.0254,0.013197,no,-0.0054,-0.0217,0.0104,0.720256
 DeepSeek official endpoint,Additional member order,0.0182,0.0057,0.0322,0.001600,no,0.0071,-0.0073,0.0222,0.720256
+Qwen-Plus official endpoint,Property order,0.1255,0.0861,0.1674,0.000400,yes,-0.0177,-0.0392,0.0003,0.160768
+Qwen-Plus official endpoint,Additional member order,0.1229,0.0853,0.1624,0.000400,yes,0.0063,-0.0142,0.0251,0.552290

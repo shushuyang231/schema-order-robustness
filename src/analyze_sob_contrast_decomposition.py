@@ -88,9 +88,11 @@ def load_run_cells(
     predictions_path: Path,
     public: dict[str, dict[str, Any]],
     gold: dict[str, dict[str, Any]],
+    allow_extra_prediction_records: bool = False,
 ) -> tuple[list[str], dict[tuple[str, str], list[dict[str, Any]]]]:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     record_ids = [str(value) for value in manifest["record_ids"]]
+    record_id_set = set(record_ids)
     conditions = list(manifest["conditions"])
     condition_to_variant = {
         str(item["name"]): str(item["schema_variant"]) for item in conditions
@@ -100,7 +102,13 @@ def load_run_cells(
 
     latest: dict[tuple[str, str], dict[str, Any]] = {}
     for row in load_jsonl(predictions_path):
-        if row.get("status") == "ok":
+        if (
+            row.get("status") == "ok"
+            and (
+                not allow_extra_prediction_records
+                or str(row["record_id"]) in record_id_set
+            )
+        ):
             latest[(str(row["record_id"]), str(row["variant"]))] = row
     expected = {
         (record_id, str(condition["name"]))

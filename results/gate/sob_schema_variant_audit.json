@@ -1,0 +1,41 @@
+{
+  "input": "C:\\Users\\Sun\\Documents\\New project 3\\data\\raw\\sob\\test-00000-of-00001.parquet",
+  "input_sha256": "b86a475557aa65028a0d2c71aac780c8258a2a8cf15cd76e1300d9cc241c81a5",
+  "row_count": 5000,
+  "complexity_counts": {
+    "hard": 3054,
+    "medium": 1946
+  },
+  "question_type_counts": {
+    "bridge": 4060,
+    "comparison": 940
+  },
+  "schema_keyword_counts": {
+    "type": 39747,
+    "description": 27171,
+    "properties": 9589,
+    "required": 9587,
+    "additionalProperties": 9585,
+    "items": 2361,
+    "title": 468,
+    "format": 216,
+    "enum": 25,
+    "minItems": 16,
+    "maxItems": 12,
+    "minimum": 2
+  },
+  "ground_truth_schema_validation_failures": [],
+  "variant_changed_record_counts": {
+    "descriptions_first": 4853,
+    "keywords_reversed": 5000,
+    "properties_reversed": 5000,
+    "required_reversed": 5000
+  },
+  "sample_count": 100,
+  "sample_ids_sha256": "17998e5f51500d1e719417f4518ef4ca6ccc60974b59e6f194c0ec176dc54d4d",
+  "sample_complexity_counts": {
+    "hard": 50,
+    "medium": 50
+  },
+  "equivalence_rule": "Only JSON object member order plus required/enum array order are changed; these are validation-order-insensitive under JSON Schema."
+}

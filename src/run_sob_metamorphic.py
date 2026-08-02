@@ -87,6 +87,9 @@ def validate_smoke_record(
     smoke_provider = manifest.get("smoke_provider")
     if smoke_provider and record.get("provider") != smoke_provider:
         raise ValueError("Smoke record provider differs from the frozen manifest")
+    if manifest.get("require_smoke_request_contract_match"):
+        if record.get("request_body_extra") != manifest.get("request_body_extra"):
+            raise ValueError("Smoke request contract differs from the frozen manifest")
     gate = record.get("gate") or {}
     if gate.get("gate_passed") is not True:
         raise ValueError("Smoke record did not pass the frozen availability gate")
@@ -112,22 +115,36 @@ class GatewayClient:
         self.client.close()
 
     def complete(
-        self, *, model_alias: str, messages: list[dict[str, str]], max_tokens: int
+        self,
+        *,
+        model_alias: str,
+        messages: list[dict[str, str]],
+        max_tokens: int,
+        request_body_extra: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         started = time.perf_counter()
         attempts: list[dict[str, Any]] = []
+        payload: dict[str, Any] = {
+            "model": model_alias,
+            "messages": messages,
+            "max_tokens": max_tokens,
+            "stream": False,
+        }
+        if request_body_extra:
+            collisions = set(payload).intersection(request_body_extra)
+            if collisions:
+                raise ValueError(
+                    "Frozen request_body_extra overrides core request fields: "
+                    f"{sorted(collisions)}"
+                )
+            payload.update(request_body_extra)
         for attempt in range(1, 4):
             try:
                 # Sampling parameters are intentionally absent: Sonnet 5 rejects
                 # non-default temperature/top_p/top_k on the official API.
                 response = self.client.post(
                     self.url,
-                    json={
-                        "model": model_alias,
-                        "messages": messages,
-                        "max_tokens": max_tokens,
-                        "stream": False,
-                    },
+                    json=payload,
                 )
                 attempts.append({"attempt": attempt, "status_code": response.status_code})
                 if response.status_code == 429 or response.status_code >= 500:
@@ -217,17 +234,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--model-alias", default="claude-sonnet-5")
-    parser.add_argument(
-        "--base-url", default=os.environ.get("PRISM_BASE_URL", "https://ai.prism.uno/v1")
-    )
+    parser.add_argument("--base-url", default=os.environ.get("GATEWAY_BASE_URL", ""))
     parser.add_argument(
         "--api-key-env",
-        default="PRISM_API_KEY",
+        default="GATEWAY_API_KEY",
         help="Environment variable containing the API key (prompted securely if absent).",
     )
     parser.add_argument(
         "--provider-label",
-        default="prism_gateway",
+        default="third_party_gateway",
         help="Non-secret provider/provenance label written to every result row.",
     )
     parser.add_argument(
@@ -251,6 +266,12 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
+    if not args.mock and not args.base_url:
+        print(
+            "GATEWAY_BASE_URL is not set and --base-url was not provided.",
+            file=sys.stderr,
+        )
+        return 2
     api_key = os.environ.get(args.api_key_env)
     if not args.mock and not api_key and not args.no_key_prompt and sys.stdin.isatty():
         api_key = getpass.getpass(
@@ -282,6 +303,10 @@ def main() -> int:
     frozen_max_tokens = int(manifest.get("max_tokens", args.max_tokens))
     if args.max_tokens != frozen_max_tokens and not args.mock:
         print("Max tokens differs from the frozen pilot manifest.", file=sys.stderr)
+        return 2
+    request_body_extra = manifest.get("request_body_extra") or {}
+    if not isinstance(request_body_extra, dict):
+        print("Manifest request_body_extra must be an object.", file=sys.stderr)
         return 2
 
     expected_returned_model: str | None = None
@@ -383,6 +408,7 @@ def main() -> int:
                         model_alias=args.model_alias,
                         messages=messages,
                         max_tokens=args.max_tokens,
+                        request_body_extra=request_body_extra,
                     )
                 )
                 if (
@@ -433,8 +459,16 @@ def main() -> int:
                         "max_tokens": args.max_tokens,
                         "stream": False,
                         "sampling_parameters": "omitted",
-                        "thinking": "omitted_provider_default",
-                        "response_format": "omitted_text_mode",
+                        "thinking": (
+                            "disabled_explicitly"
+                            if request_body_extra.get("enable_thinking") is False
+                            else "omitted_provider_default"
+                        ),
+                        "request_body_extra": request_body_extra,
+                        "response_format": (
+                            request_body_extra.get("response_format")
+                            or "omitted_text_mode"
+                        ),
                         "tools": "omitted",
                     },
                     "latency_ms": result["latency_ms"],

@@ -1,0 +1,160 @@
+{
+  "frozen_before_api_calls": true,
+  "frozen_date": "2026-08-01",
+  "study_name": "sob_qwen3_7_plus_staged_futility_20260801_v1",
+  "source_manifest": "protocol/sob_decomposed_sonnet5_manifest.json",
+  "source_manifest_sha256": "fb35ad370b6c3623e8680c6095f6cf1bc98fae70064fe7bb05614473930b54c8",
+  "source_public_input_sha256": "1553aa33a5cd76696acfa7c4ec6a00caab5b0858dee76be330db2d7f0a2a40c2",
+  "schema_variants": [
+    "original",
+    "properties_reversed",
+    "keywords_reversed"
+  ],
+  "conditions": [
+    {
+      "name": "original__r1",
+      "schema_variant": "original"
+    },
+    {
+      "name": "original__r2",
+      "schema_variant": "original"
+    },
+    {
+      "name": "original__r3",
+      "schema_variant": "original"
+    },
+    {
+      "name": "original__r4",
+      "schema_variant": "original"
+    },
+    {
+      "name": "original__r5",
+      "schema_variant": "original"
+    },
+    {
+      "name": "properties_reversed__r1",
+      "schema_variant": "properties_reversed"
+    },
+    {
+      "name": "properties_reversed__r2",
+      "schema_variant": "properties_reversed"
+    },
+    {
+      "name": "properties_reversed__r3",
+      "schema_variant": "properties_reversed"
+    },
+    {
+      "name": "properties_reversed__r4",
+      "schema_variant": "properties_reversed"
+    },
+    {
+      "name": "properties_reversed__r5",
+      "schema_variant": "properties_reversed"
+    },
+    {
+      "name": "keywords_reversed__r1",
+      "schema_variant": "keywords_reversed"
+    },
+    {
+      "name": "keywords_reversed__r2",
+      "schema_variant": "keywords_reversed"
+    },
+    {
+      "name": "keywords_reversed__r3",
+      "schema_variant": "keywords_reversed"
+    },
+    {
+      "name": "keywords_reversed__r4",
+      "schema_variant": "keywords_reversed"
+    },
+    {
+      "name": "keywords_reversed__r5",
+      "schema_variant": "keywords_reversed"
+    }
+  ],
+  "repeats_per_variant": 5,
+  "model_alias": "qwen3.7-plus-2026-05-26",
+  "provider_label": "alibaba_bailian_qwen_official",
+  "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+  "api_key_env": "DASHSCOPE_API_KEY",
+  "requires_smoke_record": true,
+  "smoke_provider": "qwen",
+  "sampling_parameters": "omitted",
+  "request_body_extra": {
+    "enable_thinking": false
+  },
+  "max_tokens": 4096,
+  "primary_contrasts": {
+    "property_order": [
+      "original",
+      "properties_reversed"
+    ],
+    "additional_keyword_order_given_reversed_properties": [
+      "properties_reversed",
+      "keywords_reversed"
+    ]
+  },
+  "minimum_practical_effect": 0.05,
+  "independent_unit": "record",
+  "request_order": "Ascending SHA256 of study_name|record_id|condition_name",
+  "interim_design": {
+    "design": "single_nonbinding_futility_interim_no_early_success",
+    "maximum_record_count": 200,
+    "interim_record_count": 40,
+    "interim_strata": {
+      "medium": 20,
+      "hard": 20
+    },
+    "practical_effect_threshold": 0.05,
+    "per_contrast_continuation_probability": 0.1,
+    "probability_method": "Plug-in normal prediction for the final record mean, conditional on the interim mean and sample standard deviation: future records are assumed iid with the interim moments.",
+    "futility_rule": "Stop after the 40-record interim only when each of the two primary contrasts has conditional probability < 0.10 of reaching a final 200-record point estimate >= 0.05. Otherwise continue to all 200.",
+    "reporting_rule": "No efficacy claim or formal confirmation is allowed at interim. The interim result must be retained whether the run stops or continues."
+  },
+  "pilot_name": "sob_qwen3_7_plus_staged_futility_20260801_v1_interim40",
+  "analysis_stage": "prospective_qwen_futility_interim_40",
+  "record_ids": [
+    "b168245863e11daf227a0ba4cf9f8ac43417a8a41bd68fd7fbb5d908c9548d7f",
+    "ad3a95fd0bbc1afcdcbfe0a6a928846df4bcebb6027a8878e2d8e17bf2ae2f8a",
+    "1a986ea3748db94b22701421c61d8a7095d5fb1c4b5dc69206e0fe8bb7f09314",
+    "5c50b3b0033e62447b6a8f04fe8bd511ffeab065ac786a9217a4153a9a7ed8a0",
+    "51c0fc21c7f6cc4273c26de247e6525ce7b3a56d9aeb570a7ea4c4dca7db5d6f",
+    "37b250a0a55b878db42f16e657c2eed599503b72bc1f4dcca1595add20e51c2c",
+    "e1cd616dd0aba35ec559f4f3c6cbff2f95c890a430201a4382a78aceecc48c1f",
+    "c90eb254acb4c0b5df592ad2b60eb7fabe3d241c6322ff61abaf35209610d156",
+    "8af9eaf822b89863f204962f5583e703207cdff6a9725e38edd49d9e58615768",
+    "a7ebe0d10420a0db464f2e3f69997b4d41098db35f8501211228a3baa1e528ea",
+    "c3a8f2fe2c49e6a4c7061678698ec2e1b05d0f176d2ec9d24c99b41fb2e082d5",
+    "d953389ee5e276d1541d9dadbd37f2ea55a353fda576e957326ecc7b3d25e92a",
+    "892f71f7c2d10ee3167d7524d71cd47244ddb31f60009be4dd799a6a21fc4ce1",
+    "38e147ba6aa069a706393ec09b43bf4391b4394f7b2a826fb3231299da1339bd",
+    "b02e18758306c3fe7545d53abf5438ff0bcc57f2215492b13bc6f3fa516c421d",
+    "930b7b79a5dc83b397d5046c849ebcd8f406fbf119b34b5cd8cc1df8798cbfe8",
+    "f6ffa285c2c221651103c7c5cc83bf8a999acf108df1d18883dfd178f7c7ca29",
+    "f898f503508c1b07e6489bef08cd56910e9dcc499bef20dbd6a26e398beea0e8",
+    "21f9eced68a26b85ace8ee58d9de8ff0fc6500d9449613b3e101147cdba47af0",
+    "b56db6041238fbf16e3841d0a99e227bcff01b7382a8963dd7a02834cf0a2136",
+    "a4fa902f714e1e67bd9cf0148b0e93a27fc3d17c5a4351fe4d2cf2446fe9f350",
+    "fdf7d19becb40d29c209bc80043978568568cecb045c8676bbaf00d9b97c2495",
+    "9b731201dc0762efdf87e22160d8838768a76c3c5c683f17164a4ef848178b18",
+    "cad1ee2cc6ec5f9408a74fa1757bef42eef97c488cd87d126a47c2202729341f",
+    "d420753926c391557fb90f67cd373ca800a8d80cf92f9f7e7285df490bba18f2",
+    "31dc643fcfa402101ba9b11a43ea28da826b4fe3db0f1b1bdac4f37c32ddc562",
+    "1bd04239c196711657f754e88eec71558bda5993b3518d37dd8e24681cb4b8a7",
+    "f19303800326249f2cf8e017c32f8e360cba7346672adedb4feb65e63f52c088",
+    "ff91852d7bdfccf61bb4f71bf1a04b3c404cf72f5d5b3328d7bc9daeae3c38bd",
+    "dad9ae0ec469b0d41bf2bf8646110a65213256c8afbb96ae1a718cd76ce8d5f2",
+    "9710c2beaa3466f6328e873d3cf1811ce584be7f0a465d870de470e16b3f7621",
+    "7c0fd952e341ccc9aadf98e33fad80c56cd6e94068fe888ab6dc2e5c10c5e402",
+    "78dd95eb01e1517d91b50bcf400eb6d870f1b95f7695289bdf9de13ca8395b83",
+    "9ec52733de824bbe8efa0a949a4abaebdb7d72fe4821fa396588cf93985e2e0b",
+    "681f465c5c2d8ac5dc30b2bd2019ef4041fd491c6f11cf2aa04ce890e3bfb67d",
+    "39c3fe5d8b2aad17e483fa9cf4b8ea9348add9631920b0ebb1c670650cf81159",
+    "453d973b265e9fbb2c4b6604cb42a15c3989b911270e4d52391424ee7570787c",
+    "c7762c15932015850924204a2da8ae0b58ae0f11d233a581d42b61b50ee75f7d",
+    "41555fa4722426d259fdde8abd1d929ca9d1da1656d96ce849c8e8af84e7d6c2",
+    "afc3ff0c97685b700c1a7e3d53bc4ae6235002b0c441418715ec3e08d676fc16"
+  ],
+  "record_ids_sha256": "650e2f63f0562c3276af3acdf6c45b8fe2d3510f9fd56c07adbf9c6d757ba02d",
+  "expected_requests": 600
+}

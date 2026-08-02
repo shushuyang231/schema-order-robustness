@@ -24,6 +24,9 @@ DECOMPOSED_CONFIRMATION_STAGES = frozenset(
     {
         "preregistered_decomposed_contrast_confirmation",
         "preregistered_official_deepseek_replication",
+        "prospective_qwen_staged_confirmation_full_200",
+        "prospective_qwen_plus_resource_confirmation_full_160",
+        "prospective_qwen_plus_json_mode_ablation_100",
     }
 )
 
@@ -84,9 +87,16 @@ def main() -> int:
     args = parse_args()
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
     validate_decomposed_manifest(manifest)
-    public = {str(row["record_id"]): row for row in load_jsonl(args.public_input)}
+    manifest_record_ids = {str(value) for value in manifest["record_ids"]}
+    public = {
+        str(row["record_id"]): row
+        for row in load_jsonl(args.public_input)
+        if str(row["record_id"]) in manifest_record_ids
+    }
     gold = {
-        str(row["record_id"]): row["ground_truth"] for row in load_jsonl(args.gold_input)
+        str(row["record_id"]): row["ground_truth"]
+        for row in load_jsonl(args.gold_input)
+        if str(row["record_id"]) in manifest_record_ids
     }
     record_ids, cells = load_run_cells(
         manifest_path=args.manifest,
@@ -151,8 +161,12 @@ def main() -> int:
             and item["normalized_energy_holm_p"] < 0.05
         )
 
+    raw_rows = load_jsonl(args.predictions)
     successful_rows = [
-        row for row in load_jsonl(args.predictions) if row.get("status") == "ok"
+        row
+        for row in raw_rows
+        if row.get("status") == "ok"
+        and str(row.get("record_id")) in manifest_record_ids
     ]
     returned_models = Counter(str(row.get("returned_model")) for row in successful_rows)
     response_ids = [str(row["response_id"]) for row in successful_rows if row.get("response_id")]
@@ -175,6 +189,18 @@ def main() -> int:
     else:
         decision = "DECOMPOSED_CONFIRMATION_NOT_FOUND"
 
+    token_usage = {
+        "input_tokens": sum(int(row.get("input_tokens") or 0) for row in successful_rows),
+        "output_tokens": sum(int(row.get("output_tokens") or 0) for row in successful_rows),
+        "cached_input_tokens": sum(
+            int(((row.get("usage") or {}).get("prompt_tokens_details") or {}).get("cached_tokens") or 0)
+            for row in successful_rows
+        ),
+    }
+    token_usage["total_tokens"] = (
+        token_usage["input_tokens"] + token_usage["output_tokens"]
+    )
+
     report = {
         "decision": decision,
         "analysis_stage": manifest["analysis_stage"],
@@ -183,6 +209,15 @@ def main() -> int:
         "successful_response_count": len(successful_rows),
         "overall_schema_pass_rate": schema_pass_rate,
         "returned_model_counts": dict(returned_models),
+        "source_log_audit": {
+            "raw_line_count": len(raw_rows),
+            "successful_line_count": sum(row.get("status") == "ok" for row in raw_rows),
+            "error_line_count": sum(row.get("status") != "ok" for row in raw_rows),
+            "unique_successful_request_key_count": len(
+                {str(row.get("request_key")) for row in successful_rows}
+            ),
+        },
+        "token_usage": token_usage,
         "operational_gate": operational_gate,
         "minimum_practical_effect": threshold,
         "multiple_testing_family": list(primary),

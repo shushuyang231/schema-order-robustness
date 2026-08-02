@@ -27,6 +27,16 @@ DECOMP_GPT_REPORT = ROOT / "results/api/sob_decomposed_gpt55_report.json"
 DECOMP_DEEPSEEK_REPORT = (
     ROOT / "results/api/sob_official_deepseek_v4_flash_report.json"
 )
+DECOMP_QWEN_REPORT = (
+    ROOT / "results/api/sob_official_qwen_plus_resource_full160_report.json"
+)
+QWEN_JSON_REPORT = (
+    ROOT / "results/api/sob_official_qwen_plus_json_mode_100_report.json"
+)
+QWEN_INTERACTION_REPORT = (
+    ROOT / "results/api/sob_official_qwen_plus_mode_interaction_100_report.json"
+)
+ROBUSTNESS_REPORT = ROOT / "results/api/sob_decomposed_robustness_audit.json"
 DECOMP_CROSS_REPORT = ROOT / "results/analysis/sob_decomposed_cross_model.json"
 
 VARIANTS = (
@@ -63,6 +73,8 @@ BLUE_LIGHT = "#DCEAF7"
 ORANGE = "#C66A1B"
 ORANGE_LIGHT = "#FBE8D5"
 GREEN = "#23856D"
+PURPLE = "#7656A8"
+TEAL = "#007C83"
 GOLD = "#A07914"
 PANEL = "#F8FAFC"
 
@@ -140,26 +152,26 @@ def build_method_figure() -> None:
     text(draw, (200, 270), "Context", 23, anchor="ma")
     text(draw, (200, 305), "Question", 23, anchor="ma")
     text(draw, (200, 340), "JSON Schema", 23, anchor="ma")
-    text(draw, (200, 382), "100 records", 20, fill=MUTED, anchor="ma")
+    text(draw, (200, 382), "Frozen record panels", 20, fill=MUTED, anchor="ma")
 
     text(draw, (570, 190), "Validation-equivalent", 25, bold=True, anchor="ma")
     text(draw, (570, 225), "serializations", 25, bold=True, anchor="ma")
-    variants = ["Original", "Properties reversed", "Required reversed", "Keywords reversed", "Descriptions first"]
+    variants = ["Original", "Properties reversed", "Required reversed", "Member order reversed", "Descriptions first"]
     for idx, label in enumerate(variants):
         text(draw, (570, 275 + idx * 31), label, 20, anchor="ma")
 
     text(draw, (942, 220), "Black-box calls", 26, bold=True, anchor="ma")
     text(draw, (942, 275), "5 repeats", 23, anchor="ma")
     text(draw, (942, 310), "per representation", 23, anchor="ma")
-    text(draw, (942, 355), "2 gateway aliases", 20, fill=MUTED, anchor="ma")
-    text(draw, (942, 385), "5,000 responses", 20, fill=MUTED, anchor="ma")
+    text(draw, (942, 355), "gateway + official APIs", 20, fill=MUTED, anchor="ma")
+    text(draw, (942, 385), "text and JSON Mode", 20, fill=MUTED, anchor="ma")
 
     text(draw, (1305, 198), "Independent oracles", 25, bold=True, anchor="ma")
     text(draw, (1305, 260), "JSON parsing", 21, anchor="ma")
     text(draw, (1305, 298), "Schema validation", 21, anchor="ma")
     text(draw, (1305, 336), "Gold leaf accuracy", 21, anchor="ma")
     text(draw, (1305, 374), "Output normalization", 21, anchor="ma")
-    text(draw, (1305, 412), "No LLM judge", 19, fill=MUTED, anchor="ma")
+    text(draw, (1305, 412), "Deterministic; no LLM judge", 19, fill=MUTED, anchor="ma")
 
     text(draw, (1638, 218), "Noise-adjusted", 23, bold=True, anchor="ma")
     text(draw, (1638, 250), "comparison", 23, bold=True, anchor="ma")
@@ -176,7 +188,9 @@ def build_method_figure() -> None:
         anchor="mm",
     )
     FIGURES.mkdir(parents=True, exist_ok=True)
-    image.save(FIGURES / "figure1_method.png", dpi=(180, 180))
+    image.crop((0, 135, image.width, image.height)).save(
+        FIGURES / "figure1_method.png", dpi=(180, 180)
+    )
 
 
 def xmap(value: float, domain: tuple[float, float], left: int, right: int) -> float:
@@ -189,12 +203,20 @@ def marker(draw: ImageDraw.ImageDraw, x: float, y: float, model: str) -> None:
         draw.ellipse((x - 8, y - 8, x + 8, y + 8), fill=BLUE, outline=INK, width=1)
     elif model == "gpt":
         draw.rectangle((x - 8, y - 8, x + 8, y + 8), fill="white", outline=ORANGE, width=4)
-    else:
+    elif model == "deepseek":
         draw.polygon(
             ((x, y - 10), (x - 10, y + 8), (x + 10, y + 8)),
             fill=GREEN,
             outline=INK,
         )
+    elif model == "qwen":
+        draw.polygon(
+            ((x, y - 10), (x - 10, y), (x, y + 10), (x + 10, y)),
+            fill=PURPLE,
+            outline=INK,
+        )
+    else:
+        draw.ellipse((x - 8, y - 8, x + 8, y + 8), fill=TEAL, outline=INK, width=1)
 
 
 def panel(
@@ -310,7 +332,9 @@ def build_forest_figure(reports: dict[str, dict[str, Any]]) -> None:
         anchor="rm",
     )
     FIGURES.mkdir(parents=True, exist_ok=True)
-    image.save(FIGURES / "figure2_forest.png", dpi=(180, 180))
+    image.crop((0, 135, image.width, image.height)).save(
+        FIGURES / "figure2_forest.png", dpi=(180, 180)
+    )
 
 
 def decomposed_panel(
@@ -354,8 +378,8 @@ def decomposed_panel(
         base_y = axis_top + 45 + row_idx * row_gap
         if show_labels:
             text(draw, (left + 28, base_y + 4), DECOMP_DISPLAY[contrast], 19, anchor="lm")
-        for model_idx, key in enumerate(("sonnet", "gpt", "deepseek")):
-            y = base_y + (-18, 0, 18)[model_idx]
+        for model_idx, key in enumerate(("sonnet", "gpt", "deepseek", "qwen")):
+            y = base_y + (-27, -9, 9, 27)[model_idx]
             result = reports[key]["contrasts"][contrast]
             value = float(result[field])
             ci_low, ci_high = (float(v) for v in result[ci_field])
@@ -363,7 +387,13 @@ def decomposed_panel(
             hi = xmap(ci_high, domain, plot_left, plot_right)
             x = xmap(value, domain, plot_left, plot_right)
             color = (
-                BLUE if key == "sonnet" else ORANGE if key == "gpt" else GREEN
+                BLUE
+                if key == "sonnet"
+                else ORANGE
+                if key == "gpt"
+                else GREEN
+                if key == "deepseek"
+                else PURPLE
             )
             draw.line((lo, y, hi, y), fill=color, width=4)
             draw.line((lo, y - 6, lo, y + 6), fill=color, width=3)
@@ -378,7 +408,7 @@ def build_decomposed_figure(reports: dict[str, dict[str, Any]]) -> None:
     text(
         draw,
         (85, 102),
-        "200 disjoint SOB records; five calls per representation; 95% record-cluster bootstrap confidence intervals",
+        "Disjoint SOB records (n=200; Qwen n=160); five calls per representation; 95% record-cluster bootstrap intervals",
         22,
         fill=MUTED,
     )
@@ -393,8 +423,8 @@ def build_decomposed_figure(reports: dict[str, dict[str, Any]]) -> None:
         subtitle="Only model-specific effects at or above 0.05 meet the preregistered practical rule",
         field="normalized_excess_disagreement",
         ci_field="normalized_excess_ci95",
-        domain=(-0.01, 0.12),
-        ticks=[0.00, 0.05, 0.10],
+        domain=(-0.01, 0.19),
+        ticks=[0.00, 0.05, 0.10, 0.15],
         threshold=0.05,
         show_labels=True,
     )
@@ -419,16 +449,105 @@ def build_decomposed_figure(reports: dict[str, dict[str, Any]]) -> None:
     text(draw, (405, 820), "GPT gateway alias", 20, anchor="lm")
     marker(draw, 640, 820, "deepseek")
     text(draw, (660, 820), "DeepSeek official endpoint", 20, anchor="lm")
+    marker(draw, 980, 820, "qwen")
+    text(draw, (1000, 820), "Qwen-Plus official endpoint", 20, anchor="lm")
     text(
         draw,
-        (1815, 820),
-        "Model-specific decisions are preregistered; direct cross-model comparisons are post-hoc.",
-        17,
+        (1815, 870),
+        "Each deployment is judged against the same frozen 0.05 practical threshold.",
+        16,
         fill=MUTED,
         anchor="rm",
     )
     FIGURES.mkdir(parents=True, exist_ok=True)
-    image.save(FIGURES / "figure3_decomposed_confirmation.png", dpi=(180, 180))
+    image.crop((0, 135, image.width, image.height)).save(
+        FIGURES / "figure3_decomposed_confirmation.png", dpi=(180, 180)
+    )
+
+
+def build_mode_figure(interaction: dict[str, Any]) -> None:
+    """Visualize the matched Qwen text-versus-JSON-Mode boundary."""
+    image = Image.new("RGB", (1900, 820), "white")
+    draw = ImageDraw.Draw(image)
+    text(draw, (85, 50), "Matched Qwen-Plus text versus JSON Mode", 39, bold=True)
+    text(
+        draw,
+        (85, 102),
+        "Same 100 frozen records; JSON Mode uses response_format={type: json_object}, not strict schema decoding",
+        22,
+        fill=MUTED,
+    )
+
+    left, right, top, bottom = 70, 930, 160, 690
+    draw.rounded_rectangle((left, top, right, bottom), radius=16, fill=PANEL, outline=GRID, width=2)
+    text(draw, (left + 28, top + 28), "A. Within-interface order effects", 27, bold=True)
+    text(draw, (left + 28, top + 66), "Descriptive matched effects; both JSON-Mode effects met the 0.05 rule", 18, fill=MUTED)
+    plot_left, plot_right = left + 270, right - 45
+    axis_top, axis_bottom = top + 135, bottom - 70
+    for tick in (0.00, 0.05, 0.10, 0.15, 0.20):
+        x = xmap(tick, (0.0, 0.20), plot_left, plot_right)
+        draw.line((x, axis_top, x, axis_bottom), fill=GRID, width=2)
+        text(draw, (x, axis_bottom + 18), f"{tick:.2f}", 17, fill=MUTED, anchor="ma")
+    threshold_x = xmap(0.05, (0.0, 0.20), plot_left, plot_right)
+    for y in range(axis_top, axis_bottom, 12):
+        draw.line((threshold_x, y, threshold_x, min(y + 6, axis_bottom)), fill=GOLD, width=3)
+
+    for row_idx, contrast in enumerate(DECOMP_CONTRASTS):
+        item = interaction["contrasts"][contrast]
+        y = axis_top + 80 + row_idx * 145
+        text(draw, (left + 28, y), DECOMP_DISPLAY[contrast], 19, anchor="lm")
+        tx = xmap(float(item["text_mode_excess"]), (0.0, 0.20), plot_left, plot_right)
+        jx = xmap(float(item["json_mode_excess"]), (0.0, 0.20), plot_left, plot_right)
+        draw.line((tx, y - 15, jx, y + 15), fill=MUTED, width=3)
+        marker(draw, tx, y - 15, "qwen")
+        marker(draw, jx, y + 15, "json")
+
+    marker(draw, left + 45, bottom - 30, "qwen")
+    text(draw, (left + 65, bottom - 30), "Text mode", 18, anchor="lm")
+    marker(draw, left + 210, bottom - 30, "json")
+    text(draw, (left + 230, bottom - 30), "JSON Mode", 18, anchor="lm")
+
+    left, right = 970, 1830
+    draw.rounded_rectangle((left, top, right, bottom), radius=16, fill=PANEL, outline=GRID, width=2)
+    text(draw, (left + 28, top + 28), "B. JSON-minus-text mode interaction", 27, bold=True)
+    text(draw, (left + 28, top + 66), "95% record-cluster intervals; frozen material-change boundary is +/-0.03", 18, fill=MUTED)
+    plot_left, plot_right = left + 270, right - 45
+    axis_top, axis_bottom = top + 135, bottom - 70
+    for tick in (-0.08, -0.04, 0.00, 0.04, 0.08):
+        x = xmap(tick, (-0.08, 0.08), plot_left, plot_right)
+        draw.line((x, axis_top, x, axis_bottom), fill=GRID, width=2)
+        text(draw, (x, axis_bottom + 18), f"{tick:+.2f}", 17, fill=MUTED, anchor="ma")
+    for boundary in (-0.03, 0.03):
+        bx = xmap(boundary, (-0.08, 0.08), plot_left, plot_right)
+        for y in range(axis_top, axis_bottom, 12):
+            draw.line((bx, y, bx, min(y + 6, axis_bottom)), fill=GOLD, width=3)
+    zx = xmap(0.0, (-0.08, 0.08), plot_left, plot_right)
+    draw.line((zx, axis_top, zx, axis_bottom), fill=INK, width=3)
+    for row_idx, contrast in enumerate(DECOMP_CONTRASTS):
+        item = interaction["contrasts"][contrast]
+        y = axis_top + 80 + row_idx * 145
+        text(draw, (left + 28, y), DECOMP_DISPLAY[contrast], 19, anchor="lm")
+        lo, hi = (float(v) for v in item["mode_change_ci95"])
+        value = float(item["mode_change"])
+        lx = xmap(lo, (-0.08, 0.08), plot_left, plot_right)
+        hx = xmap(hi, (-0.08, 0.08), plot_left, plot_right)
+        vx = xmap(value, (-0.08, 0.08), plot_left, plot_right)
+        draw.line((lx, y, hx, y), fill=TEAL, width=5)
+        draw.line((lx, y - 7, lx, y + 7), fill=TEAL, width=3)
+        draw.line((hx, y - 7, hx, y + 7), fill=TEAL, width=3)
+        marker(draw, vx, y, "json")
+    text(
+        draw,
+        (1815, 760),
+        "No material attenuation was confirmed; this is not an equivalence claim.",
+        18,
+        fill=MUTED,
+        anchor="rm",
+    )
+    FIGURES.mkdir(parents=True, exist_ok=True)
+    image.crop((0, 135, image.width, image.height)).save(
+        FIGURES / "figure4_qwen_mode_interaction.png", dpi=(180, 180)
+    )
 
 
 def build_tables(reports: dict[str, dict[str, Any]], exploratory: dict[str, Any]) -> None:
@@ -524,6 +643,7 @@ def build_decomposed_tables(
         ("Sonnet gateway alias", "sonnet"),
         ("GPT gateway alias", "gpt"),
         ("DeepSeek official endpoint", "deepseek"),
+        ("Qwen-Plus official endpoint", "qwen"),
     ):
         for contrast in DECOMP_CONTRASTS:
             item = reports[key]["contrasts"][contrast]
@@ -568,6 +688,70 @@ def build_decomposed_tables(
     write_csv(TABLES / "table6_decomposed_cross_model.csv", list(cross_rows[0]), cross_rows)
 
 
+def build_qwen_mode_tables(
+    json_mode: dict[str, Any], interaction: dict[str, Any], robustness: dict[str, Any]
+) -> None:
+    mode_rows: list[dict[str, Any]] = []
+    for contrast in DECOMP_CONTRASTS:
+        within = json_mode["contrasts"][contrast]
+        item = interaction["contrasts"][contrast]
+        low, high = item["mode_change_ci95"]
+        mode_rows.append(
+            {
+                "contrast": DECOMP_DISPLAY[contrast],
+                "text_mode_excess_matched_100": f"{item['text_mode_excess']:.4f}",
+                "json_mode_excess": f"{within['normalized_excess_disagreement']:.4f}",
+                "json_mode_ci95_low": f"{within['normalized_excess_ci95'][0]:.4f}",
+                "json_mode_ci95_high": f"{within['normalized_excess_ci95'][1]:.4f}",
+                "json_minus_text": f"{item['mode_change']:.4f}",
+                "mode_change_ci95_low": f"{low:.4f}",
+                "mode_change_ci95_high": f"{high:.4f}",
+                "mode_change_holm_p": f"{item['mode_change_holm_p']:.6f}",
+                "material_mode_change_confirmed": "no",
+            }
+        )
+    write_csv(TABLES / "table7_qwen_mode_interaction.csv", list(mode_rows[0]), mode_rows)
+
+    robust_rows: list[dict[str, Any]] = []
+    for system, run in robustness["runs"].items():
+        for contrast in DECOMP_CONTRASTS:
+            item = run["contrasts"][contrast]
+            robust_rows.append(
+                {
+                    "system": system,
+                    "contrast": DECOMP_DISPLAY[contrast],
+                    "records": run["record_count"],
+                    "mean": f"{item['mean']:.4f}",
+                    "median": f"{item['median']:.4f}",
+                    "symmetric_10pct_trimmed_mean": f"{item['symmetric_10pct_trimmed_mean']:.4f}",
+                    "mean_after_removing_largest_10pct": f"{item['mean_after_removing_largest_10pct']:.4f}",
+                    "top_decile_positive_mass_share": f"{item['largest_10pct_positive_mass_share']:.4f}",
+                    "medium_mean": f"{item['by_schema_complexity']['medium']:.4f}",
+                    "hard_mean": f"{item['by_schema_complexity']['hard']:.4f}",
+                    "analysis_status": "post-hoc descriptive",
+                }
+            )
+    write_csv(TABLES / "table8_effect_concentration.csv", list(robust_rows[0]), robust_rows)
+
+    concordance_rows = []
+    for item in robustness["cross_system_concordance"]:
+        low, high = item["rho_ci95"]
+        concordance_rows.append(
+            {
+                "left": item["left"],
+                "right": item["right"],
+                "contrast": DECOMP_DISPLAY[item["contrast"]],
+                "shared_records": item["shared_record_count"],
+                "spearman_rho": f"{item['spearman_rho']:.4f}",
+                "ci95_low": f"{low:.4f}",
+                "ci95_high": f"{high:.4f}",
+                "global_holm_p": f"{item['holm_p']:.6f}",
+                "analysis_status": "post-hoc exploratory",
+            }
+        )
+    write_csv(TABLES / "table9_record_concordance.csv", list(concordance_rows[0]), concordance_rows)
+
+
 def main() -> int:
     reports = {
         "sonnet": load_json(SONNET_REPORT),
@@ -578,13 +762,19 @@ def main() -> int:
         "sonnet": load_json(DECOMP_SONNET_REPORT),
         "gpt": load_json(DECOMP_GPT_REPORT),
         "deepseek": load_json(DECOMP_DEEPSEEK_REPORT),
+        "qwen": load_json(DECOMP_QWEN_REPORT),
     }
     decomposed_cross = load_json(DECOMP_CROSS_REPORT)
+    qwen_json = load_json(QWEN_JSON_REPORT)
+    qwen_interaction = load_json(QWEN_INTERACTION_REPORT)
+    robustness = load_json(ROBUSTNESS_REPORT)
     build_tables(reports, exploratory)
     build_decomposed_tables(decomposed_reports, decomposed_cross)
+    build_qwen_mode_tables(qwen_json, qwen_interaction, robustness)
     build_method_figure()
     build_forest_figure(reports)
     build_decomposed_figure(decomposed_reports)
+    build_mode_figure(qwen_interaction)
     outputs = sorted(TABLES.glob("*.csv")) + sorted(FIGURES.glob("*.png"))
     manifest = {
         "generated_by": "src/build_paper_artifacts.py",
@@ -597,6 +787,10 @@ def main() -> int:
                 DECOMP_SONNET_REPORT,
                 DECOMP_GPT_REPORT,
                 DECOMP_DEEPSEEK_REPORT,
+                DECOMP_QWEN_REPORT,
+                QWEN_JSON_REPORT,
+                QWEN_INTERACTION_REPORT,
+                ROBUSTNESS_REPORT,
                 DECOMP_CROSS_REPORT,
             )
         ],

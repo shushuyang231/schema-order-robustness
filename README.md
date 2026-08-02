@@ -1,63 +1,59 @@
-# JSON Schema 序列化稳健性蜕变测试
+# JSON Schema 指令工件的分布稳健性测试
 
-当前研究题目：
+当前论文题目：
 
-**Equivalent Schemas, Different Distributions: Metamorphic Testing of Schema-Guided JSON Generation under Serialization Reordering**
+> Testing JSON Schema Instruction Artifacts: Distributional Robustness under
+> Validation-Equivalent Serialization and JSON Mode
 
-项目把 JSON Schema 当作机器可读的软件接口契约。若两个 Schema 接受完全相同的 JSON 实例，但序列化顺序不同，黑盒 LLM 的输出分布是否仍然稳定？本项目通过等价重排、重复调用和 gold 指标分别测量表示敏感性、模型自身随机性、Schema 合规与答案正确性。
+本项目把序列化后的 JSON Schema 同时视为验证契约和 LM 指令工件。研究问题是：如果序列化器、代码生成器或中间件只改变 Schema 成员顺序，而不改变验证语义，黑盒 LM 组件的输出分布是否仍然稳定？
 
-## 当前结论（2026-07-24）
+## 当前结论（2026-08-02）
 
-- 100 条初始样本上的 5×5 重复测量结果显示，`claude-sonnet-5` 网关 alias 的两个主要复合重排超过冻结的 0.05 实用阈值，`gpt-5.5` alias 没有超过；
-- 在不相交的 200 条样本、3 个分解条件、每条件 5 次重复中，Sonnet alias 的 property-order 和 additional-member-order 效应分别为 0.0584 和 0.0768，均超过阈值；
-- 同一分解确认中，GPT alias 的两个效应为 0.03285 和 0.03795，均低于阈值；additional-member 对叶值准确率约有 -2.48 个百分点的次要信号，不能提升为主要结论；
-- 官方 DeepSeek `deepseek-v4-flash` 端点的两个分解效应为 0.01325 和 0.01815，统计上可辨但低于 0.05 实用阈值，也没有得到受支持的准确率变化；
-- 直接的 Sonnet–GPT 配对差异未通过 Holm 校正，因此不能声称模型间易感性差异已经得到确认；
-- 全部正式实验共计 14,000 个成功黑盒响应。没有证据支持“所有模型都受显著影响”或“一般性准确率下降”。
+- 核心证据包含 17,900 个成功响应；另有 600 个因模型资源包不适用而停止的探索性 Qwen3.7 响应，未合并进入正式结果。
+- 在不相交的分解实验中，Sonnet 网关 alias 的 property-order / additional-member-order 效应为 0.0584 / 0.0768，均超过冻结的 0.05 实用阈值。
+- GPT 网关 alias 的对应效应为 0.0329 / 0.0380；DeepSeek 官方端点为 0.0133 / 0.0182。它们统计上可检测，但未达到 0.05，因此是应当保留的负向实用复现，不是“零效应”。
+- Qwen-Plus 官方文本模式的对应效应为 0.1255 / 0.1229，均得到确认。
+- Qwen-Plus JSON Mode 内的效应为 0.1582 / 0.1219。与同一批 100 条文本模式记录相比，JSON-minus-text 变化为 +0.0191 / -0.0249；两项都没有确认达到冻结的 0.03 material-interaction 规则。
+- 上述 JSON Mode 结果只能表述为“没有证明其能实质削弱序列化敏感性”，不能表述为“模式没有影响”或“两个模式等价”。这里使用的是 `response_format={"type":"json_object"}`，不是严格 JSON Schema constrained decoding。
+- 没有证据支持一般性的平均准确率下降。GPT additional-member 对 leaf accuracy 的 -0.0248 次要信号被完整保留，但不能升级为普遍结论。
+- 保守 canonicalizer 在全部 200 条分解记录上把三个存储变体折叠为同一字节表示；它只处理本研究审计过的顺序自由度，不是通用 Schema 等价证明器。
 
-裁决：作为软件测试/黑盒接口稳健性论文继续投稿准备。论文只主张部分部署系统存在达到预先冻结阈值的表示敏感性，并把 GPT 与 DeepSeek 的低于阈值结果作为模型依赖边界，而不是隐藏的失败实验。
+实验分支已经关闭。不要为了寻找更多阳性结果继续添加模型。
 
-## 重要边界
+## 主要文件
 
-- JSON Schema 作为普通文本放在 user prompt 中；这不是厂商原生 `response_format` 或 constrained decoding 实验。
-- 模型名称按网关 requested/returned alias 报告；上游权重和官方供应商身份未被独立验证。
-- 100 条记录是独立统计单位；重复调用不作为额外独立样本虚增 n。
-- `data/restricted/` 中的 gold 不进入生成 prompt，也不发布。
-- 不根据 DeepSeek 结果再追加 Kimi 或其他模型来寻找阳性结果。未来若扩展模型面板，应作为独立、预先冻结的新研究。
+- `paper/manuscript.md`：EMSE PROMPT-SE 英文正文；
+- `paper/references.bib`：论文引用数据库；
+- `paper/emse/main.tex`：扁平、可编辑的 LaTeX 源；
+- `output/pdf/schema_order_emse_promptse.pdf`：逐页检查的投稿审阅 PDF；
+- `paper/emse/cover_letter.md`：特刊 cover letter 草稿；
+- `paper/emse/submission_checklist.md`：投稿检查清单；
+- `output/artifact/schema_order_emse_online_resource1.zip`：离线复现材料；
+- `paper/claim_evidence_audit.md`：主张—证据映射与措辞边界；
+- `PROJECT_HANDOFF.md`：项目状态和下一条本地指令。
 
-## 关键文档
+## 离线复现
 
-- `protocol/13_confirmatory_repeated_mve.md`：Sonnet 确认性重复测量协议；
-- `protocol/14_gpt55_cross_model_replication.md`：GPT 跨模型复现协议；
-- `protocol/16_cross_model_result_decision.md`：正式结果后的裁决；
-- `protocol/17_related_work_novelty_audit.md`：相关工作与新颖性审计；
-- `protocol/18_paper_research_questions_and_outline.md`：冻结 RQ、贡献边界和投稿级大纲；
-- `protocol/26_official_deepseek_result.md`：官方 DeepSeek 端点的审计、结果与哈希；
-- `protocol/related_work_matrix.csv`：机器可读相关工作矩阵；
-- `paper/manuscript.md`：当前完整英文正文；
-- `paper/claim_evidence_audit.md`：论文主张—证据审计；
-- `paper/tmlr/main.tex`：官方 TMLR review-mode 匿名 LaTeX 源；
-- [GitHub Releases](https://github.com/shushuyang231/schema-order-robustness/releases/latest)：已渲染并完成视觉检查的匿名论文 PDF，以及经过 allowlist 和密钥扫描的离线复现 ZIP；
-- 本仓库运行 `scripts/reproduce_paper_offline.ps1` 后会在 `output/artifact/` 重新生成匿名离线复现工件。
-
-## 安装
+安装论文侧依赖：
 
 ```powershell
-.\.venv\Scripts\python.exe -m pip install -r requirements-structured-output.txt
+python -m pip install -r requirements-paper.txt
 ```
 
-## 通用任务准备 CLI
-
-输入 JSONL 每行需要四个公开字段：
-
-```json
-{"record_id":"example-1","context":"...","question":"...","json_schema":{"type":"object","properties":{}}}
-```
-
-答案侧字段（如 `ground_truth`、`gold`、`answer`）会被拒绝，防止意外泄漏。生成五种 Schema 表示、运行 manifest 和逐条哈希审计：
+运行完整离线门禁：
 
 ```powershell
-.\.venv\Scripts\python.exe src\prepare_schema_metamorphic_tasks.py `
+.\scripts\reproduce_paper_offline.ps1
+```
+
+该脚本会编译 Python 源、运行单元测试、从冻结 JSON 报告重建图表、核对正文数字和引用、生成 EMSE LaTeX/PDF，并验证 Online Resource ZIP。它不会调用任何模型 API。
+
+## 通用 Schema 变体工具
+
+输入 JSONL 每行需要 `record_id`、`context`、`question` 和 `json_schema`。生成端文件会拒绝 `ground_truth`、`gold` 或 `answer` 等答案字段，避免泄漏。
+
+```powershell
+python src\prepare_schema_metamorphic_tasks.py `
   --input data\public\tasks.jsonl `
   --public-output data\processed\tasks_with_variants.jsonl `
   --manifest-output protocol\tasks_manifest.json `
@@ -67,35 +63,8 @@
   --repeats 5
 ```
 
-该输出可直接交给现有的可断点续跑生成器：
+先使用 `--mock` 验证生成、保存、恢复、解析和 Schema 校验链路。API 密钥不得写入命令、代码、日志、截图或论文工件。
 
-```powershell
-.\.venv\Scripts\python.exe src\run_sob_metamorphic.py `
-  --public-input data\processed\tasks_with_variants.jsonl `
-  --manifest protocol\tasks_manifest.json `
-  --output results\api\tasks_predictions.jsonl `
-  --model-alias model-alias `
-  --mock
-```
+## 作者信息与投稿前检查
 
-先使用 `--mock` 验证保存、解析和 Schema 校验链路；正式调用时去掉 `--mock` 并通过环境变量提供 API key。密钥不得写入命令、文件、日志或截图。
-
-## 测试
-
-```powershell
-.\.venv\Scripts\python.exe -m unittest discover -s tests -v
-```
-
-完整离线重建论文图表、审计正文并打包匿名工件：
-
-```powershell
-.\scripts\reproduce_paper_offline.ps1
-```
-
-该脚本不调用任何模型 API。原始模型响应、受限 gold 数据和本地密钥均不进入匿名工件。
-
-本机已核验的解释器为 Python 3.12.13。Windows `py` launcher 当前不可用，因此文档统一使用项目虚拟环境的绝对相对入口。
-
-## 已放弃的早期方向
-
-仓库仍保留 BIRD-Critic SQL repair 的审计和实验文件，作为完整研究过程记录。该方向的 M1 最小补丁方法只通过 3/30，已按预注册规则判定 `NO_GO_REVISE_OR_ABANDON`，不属于当前论文主线。
+EMSE 采用 single-blind review。作者信息已经按本人确认填写为：Shengyao Sun，上海交通大学本科生，Shanghai, China，通信邮箱 `sthfornothing@sjtu.edu.cn`。作者目前没有提供 ORCID；ORCID 是可选的永久研究者标识，因此本稿直接省略，不影响投稿。上传前只需再次检查 PDF、LaTeX 和 Editorial Manager 中的信息完全一致。

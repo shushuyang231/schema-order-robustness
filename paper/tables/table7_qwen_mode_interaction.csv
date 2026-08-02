@@ -1,0 +1,3 @@
+﻿contrast,text_mode_excess_matched_100,json_mode_excess,json_mode_ci95_low,json_mode_ci95_high,json_minus_text,mode_change_ci95_low,mode_change_ci95_high,mode_change_holm_p,material_mode_change_confirmed
+Property order,0.1391,0.1582,0.1049,0.2194,0.0191,-0.0199,0.0594,0.495101,no
+Additional member order,0.1468,0.1219,0.0724,0.1803,-0.0249,-0.0677,0.0162,0.495101,no

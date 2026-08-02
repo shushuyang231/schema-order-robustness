@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import Any
 
 
-PROVIDERS: dict[str, dict[str, str]] = {
+PROVIDERS: dict[str, dict[str, Any]] = {
     "kimi": {
         "base_url": "https://api.moonshot.cn/v1",
         "api_key_env": "MOONSHOT_API_KEY",
@@ -29,6 +29,18 @@ PROVIDERS: dict[str, dict[str, str]] = {
         "base_url": "https://api.deepseek.com",
         "api_key_env": "DEEPSEEK_API_KEY",
         "default_model": "deepseek-v4-flash",
+    },
+    "qwen": {
+        "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+        "api_key_env": "DASHSCOPE_API_KEY",
+        "default_model": "qwen3.7-plus-2026-05-26",
+        "request_body_extra": {"enable_thinking": False},
+    },
+    "qwen_plus": {
+        "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+        "api_key_env": "DASHSCOPE_API_KEY",
+        "default_model": "qwen-plus",
+        "request_body_extra": {"enable_thinking": False},
     },
     "xai": {
         "base_url": "https://api.x.ai/v1",
@@ -52,6 +64,14 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--repeats", type=int, default=3)
     parser.add_argument("--catalog-only", action="store_true")
+    parser.add_argument(
+        "--json-mode",
+        action="store_true",
+        help=(
+            "Smoke-test response_format=json_object. This verifies JSON Mode "
+            "only; it is not a strict JSON Schema decoding test."
+        ),
+    )
     parser.add_argument("--timeout", type=float, default=120.0)
     return parser.parse_args()
 
@@ -96,6 +116,14 @@ def sanitized_completion(payload: dict[str, Any]) -> dict[str, Any]:
     message = (choices[0].get("message") or {}) if choices else {}
     content = visible_text(message.get("content"))
     reasoning_content = visible_text(message.get("reasoning_content"))
+    parsed_json_object: dict[str, Any] | None = None
+    if content is not None:
+        try:
+            candidate = json.loads(content)
+            if isinstance(candidate, dict):
+                parsed_json_object = candidate
+        except json.JSONDecodeError:
+            pass
     return {
         "id": payload.get("id"),
         "object": payload.get("object"),
@@ -111,6 +139,12 @@ def sanitized_completion(payload: dict[str, Any]) -> dict[str, Any]:
             else None
         ),
         "content_exact_api_ok": content.strip() == "API_OK" if content else False,
+        "content_json_object": parsed_json_object is not None,
+        "content_api_status_ok": (
+            parsed_json_object.get("api_status") == "API_OK"
+            if parsed_json_object is not None
+            else False
+        ),
         "reasoning_content_length": (
             len(reasoning_content) if reasoning_content is not None else None
         ),
@@ -142,16 +176,32 @@ def evaluate_gate(record: dict[str, Any], required_repeats: int = 3) -> dict[str
         not catalog.get("error")
         and catalog.get("requested_model_present") is True
     )
+    json_mode = (
+        (record.get("request_body_extra") or {}).get("response_format")
+        == {"type": "json_object"}
+    )
+    json_contract_passed = (
+        all(
+            run.get("response", {}).get("content_json_object") is True
+            for run in runs
+            if run.get("status") == "ok"
+        )
+        if json_mode
+        else True
+    )
     runs_passed = (
         len(runs) == required_repeats
         and successful_runs == required_repeats
         and stable_returned_model is not None
+        and json_contract_passed
     )
     return {
         "required_repeats": required_repeats,
         "catalog_passed": catalog_passed,
         "successful_runs": successful_runs,
         "stable_returned_model": stable_returned_model,
+        "json_mode_requested": json_mode,
+        "json_contract_passed": json_contract_passed,
         "runs_passed": runs_passed,
         "gate_passed": catalog_passed and runs_passed,
     }
@@ -174,6 +224,9 @@ def main() -> int:
     base_url = provider["base_url"].rstrip("/")
     model = args.model or provider["default_model"]
     api_key_env = provider["api_key_env"]
+    request_body_extra = dict(provider.get("request_body_extra") or {})
+    if args.json_mode:
+        request_body_extra["response_format"] = {"type": "json_object"}
     api_key = os.environ.get(api_key_env)
     if not api_key and sys.stdin.isatty():
         api_key = getpass.getpass(
@@ -190,6 +243,7 @@ def main() -> int:
         "base_url": base_url,
         "api_key_source": api_key_env,
         "requested_model": model,
+        "request_body_extra": request_body_extra,
         "catalog": None,
         "runs": [],
     }
@@ -230,18 +284,28 @@ def main() -> int:
         )
     elif not args.catalog_only:
         for repeat_index in range(1, args.repeats + 1):
+            if args.json_mode:
+                system_content = (
+                    'Return exactly the JSON object {"api_status":"API_OK"} '
+                    "and nothing else."
+                )
+                user_content = "JSON Mode connectivity check."
+            else:
+                system_content = "Return exactly API_OK and nothing else."
+                user_content = "Connectivity check."
             payload = {
                 "model": model,
                 "messages": [
                     {
                         "role": "system",
-                        "content": "Return exactly API_OK and nothing else.",
+                        "content": system_content,
                     },
-                    {"role": "user", "content": "Connectivity check."},
+                    {"role": "user", "content": user_content},
                 ],
                 "max_tokens": 512,
                 "stream": False,
             }
+            payload.update(request_body_extra)
             try:
                 response = request_json(
                     f"{base_url}/chat/completions",
