@@ -1,14 +1,14 @@
 # Cover letter — EMSE PROMPT-SE 2026
 
-2 August 2026
+6 August 2026
 
 Dear Editors of the PROMPT-SE 2026 Special Issue,
 
 Please consider the manuscript “Testing JSON Schema Instruction Artifacts:
 Distributional Robustness under Validation-Equivalent Serialization and JSON
 Mode” as a Research Paper for the Empirical Software Engineering special issue
-“Empirical Studies for Prompt Engineering in Software Engineering
-(PROMPT-SE 2026).”
+“Empirical Studies on Prompts and other Instruction Artifacts in Software
+Engineering (PROMPT-SE 2026).”
 
 The paper treats serialized JSON Schema as a first-class instruction artifact
 in LM-enabled software. It studies a concrete maintenance failure mode:

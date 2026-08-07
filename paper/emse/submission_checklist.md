@@ -8,8 +8,8 @@
 - Six indexing keywords.
 - Decimal headings with no more than three levels.
 - Author name shown for single-blind review.
-- Author affiliation, Shanghai location, and corresponding email confirmed by
-  the author and inserted consistently; ORCID omitted because none was provided.
+- Author affiliation, Shanghai location, corresponding email, and authenticated
+  ORCID confirmed by the author and inserted consistently.
 - Statements and Declarations: competing interests, funding, contributions,
   data availability, and human-subject status.
 - Generative-AI assistance disclosed in the methods/reproducibility section;
@@ -24,9 +24,15 @@
   Shanghai, China** and **sthfornothing@sjtu.edu.cn** exactly as on the title
   page.
 - Inspect every file in the final upload set after metadata insertion.
+- Upload the standalone title page as **Title Page containing ALL Author Contact
+  Info** and the review PDF as **Manuscript**.
 - In Editorial Manager select **Research Paper**, answer **Yes** to the special
   issue question, and select **PROMPT-SE 2026**.
-- Upload the manuscript/source files and the reproduction package as Online
-  Resource 1; copy its descriptive caption into the submission form.
+- For the full-LaTeX workflow, upload `main.tex` first as **Manuscript**, the
+  four PNG figures as **Figure**, and `references.bib` as **LaTeX supporting
+  files**. Upload the compiled PDF only as a reference/supplement if the form
+  provides that item type.
+- Upload the reproduction package ZIP separately as **Supplementary Material**
+  or **Online Resource 1**; do not classify it as LaTeX supporting files.
 - Paste the finalized cover letter and confirm the manuscript is not under
   consideration elsewhere.

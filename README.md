@@ -1,70 +1,96 @@
-# JSON Schema 指令工件的分布稳健性测试
+# Testing JSON Schema Instruction Artifacts / JSON Schema 指令工件测试
 
-当前论文题目：
+This repository contains the paper, frozen aggregate results, and offline
+reproduction package for **Testing JSON Schema Instruction Artifacts:
+Distributional Robustness under Validation-Equivalent Serialization and JSON
+Mode**. The work treats a serialized JSON Schema as both a validation contract
+and an instruction artifact consumed by a language-model software component.
 
-> Testing JSON Schema Instruction Artifacts: Distributional Robustness under
-> Validation-Equivalent Serialization and JSON Mode
+本仓库公开论文、冻结后的汇总结果和离线复现包。研究的核心问题是：当
+JSON Schema 的序列化顺序改变、但验证语义不变时，它作为大语言模型指令
+工件的行为分布是否仍然稳定。结论是：**验证等价本身不足以作为面向 LM
+Schema 工件的行为回归判据**；效应取决于具体部署，不能据此提出“字段永远
+应该排在前面”的通用规则。
 
-本项目把序列化后的 JSON Schema 同时视为验证契约和 LM 指令工件。研究问题是：如果序列化器、代码生成器或中间件只改变 Schema 成员顺序，而不改变验证语义，黑盒 LM 组件的输出分布是否仍然稳定？
+**Repository snapshot:** 6 August 2026
+**Submission target:** Empirical Software Engineering, PROMPT-SE 2026
+**Author:** Shengyao Sun, Shanghai Jiao Tong University
+**ORCID:** [0009-0008-9175-8226](https://orcid.org/0009-0008-9175-8226)
 
-## 当前结论（2026-08-02）
+## Latest evidence
 
-- 核心证据包含 17,900 个成功响应；另有 600 个因模型资源包不适用而停止的探索性 Qwen3.7 响应，未合并进入正式结果。
-- 在不相交的分解实验中，Sonnet 网关 alias 的 property-order / additional-member-order 效应为 0.0584 / 0.0768，均超过冻结的 0.05 实用阈值。
-- GPT 网关 alias 的对应效应为 0.0329 / 0.0380；DeepSeek 官方端点为 0.0133 / 0.0182。它们统计上可检测，但未达到 0.05，因此是应当保留的负向实用复现，不是“零效应”。
-- Qwen-Plus 官方文本模式的对应效应为 0.1255 / 0.1229，均得到确认。
-- Qwen-Plus JSON Mode 内的效应为 0.1582 / 0.1219。与同一批 100 条文本模式记录相比，JSON-minus-text 变化为 +0.0191 / -0.0249；两项都没有确认达到冻结的 0.03 material-interaction 规则。
-- 上述 JSON Mode 结果只能表述为“没有证明其能实质削弱序列化敏感性”，不能表述为“模式没有影响”或“两个模式等价”。这里使用的是 `response_format={"type":"json_object"}`，不是严格 JSON Schema constrained decoding。
-- 没有证据支持一般性的平均准确率下降。GPT additional-member 对 leaf accuracy 的 -0.0248 次要信号被完整保留，但不能升级为普遍结论。
-- 保守 canonicalizer 在全部 200 条分解记录上把三个存储变体折叠为同一字节表示；它只处理本研究审计过的顺序自由度，不是通用 Schema 等价证明器。
+### 最新结果（2026 年 8 月）
 
-实验分支已经关闭。不要为了寻找更多阳性结果继续添加模型。
+正式核心研究包含 17,900 个成功的黑盒响应；每个条件重复调用 5 次。Sonnet
+网关和官方 Qwen-Plus 文本部署的两个主要对比均超过预先冻结的 0.05 工程筛选
+线；GPT 网关和 DeepSeek 官方端点的效应虽可统计检测，但没有越过这条实际量级
+筛选线。Qwen 的 JSON Mode 匹配实验没有证明它会实质性削弱顺序敏感性。此前
+因资源权益问题停止的 600 次 Qwen3.7 探索性响应不进入正式结果。
 
-## 主要文件
+The core study contains **17,900 successful black-box responses**. Each
+condition uses five repeated calls, and the analysis compares cross-
+serialization disagreement with repeated-call disagreement. The two primary
+decomposed contrasts and the frozen 0.05 practical screen are:
 
-- `paper/manuscript.md`：EMSE PROMPT-SE 英文正文；
-- `paper/references.bib`：论文引用数据库；
-- `paper/emse/main.tex`：扁平、可编辑的 LaTeX 源；
-- `output/pdf/schema_order_emse_promptse.pdf`：逐页检查的投稿审阅 PDF；
-- `paper/emse/cover_letter.md`：特刊 cover letter 草稿；
-- `paper/emse/submission_checklist.md`：投稿检查清单；
-- `output/artifact/schema_order_emse_online_resource1.zip`：离线复现材料；
-- `paper/claim_evidence_audit.md`：主张—证据映射与措辞边界；
-- `PROJECT_HANDOFF.md`：项目状态和下一条本地指令。
+| Deployment | Property order | Additional Schema-member order |
+| --- | ---: | ---: |
+| Sonnet gateway alias | 0.0584 | 0.0768 |
+| GPT gateway alias | 0.0329 | 0.0380 |
+| Official DeepSeek endpoint | 0.0133 | 0.0182 |
+| Official Qwen-Plus text mode | **0.1255** | **0.1229** |
+| Official Qwen-Plus JSON Mode | 0.1582 | 0.1219 |
 
-## 离线复现
+The positive practical replications are therefore deployment-contingent:
+both contrasts crossed 0.05 for the Sonnet gateway and official Qwen-Plus
+text deployment, while GPT and DeepSeek produced statistically detectable but
+smaller effects. In a matched 100-record Qwen comparison, JSON-minus-text
+changes were +0.0191 and -0.0249; neither met the separately frozen 0.03
+material-interaction rule. The results do **not** establish universal accuracy
+degradation, a universal field-order rule, or equivalence between text mode and
+JSON Mode. The 600-response Qwen3.7 resource-entitlement pilot was stopped and
+is excluded from the formal results.
 
-安装论文侧依赖：
+The headline conclusion is deliberately narrow: **validation equivalence is
+not by itself a sufficient behavioral regression oracle for LM-facing Schema
+artifacts**. Effects depend on the deployed model/interface, and the gateway
+aliases are reported as observed deployments because their upstream checkpoint
+identities were not independently verified.
+
+上述结论只针对记录时实际调用的部署，不是模型家族排名，也不是所有模型都
+对顺序敏感的普遍定律。网关上游 checkpoint 没有被独立验证，因此仓库按
+“Sonnet gateway alias / GPT gateway alias”报告，而不是把它们写成官方模型。
+
+## Repository contents
+
+- `paper/manuscript.md` — authoritative manuscript and current conclusions.
+- `paper/emse/main.tex` — editable flat LaTeX source for the EMSE submission.
+- `output/pdf/schema_order_emse_promptse_revision.pdf` — latest rendered review
+  PDF (the earlier filename remains for provenance because it may be open in a
+  local viewer).
+- `output/artifact/schema_order_emse_online_resource1.zip` — allowlisted
+  offline artifact package.
+- `results/` and `protocol/` — frozen aggregate reports, manifests, and
+  analysis decisions.
+- `PROJECT_HANDOFF.md` — audit trail, checksums, and file-level status.
+
+## Offline reproduction
+
+The reproduction path never calls a model API:
 
 ```powershell
 python -m pip install -r requirements-paper.txt
-```
-
-运行完整离线门禁：
-
-```powershell
 .\scripts\reproduce_paper_offline.ps1
 ```
 
-该脚本会编译 Python 源、运行单元测试、从冻结 JSON 报告重建图表、核对正文数字和引用、生成 EMSE LaTeX/PDF，并验证 Online Resource ZIP。它不会调用任何模型 API。
+It compiles the Python sources, runs offline tests, rebuilds tables and
+figures from frozen aggregate reports, audits manuscript claims and citations,
+regenerates the LaTeX/PDF package, and validates the artifact archive. API
+runners are retained for method inspection but are not invoked by this command.
 
-## 通用 Schema 变体工具
+## Scope and data policy
 
-输入 JSONL 每行需要 `record_id`、`context`、`question` 和 `json_schema`。生成端文件会拒绝 `ground_truth`、`gold` 或 `answer` 等答案字段，避免泄漏。
-
-```powershell
-python src\prepare_schema_metamorphic_tasks.py `
-  --input data\public\tasks.jsonl `
-  --public-output data\processed\tasks_with_variants.jsonl `
-  --manifest-output protocol\tasks_manifest.json `
-  --audit-output results\gate\tasks_variant_audit.json `
-  --study-name my_schema_test `
-  --model-alias model-alias `
-  --repeats 5
-```
-
-先使用 `--mock` 验证生成、保存、恢复、解析和 Schema 校验链路。API 密钥不得写入命令、代码、日志、截图或论文工件。
-
-## 作者信息与投稿前检查
-
-EMSE 采用 single-blind review。作者信息已经按本人确认填写为：Shengyao Sun，上海交通大学本科生，Shanghai, China，通信邮箱 `sthfornothing@sjtu.edu.cn`。作者目前没有提供 ORCID；ORCID 是可选的永久研究者标识，因此本稿直接省略，不影响投稿。上传前只需再次检查 PDF、LaTeX 和 Editorial Manager 中的信息完全一致。
+Raw provider responses, credentials, restricted benchmark contexts, and
+private gateway communications are intentionally not redistributed. The public
+artifact exposes the method, manifests, aggregate outputs, validation checks,
+and an authorized example task panel. See `ARTIFACT_README.md` and
+`LICENSES.md` for the three reproducibility levels and licensing details.

@@ -8,6 +8,7 @@ does not call any model or recompute frozen statistics.
 from __future__ import annotations
 
 import html
+import os
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -19,6 +20,8 @@ from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_LEFT
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import mm
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import (
     HRFlowable,
     Image,
@@ -35,7 +38,12 @@ from reportlab.platypus import (
 ROOT = Path(__file__).resolve().parents[1]
 MANUSCRIPT = ROOT / "paper/manuscript.md"
 BIBLIOGRAPHY = ROOT / "paper/references.bib"
-OUTPUT = ROOT / "output/pdf/schema_order_emse_promptse.pdf"
+OUTPUT = Path(
+    os.environ.get(
+        "EMSE_REVIEW_PDF_OUTPUT",
+        str(ROOT / "output/pdf/schema_order_emse_promptse.pdf"),
+    )
+)
 
 NAVY = colors.HexColor("#172033")
 BLUE = colors.HexColor("#2563A6")
@@ -45,11 +53,16 @@ GRID = colors.HexColor("#CCD4DF")
 
 TABLE_CAPTIONS = (
     "Study stages, record panels, interfaces, and formal status",
+    "Execution windows, endpoint provenance, and request settings",
     "Decomposed text-mode effects and frozen deployment-level decisions",
     "Leaf-value accuracy contrasts for the decomposed studies",
     "Post-hoc effect-concentration stress tests",
     "Selected high-effect Qwen text-mode cases; post-hoc and non-representative",
 )
+
+SUM_FONT_NAME = "ReviewSegoeUISymbol"
+SUM_FONT_PATH = Path("C:/Windows/Fonts/seguisym.ttf")
+HAS_SUM_FONT = False
 
 
 @dataclass
@@ -146,7 +159,14 @@ def cite_label(entry: BibEntry) -> str:
     if not names:
         lead = entry.fields.get("title", entry.key)
     elif len(names) == 1:
-        lead = surname(names[0])
+        # Keep institutional authors distinct in prose citations. Otherwise
+        # ``Google Cloud`` and ``Alibaba Cloud`` both collapse to ``Cloud``.
+        author = names[0]
+        institutional = any(
+            marker in author.lower()
+            for marker in ("cloud", "alibaba", "google", "openai", "anthropic")
+        )
+        lead = author if institutional else surname(author)
     elif len(names) == 2:
         lead = f"{surname(names[0])} and {surname(names[1])}"
     else:
@@ -180,15 +200,65 @@ def bibliography_text(entry: BibEntry) -> str:
 def latex_formula_to_text(value: str) -> str:
     compact = " ".join(line.strip() for line in value.splitlines())
     if compact.startswith("E_i(A,B)="):
-        return "E_i(A,B) = D_cross(A_i,B_i) - 1/2 [D_within(A_i) + D_within(B_i)]"
+        return "Eᵢ(A,B) = D_cross(Aᵢ,Bᵢ) - ½ [D_within(Aᵢ) + D_within(Bᵢ)]"
     if compact.startswith(r"\mathbb{E}[E_i]"):
-        return "E[E_i] = 1/2 sum_z (p_i(z) - q_i(z))^2"
+        return "E[Eᵢ] = ½ Σ_z (pᵢ(z) - qᵢ(z))²"
     compact = compact.replace(r"\mathrm", "").replace(r"\mathbb", "")
     compact = compact.replace(r"\left", "").replace(r"\right", "")
     compact = compact.replace(r"\frac{1}{2}", "½").replace(r"\sum_z", "Σz")
-    compact = compact.replace(r"\ell_2", "ℓ₂").replace(r"\mathbb{E}", "E")
+    compact = compact.replace(r"\ell_2", "L_2").replace(r"\mathbb{E}", "E")
     compact = compact.replace("{", "").replace("}", "")
     return compact
+
+
+def latex_formula_to_markup(value: str) -> str:
+    """Render the two manuscript equations with ReportLab-safe subscripts."""
+    compact = " ".join(line.strip() for line in value.splitlines())
+    if compact.startswith("E_i(A,B)="):
+        return (
+            "<i>E</i><sub>i</sub>(<i>A</i>,<i>B</i>) = "
+            "<i>D</i><sub>cross</sub>(<i>A</i><sub>i</sub>,<i>B</i><sub>i</sub>) "
+            "- 1/2 [<i>D</i><sub>within</sub>(<i>A</i><sub>i</sub>) + "
+            "<i>D</i><sub>within</sub>(<i>B</i><sub>i</sub>)]"
+        )
+    if compact.startswith(r"\mathbb{E}[E_i]"):
+        summation = (
+            f"<font name='{SUM_FONT_NAME}'>&#8721;</font><sub>z</sub>"
+            if HAS_SUM_FONT
+            else "SUM<sub>z</sub>"
+        )
+        return (
+            "<i>E</i>[<i>E</i><sub>i</sub>] = 1/2 " + summation + " "
+            "(<i>p</i><sub>i</sub>(<i>z</i>) - <i>q</i><sub>i</sub>(<i>z</i>))"
+            "<super>2</super>"
+        )
+    return html.escape(latex_formula_to_text(value))
+
+
+def latex_inline_to_markup(value: str) -> str:
+    r"""Render simple inline math without relying on unavailable Unicode glyphs.
+
+    The review-PDF path uses ReportLab rather than a TeX engine.  In
+    particular, the Times/Unicode fallback used for ``\ell`` is not reliably
+    embedded by every PDF viewer and previously appeared as missing squares in
+    the sentence describing the squared L2 distance.  The manuscript only
+    needs a small set of scalar/subscript expressions, so emit those with
+    ReportLab's stable markup and use an ASCII ``L`` for ``\ell``.
+    """
+    compact = " ".join(line.strip() for line in value.splitlines())
+    compact = re.sub(r"\\mathrm\{([^{}]+)\}", r"\1", compact)
+    compact = re.sub(r"\\mathbb\{([^{}]+)\}", r"\1", compact)
+    compact = compact.replace(r"\left", "").replace(r"\right", "")
+    compact = compact.replace(r"\ell_2", "L_2")
+    compact = compact.replace(r"\frac{1}{2}", "1/2")
+    compact = compact.replace("{", "").replace("}", "")
+    escaped = html.escape(compact)
+    escaped = re.sub(
+        r"([A-Za-z])_([A-Za-z0-9]+)",
+        lambda match: f"<i>{match.group(1)}</i><sub>{match.group(2)}</sub>",
+        escaped,
+    )
+    return escaped if "<sub>" in escaped else f"<i>{escaped}</i>"
 
 
 def inline_markup(value: str, bib: dict[str, BibEntry]) -> str:
@@ -208,7 +278,7 @@ def inline_markup(value: str, bib: dict[str, BibEntry]) -> str:
     value = re.sub(r"`([^`]+)`", lambda m: hold("<font name='Courier'>" + html.escape(m.group(1)) + "</font>"), value)
     value = re.sub(r"\*\*([^*]+)\*\*", lambda m: hold("<b>" + html.escape(m.group(1)) + "</b>"), value)
     value = re.sub(r"(?<!\*)\*([^*]+)\*(?!\*)", lambda m: hold("<i>" + html.escape(m.group(1)) + "</i>"), value)
-    value = re.sub(r"\\\((.+?)\\\)", lambda m: hold("<i>" + html.escape(latex_formula_to_text(m.group(1))) + "</i>"), value)
+    value = re.sub(r"\\\((.+?)\\\)", lambda m: hold(latex_inline_to_markup(m.group(1))), value)
     rendered = html.escape(value)
     for index, replacement in enumerate(tokens):
         rendered = rendered.replace(f"@@H{index}@@", replacement)
@@ -231,6 +301,9 @@ def make_styles() -> dict[str, ParagraphStyle]:
     )
     return {
         "body": base,
+        "body_left": ParagraphStyle(
+            "BodyLeft", parent=base, alignment=TA_LEFT
+        ),
         "title": ParagraphStyle(
             "Title",
             parent=styles["Title"],
@@ -355,7 +428,7 @@ def header_footer(canvas: Any, doc: Any) -> None:
         canvas.setFont("Helvetica", 8)
         canvas.setFillColor(MUTED)
         canvas.drawString(18 * mm, A4[1] - 11 * mm, "Sun • Testing JSON Schema Instruction Artifacts")
-        canvas.drawRightString(A4[0] - 18 * mm, A4[1] - 11 * mm, "EMSE PROMPT-SE 2026")
+        canvas.drawRightString(A4[0] - 18 * mm, A4[1] - 11 * mm, "Manuscript")
         canvas.setStrokeColor(GRID)
         canvas.line(18 * mm, A4[1] - 13 * mm, A4[0] - 18 * mm, A4[1] - 13 * mm)
     canvas.setFont("Helvetica", 8)
@@ -373,8 +446,9 @@ def build_story(manuscript: str, bib: dict[str, BibEntry], styles: dict[str, Par
             Paragraph("Shengyao Sun", styles["author"]),
             Paragraph("Shanghai Jiao Tong University, Shanghai, China", styles["meta"]),
             Paragraph("Corresponding author: sthfornothing@sjtu.edu.cn", styles["meta"]),
+            Paragraph("ORCID: 0009-0008-9175-8226", styles["meta"]),
             Spacer(1, 3 * mm),
-            Paragraph("Research Paper • Empirical Software Engineering • PROMPT-SE 2026", styles["meta"]),
+            Paragraph("Manuscript", styles["meta"]),
             HRFlowable(width="100%", thickness=0.8, color=GRID, spaceBefore=6, spaceAfter=8),
         ]
     )
@@ -386,7 +460,16 @@ def build_story(manuscript: str, bib: dict[str, BibEntry], styles: dict[str, Par
     def flush() -> None:
         if paragraph:
             raw = " ".join(part.strip() for part in paragraph)
-            style = styles["abstract"] if section_name == "Abstract" else styles["body"]
+            # Long hashes and other unbreakable identifiers should not be
+            # typeset with full justification: ReportLab stretches the spaces
+            # between ordinary words to fill the line, producing the visibly
+            # broken SHA-256 paragraph in the review PDF.
+            if section_name == "Abstract":
+                style = styles["abstract"]
+            elif "SHA-256" in raw or raw.count("`sha256") >= 1:
+                style = styles["body_left"]
+            else:
+                style = styles["body"]
             story.append(Paragraph(inline_markup(raw, bib), style))
             paragraph.clear()
 
@@ -432,7 +515,7 @@ def build_story(manuscript: str, bib: dict[str, BibEntry], styles: dict[str, Par
             while index < len(lines) and lines[index].strip() != r"\]":
                 equation.append(lines[index])
                 index += 1
-            story.append(Paragraph(html.escape(latex_formula_to_text("\n".join(equation))), styles["equation"]))
+            story.append(Paragraph(latex_formula_to_markup("\n".join(equation)), styles["equation"]))
             index += 1
             continue
         if stripped.startswith("- "):
@@ -472,6 +555,10 @@ def build_story(manuscript: str, bib: dict[str, BibEntry], styles: dict[str, Par
 
 
 def main() -> int:
+    global HAS_SUM_FONT
+    if SUM_FONT_PATH.exists():
+        pdfmetrics.registerFont(TTFont(SUM_FONT_NAME, str(SUM_FONT_PATH)))
+        HAS_SUM_FONT = True
     manuscript = MANUSCRIPT.read_text(encoding="utf-8")
     bib = parse_bibtex(BIBLIOGRAPHY.read_text(encoding="utf-8"))
     styles = make_styles()
@@ -486,7 +573,7 @@ def main() -> int:
         bottomMargin=17 * mm,
         title="Testing JSON Schema Instruction Artifacts",
         author="Shengyao Sun",
-        subject="EMSE PROMPT-SE 2026 research paper",
+        subject="Testing JSON Schema instruction artifacts",
         creator="Offline reproducible paper builder",
     )
     doc.build(story, onFirstPage=header_footer, onLaterPages=header_footer)

@@ -44,7 +44,7 @@
     {
       "path": "paper/draft_audit.json",
       "bytes": 1132,
-      "sha256": "714f1e2727883d392f5f9be97101606e128208aab5c8ed22b30c727e425dbc21"
+      "sha256": "633d2a7812cb88719eead8b7f2a36c05de9a7e3350efb765d9ac296fb604789e"
     },
     {
       "path": "paper/figures/figure1_method.png",
@@ -68,8 +68,8 @@
     },
     {
       "path": "paper/manuscript.md",
-      "bytes": 59372,
-      "sha256": "26ef8a3755178c280607b4208c7f9ed0a82cb07333cc2443c29c0ba8598b763c"
+      "bytes": 63352,
+      "sha256": "a6a81c190bcb2b6612de78dcea40d07f6515cddd9a51bde4801d1281d572c596"
     },
     {
       "path": "paper/references.bib",
@@ -563,13 +563,13 @@
     },
     {
       "path": "src/build_emse_review_pdf.py",
-      "bytes": 19307,
-      "sha256": "c39aaeee7bcf1c7e56e189502b4f280d1364d2703036fc8d2c2ce2ab13ed1c30"
+      "bytes": 22978,
+      "sha256": "67c8e9e98cb7a9fcb7fdb6f737f9739ecffa7d4c6d11d488f06d74c4f8203d28"
     },
     {
       "path": "src/build_emse_submission.py",
-      "bytes": 3550,
-      "sha256": "90cd41c56159779143a680b04dcd2d09ef941a426be60aee0ab289cb53ab3940"
+      "bytes": 3583,
+      "sha256": "b85b006c5f7ece37af07cdde0a40a1f6755f8fd04306f84fd233cabd3f260ebe"
     },
     {
       "path": "src/build_paper_artifacts.py",

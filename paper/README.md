@@ -1,54 +1,41 @@
-# Paper status
+# Paper package / 论文文件包
 
-This directory contains the rewritten single-blind EMSE PROMPT-SE manuscript
-and its frozen, offline-reproducible paper artifacts. The experimental branch
-is closed; no build or audit command calls a model API.
+This directory contains the current single-blind EMSE PROMPT-SE manuscript and
+its frozen, offline-reproducible paper artifacts. The experimental branch is
+closed; no build or audit command calls a model API.
 
-## Main submission files
+本目录是当前 EMSE PROMPT-SE 单盲稿件及其冻结、可离线复现的论文材料。实验
+分支已经关闭，构建和审计命令都不会调用模型 API。
 
-- `manuscript.md` — authoritative English manuscript (8,004 audited words).
-- `references.bib` — bibliography; every entry is cited and every citation is
-  defined.
+## Main submission files / 主要文件
+
+- `manuscript.md` — authoritative English manuscript (8,540 audited words).
+- `references.bib` — bibliography used by the manuscript.
 - `emse/main.tex` — flat editable LaTeX review source.
-- `../output/pdf/schema_order_emse_promptse.pdf` — rendered A4 review PDF.
+- `../output/pdf/schema_order_emse_promptse_revision.pdf` — latest rendered
+  18-page A4 review PDF.
 - `emse/cover_letter.md` — special-issue cover-letter draft.
-- `emse/submission_checklist.md` — journal and human-administration checks.
-- `emse/AUTHOR_METADATA_REQUIRED.md` — author-confirmed title-page metadata and
-  ORCID status.
+- `emse/submission_checklist.md` — journal and administration checklist.
+- `emse/AUTHOR_METADATA_REQUIRED.md` — author-confirmed metadata and ORCID.
 
-The paper uses single-blind author identification and includes the declarations
-required by EMSE. Generative-AI assistance and human accountability are
-documented in the reproducibility section.
+## Evidence and reproduction / 证据与复现
 
-## Evidence and audit files
-
-- `claim_evidence_audit.md` — claim-to-report mapping and wording boundaries.
-- `reviews/emse_rewrite_plan.md` — frozen journal-reframing plan.
-- `reviews/post_tmlr_venue_novelty_adversarial_audit.md` — venue and closest-work
-  audit after the earlier desk rejection.
-- `artifact_manifest.json` — hashes for all generated figures and tables.
-- `draft_audit.json` — citation, headline-number, section, table, and figure
-  audit.
-- `robustness/dialect_validation_audit.json` — Draft 7 versus Draft 2020-12
-  validation audit.
-
-## Figures, tables, and reproduction
-
-Figures are under `figures/`; generated result tables are under `tables/`.
-Regenerate and audit the complete submission offline with:
+Frozen aggregate reports are under `../results/`; protocols and decision
+records are under `../protocol/`; generated tables and figures are under
+`tables/` and `figures/`. Rebuild and audit the complete package with:
 
 ```powershell
 .\scripts\reproduce_paper_offline.ps1
 ```
 
-The command compiles Python sources, runs the unit tests, rebuilds tables and
-figures from frozen reports, audits the manuscript, regenerates the flat LaTeX
-and PDF, and writes Online Resource 1 to
-`output/artifact/schema_order_emse_online_resource1.zip`.
+The command compiles Python sources, runs offline tests, rebuilds tables and
+figures from frozen reports, audits manuscript claims and citations, regenerates
+the LaTeX/PDF package, and validates Online Resource 1. Raw provider responses,
+credentials, and restricted benchmark contexts are intentionally not included.
 
-## Author metadata
+## Author metadata / 作者信息
 
-The title page now identifies Shengyao Sun as an undergraduate student at
-Shanghai Jiao Tong University in Shanghai, China, with
-`sthfornothing@sjtu.edu.cn` as the corresponding email. No ORCID was provided,
-so the optional ORCID field is omitted.
+The title page identifies Shengyao Sun as an undergraduate student at Shanghai
+Jiao Tong University, Shanghai, China. Corresponding email:
+`sthfornothing@sjtu.edu.cn`. ORCID:
+`0009-0008-9175-8226`.

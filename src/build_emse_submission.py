@@ -36,6 +36,7 @@ def main() -> int:
 
     markdown_latex.TABLE_CAPTIONS = (
         "Study stages, record panels, interfaces, and formal status.",
+        "Execution windows, endpoint provenance, and request settings.",
         "Decomposed text-mode effects and frozen deployment-level decisions.",
         "Leaf-value accuracy contrasts for the decomposed studies.",
         "Post-hoc effect-concentration stress tests.",
@@ -63,13 +64,12 @@ def main() -> int:
         r"\captionsetup{font=small,labelfont=bf}",
         "",
         r"\title{" + markdown_latex.inline(title) + "}",
-        r"\author{Shengyao Sun\thanks{Corresponding author: \href{mailto:sthfornothing@sjtu.edu.cn}{sthfornothing@sjtu.edu.cn}}}",
+        r"\author{Shengyao Sun\thanks{Corresponding author: \href{mailto:sthfornothing@sjtu.edu.cn}{sthfornothing@sjtu.edu.cn}; ORCID: \href{https://orcid.org/0009-0008-9175-8226}{0009-0008-9175-8226}}}",
         r"\affil{Shanghai Jiao Tong University, Shanghai, China}",
         r"\date{}",
         "",
         r"\begin{document}",
         r"\maketitle",
-        r"\noindent\textit{Research Paper for the Empirical Software Engineering special issue PROMPT-SE 2026.}",
         r"\begin{abstract}",
         markdown_latex.inline(" ".join(abstract_lines)),
         r"\end{abstract}",

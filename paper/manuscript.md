@@ -3,10 +3,11 @@
 **Shengyao Sun**
 Shanghai Jiao Tong University, Shanghai, China
 Corresponding author: sthfornothing@sjtu.edu.cn
+ORCID: 0009-0008-9175-8226
 
 ## Abstract
 
-**Context:** Language-model software uses JSON Schema as both an instruction artifact and a validation contract. Software tooling may reorder a Schema without changing validator behavior, yet change model behavior. **Objective:** We test whether validation-equivalent Schema serializations induce output-distribution changes beyond repeated-call variability, whether the changes exceed a prespecified practical threshold across deployed systems, and whether provider JSON Mode attenuates them. **Method:** We derive metamorphic relations from JSON and JSON Schema semantics, issue five repeated calls per representation, and estimate record-level excess disagreement with cluster bootstrap and permutation inference. The core study contains 17,900 successful responses from two gateway aliases and official DeepSeek/Qwen endpoints, a disjoint 200-record decomposition, and a matched 100-record Qwen text/JSON-Mode ablation. Gateway results characterize observed deployments; upstream checkpoint identities were not independently verified. **Results:** Property-order and additional Schema-member-order effects exceeded 0.05 for the Sonnet gateway (0.058 and 0.077) and Qwen-Plus text deployment (0.126 and 0.123), but not for the GPT gateway (0.033 and 0.038) or DeepSeek (0.013 and 0.018). JSON-Mode effects also exceeded 0.05. Matched JSON-minus-text changes were +0.019 and -0.025; neither was confirmed as a material interaction. Average Schema compliance and leaf-value accuracy did not show universal degradation. **Conclusions:** Validation equivalence is an insufficient regression oracle for LM-facing Schema artifacts. We release an offline-auditable test workflow and conservative canonicalizer; distributional robustness should be tested separately from syntax and task accuracy.
+**Context:** Language-model software uses JSON Schema as both an instruction artifact and a validation contract. Software tooling may reorder a Schema without changing validator behavior, yet change model behavior. **Objective:** We test whether validation-equivalent Schema serializations induce output-distribution changes beyond repeated-call variability, whether the changes exceed a prospectively specified practical screen across deployed systems, and whether provider JSON Mode attenuates them. **Method:** We derive metamorphic relations from JSON and JSON Schema semantics, issue five repeated calls per representation, and estimate record-level excess disagreement with cluster bootstrap and permutation inference. The core study contains 17,900 successful responses from two gateway aliases and official DeepSeek/Qwen endpoints, a disjoint 200-record decomposition, and a matched 100-record Qwen text/JSON-Mode ablation. Gateway results characterize observed deployments; upstream checkpoint identities were not independently verified. **Results:** Property-order and additional Schema-member-order effects exceeded 0.05 for the Sonnet gateway (0.058 and 0.077) and Qwen-Plus text deployment (0.126 and 0.123), but not for the GPT gateway (0.033 and 0.038) or DeepSeek (0.013 and 0.018). JSON-Mode effects also exceeded 0.05. Matched JSON-minus-text changes were +0.019 and -0.025; neither was confirmed as a material interaction. Average Schema compliance and leaf-value accuracy did not show universal degradation. **Conclusions:** Validation equivalence is an insufficient regression oracle for LM-facing Schema artifacts. We release an offline-auditable test workflow and conservative canonicalizer; distributional robustness should be tested separately from syntax and task accuracy.
 
 **Keywords:** prompt testing; JSON Schema; structured output; metamorphic testing; robustness; empirical software engineering
 
@@ -23,14 +24,14 @@ We study five serialization transformations in an initial 100-record experiment 
 The study answers five research questions:
 
 - **RQ1 — Distributional invariance:** Do validation-equivalent Schema serializations change normalized output distributions beyond identical-prompt variability?
-- **RQ2 — Decomposed practical effects:** Do property order and additional Schema-object member order independently exceed a prespecified 0.05 practical threshold across deployed systems?
+- **RQ2 — Decomposed practical effects:** Do property order and additional Schema-object member order independently exceed a prospectively specified 0.05 practical screen across deployed systems?
 - **RQ3 — Quality consequences:** Do the distribution changes imply average Schema-compliance or leaf-value-accuracy degradation?
 - **RQ4 — Interface boundary:** Does provider JSON Mode materially attenuate the order effects for a matched Qwen-Plus deployment?
 - **RQ5 — Heterogeneity:** Are mean effects concentrated in a small subset of records, and are vulnerable-record profiles stable across systems or interfaces?
 
-RQ5 is explicitly exploratory. The JSON Mode ablation was frozen only after the Qwen text-mode interim had been inspected; we disclose that selection and do not present the mode comparison as part of the earlier preregistration.
+RQ5 is explicitly exploratory. The JSON Mode ablation was frozen only after the Qwen text-mode interim had been inspected; we disclose that selection and do not present the mode comparison as part of the earlier local frozen analysis plan.
 
-This paper makes five contributions. First, it turns validation equivalence into a metamorphic relation for testing LM-facing Schema artifacts. Second, it provides a stochasticity-adjusted excess-disagreement estimator with record-cluster inference and a prespecified practical screen. Third, it reports positive and negative practical replications across gateway aliases and official endpoints, including 17,900 successful core responses. Fourth, it supplies a matched text-versus-JSON-Mode boundary experiment showing that syntax-oriented JSON Mode did not demonstrate attenuation in this Qwen deployment. Fifth, it provides a conservative canonicalizer and a continuous-integration (CI) regression workflow that remove the tested representation degree of freedom by construction.
+This paper makes five contributions. First, it turns validation equivalence into a metamorphic relation for testing LM-facing Schema artifacts. Second, it provides a stochasticity-adjusted excess-disagreement estimator with record-cluster inference and a prospectively specified practical screen. Third, it reports positive and negative practical replications across gateway aliases and official endpoints, including 17,900 successful core responses. Fourth, it supplies a matched text-versus-JSON-Mode boundary experiment showing that syntax-oriented JSON Mode did not demonstrate attenuation in this Qwen deployment. Fifth, it provides a conservative canonicalizer and a continuous-integration (CI) regression workflow that remove the tested representation degree of freedom by construction.
 
 The durable contribution is the specification-derived test and mitigation workflow, not a point-in-time ranking of hosted models. Deployment estimates are evidence about the named interfaces during the recorded runs and should be remeasured after provider, model, SDK, prompt-wrapper, or Schema-generator changes.
 
@@ -133,7 +134,23 @@ The official Alibaba Cloud replication requested the real-time alias `qwen-plus`
 
 Across core runs, operational gates verify counts, unique successful request keys, returned aliases, response identifiers where available, and prompt-repeat consistency. Overall Schema pass rates range from 98.73% to 99.92%, leaving sufficient valid output while preventing parse failure from dominating the distribution statistic.
 
-### 3.5 Deterministic outcome measures
+### 3.5 Execution contract and model settings
+
+Table 2 reports the successful-response windows and endpoint-level settings that define each deployment observation. Times are UTC and are the first and last successful rows in the corresponding run log; smoke calls and transient errors are documented separately in the artifact. The gateway base URL is intentionally withheld from the public manuscript because it identifies a small private relay; its request path was OpenAI-compatible `/chat/completions`, and no gateway region field was exposed.
+
+| Interface/stage | Successful-response window (UTC) | Requested/returned model | Endpoint and region | Request contract |
+|---|---|---|---|---|
+| Sonnet gateway, primary / decomposition | 2026-07-17 10:07–16:05 / 2026-07-19 07:50–13:39 | `claude-sonnet-5` / same | Private OpenAI-compatible gateway; region not exposed | `max_tokens=4096`; temperature, top_p, seed omitted; text mode |
+| GPT gateway, primary / decomposition | 2026-07-17 16:22–2026-07-18 04:59 / 2026-07-19 13:48–2026-07-21 09:44 | `gpt-5.5` / same | Private OpenAI-compatible gateway; region not exposed | `max_tokens=4096`; temperature, top_p, seed omitted; text mode |
+| DeepSeek official | 2026-07-24 05:41–14:27 | `deepseek-v4-flash` / same | `https://api.deepseek.com/v1`; provider region not returned | `max_tokens=4096`; provider-default thinking; response_format and tools omitted |
+| Qwen-Plus official text | 2026-08-01 14:46–2026-08-02 03:19 | `qwen-plus` / same | `https://dashscope.aliyuncs.com/compatible-mode/v1`; provider region not returned | `max_tokens=4096`; `enable_thinking=false`; response_format omitted |
+| Qwen-Plus official JSON Mode | 2026-08-02 04:18–05:02 | `qwen-plus` / same | Same Alibaba endpoint; provider region not returned | `max_tokens=4096`; `enable_thinking=false`; `response_format={"type":"json_object"}` |
+
+Across all runs, `stream=false`, no tools were sent, and no seed was supplied. The runner used Python 3.12.13, `httpx` 0.28.1, and `jsonschema` 4.26.0. The request timeout was 240 seconds. Each request allowed at most three attempts; HTTP 429, HTTP 5xx, timeouts, and network errors used exponential backoff of 1 and 2 seconds, while other 4xx responses stopped the run. Five consecutive request errors paused execution for resumable inspection. The complete request rows, prompt hashes, returned model strings, and retry records are included in the online resource.
+
+The exact system prompt was: “You are a precise information extraction system. Answer using only one JSON object that satisfies the supplied JSON Schema. Do not add markdown, explanations, comments, or fields not allowed by the schema. Use only the provided context.” The exact user-template, with only record-specific fields substituted, was: “# Context\\n{context}\\n\\n# Question\\n{question}\\n\\n# JSON Schema\\n{schema_serialization}\\n\\nReturn only the JSON object.” This template was identical across representations; only `{schema_serialization}` changed.
+
+### 3.6 Deterministic outcome measures
 
 Every response is scored without an LM judge:
 
@@ -144,33 +161,33 @@ Every response is scored without an LM judge:
 
 For distributional stability, parsed objects are canonicalized by sorting object keys. String leaves receive the same token normalization used for value F1. Parse failures receive explicit failure signatures. This removes output-object key order from the outcome: the paper tests changes in generated content, not whether the model echoes the input order.
 
-For record (i), let (A_i) and (B_i) be the five normalized output signatures under two Schema representations. Let (D_{\mathrm{within}}) be the unequal-pair proportion among the ten unordered pairs within a condition, and (D_{\mathrm{cross}}) the unequal-pair proportion among the 25 cross-condition pairs. The record-level excess disagreement is
+For record \(i\), let \(A_i\) and \(B_i\) be the five normalized output signatures under two Schema representations. Let \(D_{\mathrm{within}}\) be the unequal-pair proportion among the ten unordered pairs within a condition, and \(D_{\mathrm{cross}}\) the unequal-pair proportion among the 25 cross-condition pairs. The record-level excess disagreement is
 
 \[
 E_i(A,B)=D_{\mathrm{cross}}(A_i,B_i)-\frac{1}{2}\left[D_{\mathrm{within}}(A_i)+D_{\mathrm{within}}(B_i)\right].
 \]
 
-The reported effect is the frozen-sample mean of (E_i). Positive values indicate that the two representations disagree more than expected from their own repeated-call variability. If (p_i(z)) and (q_i(z)) are the population probabilities of normalized signature (z), then
+The reported effect is the frozen-sample mean of \(E_i\). Positive values indicate that the two representations disagree more than expected from their own repeated-call variability. If \(p_i(z)\) and \(q_i(z)\) are the population probabilities of normalized signature \(z\), then
 
 \[
 \mathbb{E}[E_i]=\frac{1}{2}\sum_z\left(p_i(z)-q_i(z)\right)^2.
 \]
 
-Thus the population estimand is one half of squared (\ell_2) distance between discrete output distributions, equivalently one half of squared maximum mean discrepancy under the Kronecker-delta kernel [@gretton2012kernel]. The pairwise construction is an unbiased U-statistic under independent repeats. A finite-sample record value can be negative even though the population quantity is nonnegative.
+Thus the population estimand is one half of squared \(L_2\) distance between discrete output distributions, equivalently one half of squared maximum mean discrepancy under the Kronecker-delta kernel [@gretton2012kernel]. The pairwise construction is an unbiased U-statistic under independent repeats. A finite-sample record value can be negative even though the population quantity is nonnegative.
 
-### 3.6 Inference and decision rules
+### 3.7 Inference and decision rules
 
-Confidence intervals use 5,000 record-cluster bootstrap resamples. Distribution p-values use 5,000 within-record label permutations, and accuracy p-values use record-level sign flips. The record—not the individual API response—is the resampling unit. Holm correction is applied within each prespecified metric family: four non-original variants in the initial study, two decomposed contrasts in each later study, and two mode-by-order interactions in the matched ablation.
+Confidence intervals use 5,000 record-cluster bootstrap resamples. Distribution p-values use 5,000 within-record label permutations, and accuracy p-values use record-level sign flips. The record—not the individual API response—is the resampling unit. Holm correction is applied within each prospectively specified metric family: four non-original variants in the initial study, two decomposed contrasts in each later study, and two mode-by-order interactions in the matched ablation.
 
-Before the confirmatory 100-record calls, the study defined 0.05 normalized excess disagreement as a practical screen: five percentage points of cross-representation disagreement beyond the mean within-representation baseline. A contrast is confirmed only when its estimate is at least 0.05, its 95% interval has a lower bound above zero, and its Holm-adjusted p-value is below 0.05. This threshold is a study-specific engineering context, not a universal utility boundary. We report all estimates and intervals, including statistically detectable effects below it.
+Before the confirmatory 100-record calls, the study defined 0.05 normalized excess disagreement as a practical screen: five percentage points of cross-representation disagreement beyond the mean within-representation baseline, approximately one additional changed output per twenty cross-condition comparisons after noise adjustment. A contrast is confirmed only when its estimate is at least 0.05, its 95% interval has a lower bound above zero, and its Holm-adjusted p-value is below 0.05. This is a descriptive benchmark for separating effect magnitudes in this study, not a business-loss, safety, reliability, or industry-standard threshold. A deployment should recalibrate it against its own consequence costs; we report all estimates and intervals, including statistically detectable effects below it.
 
 The Qwen mode interaction is JSON-Mode excess minus text-mode excess on the matched 100 records. A material interaction requires an absolute change of at least 0.03, an interval excluding zero, and Holm-adjusted (p<0.05). Failure to meet this rule is **not** an equivalence conclusion; its interval may still contain modest attenuation or amplification.
 
-### 3.7 Exploratory robustness analyses
+### 3.8 Exploratory robustness analyses
 
 After viewing earlier reports, we assessed effect concentration with the median, symmetric 10% trimmed mean, the mean after removing the largest 10% of record effects, complexity-stratified means, and the share of positive mass contributed by the top decile. We also computed Spearman correlation between record-level effects for every system pair on shared records, with bootstrap intervals, permutation tests, and one global Holm correction across the 20 pair-by-contrast comparisons. These analyses explain heterogeneity but do not alter any frozen decision.
 
-### 3.8 Schema canonicalization intervention
+### 3.9 Schema canonicalization intervention
 
 The artifact includes a conservative canonicalizer intended for build pipelines. It recursively sorts object members, sorts only unique string arrays under `required`, and preserves every other array because order may be semantically meaningful for keywords such as `prefixItems` or application-specific extensions. This is not a general JSON Schema equivalence checker. On all 200 disjoint records, the canonicalizer maps `original`, `properties_reversed`, and `keywords_reversed` to one byte-identical representation (200/200 audit pass). It therefore removes the tested serialization degree of freedom without claiming to normalize every semantically equivalent Schema.
 
@@ -178,7 +195,7 @@ The artifact includes a conservative canonicalizer intended for build pipelines.
 
 ### 4.1 Answer-first overview
 
-Table 2 reports the central decomposed results. Both effects crossed the 0.05 rule in the Sonnet gateway and official Qwen-Plus text deployments. Both remained below 0.05 for the GPT gateway and official DeepSeek endpoint, despite intervals and adjusted p-values supporting nonzero effects. This is evidence of deployment-contingent practical magnitude, not a formal ranking of model families.
+Table 3 reports the central decomposed results. Both effects crossed the 0.05 rule in the Sonnet gateway and official Qwen-Plus text deployments. Both remained below 0.05 for the GPT gateway and official DeepSeek endpoint, despite intervals and adjusted p-values supporting nonzero effects. This is evidence of deployment-contingent practical magnitude, not a formal ranking of model families.
 
 | System | Records | Property-order excess (95% CI) | Additional-member excess (95% CI) | Schema pass | Frozen decision |
 |---|---:|---:|---:|---:|---|
@@ -187,7 +204,7 @@ Table 2 reports the central decomposed results. Both effects crossed the 0.05 ru
 | DeepSeek official | 200 | 0.0133 [0.0014, 0.0254] | 0.0182 [0.0057, 0.0322] | 99.63% | neither reached 0.05 |
 | Qwen-Plus official text | 160 | 0.1255 [0.0861, 0.1674] | 0.1229 [0.0853, 0.1624] | 99.33% | both confirmed |
 
-All Sonnet, GPT, and Qwen adjusted p-values in Table 2 are 0.0004. DeepSeek adjusted p-values are 0.0132 and 0.0016. Statistical detectability is therefore not the same as the frozen practical decision.
+All Sonnet, GPT, and Qwen adjusted p-values in Table 3 are 0.0004. DeepSeek adjusted p-values are 0.0132 and 0.0016. Statistical detectability is therefore not the same as the frozen practical decision.
 
 ![Figure 2. Primary five-way effects for the two gateway deployments.](figures/figure2_forest.png)
 
@@ -197,11 +214,11 @@ All Sonnet, GPT, and Qwen adjusted p-values in Table 2 are 0.0004. DeepSeek adju
 
 The initial five-way experiment first established the phenomenon on the Sonnet gateway. Relative to `original`, property reversal yielded normalized excess disagreement 0.0831 (95% CI [0.0460, 0.1279], Holm (p=0.0008)); recursive keyword reversal yielded 0.0703 ([0.0391, 0.1067], (p=0.0008)). Both exceeded 0.05. Required reversal produced 0.0328 ([0.0091, 0.0620]), and descriptions-first produced 0.0270 ([0.0088, 0.0495]); these statistically detectable but smaller effects did not pass the practical rule.
 
-The same 100 records on the GPT gateway showed smaller effects: 0.0389 for property reversal, 0.0109 for required reversal, 0.0287 for keyword reversal, and 0.0015 for descriptions-first. None reached 0.05. The contrast between the two gateway reports was not itself preregistered. Post-hoc paired Sonnet-minus-GPT comparisons did not survive Holm correction, so the correct conclusion is not that one underlying model is proven more susceptible. Rather, the study observed a practical confirmation in one gateway deployment and a failed practical replication in the other.
+The same 100 records on the GPT gateway showed smaller effects: 0.0389 for property reversal, 0.0109 for required reversal, 0.0287 for keyword reversal, and 0.0015 for descriptions-first. None reached 0.05. The contrast between the two gateway reports was not itself prospectively specified. Post-hoc paired Sonnet-minus-GPT comparisons did not survive Holm correction, so the correct conclusion is not that one underlying model is proven more susceptible. Rather, the study observed a practical confirmation in one gateway deployment and a replication that did not meet the practical screen in the other.
 
 Required-array reversal was smaller than property reversal in both initial gateways, and descriptions-first was smaller still. One plausible interpretation is that models treat the contents of `required` more like set-valued metadata and rely less on annotation placement than on property presentation. The study does not isolate attention or parsing mechanisms, however, and two descriptions-first transformations were byte-level no-ops. We therefore retain this as an observed pattern and replication hypothesis rather than a causal explanation.
 
-The disjoint decomposed studies then reproduced nonzero representation effects across four text-mode deployments (Table 2). Every one of the eight intervals has a positive lower bound. **Answer to RQ1:** validator-equivalent serialization can change normalized black-box output distributions beyond repeated-prompt variability, but magnitude is system- and deployment-contingent.
+The disjoint decomposed studies then reproduced nonzero representation effects across four text-mode deployments (Table 3). Every one of the eight intervals has a positive lower bound. **Answer to RQ1:** validator-equivalent serialization can change normalized black-box output distributions beyond repeated-prompt variability, but magnitude is system- and deployment-contingent.
 
 ### 4.3 RQ2: property and additional member order are separable in the tested design
 
@@ -209,11 +226,11 @@ The decomposed Sonnet follow-up confirmed both contrasts. Property order produce
 
 GPT produced 0.0329 and 0.0380. DeepSeek produced 0.0133 and 0.0182. Their positive intervals and adjusted p-values indicate detectable shifts, but none passed the practical magnitude screen. Retaining these negative practical replications is essential: choosing only Sonnet and Qwen would overstate generality, while treating the smaller results as “no effect” would discard evidence supported by the statistical tests.
 
-The decomposition changes the interpretation of the original keyword-reversal result. It shows that a representation shift remains after property order is held fixed; it does not identify which individual keyword position causes it. **Answer to RQ2:** both decomposed order dimensions exceeded the prespecified threshold in two deployments and remained below it in two. No universal threshold-crossing effect is established.
+The decomposition changes the interpretation of the original keyword-reversal result. It shows that a representation shift remains after property order is held fixed; it does not identify which individual keyword position causes it. **Answer to RQ2:** both decomposed order dimensions exceeded the prospectively specified screen in two deployments and remained below it in two. No universal threshold-crossing effect is established.
 
 ### 4.4 RQ3: distribution shift did not imply universal average quality loss
 
-Table 3 separates the distribution estimand from leaf-value accuracy. Sonnet's decomposed accuracy contrasts are effectively zero. DeepSeek's are small and in opposite directions. Qwen text-mode point estimates are -0.0177 for property order and +0.0063 for additional member order; both intervals include zero. In JSON Mode they are -0.0246 and +0.0089, again with intervals including zero.
+Table 4 separates the distribution estimand from leaf-value accuracy. Sonnet's decomposed accuracy contrasts are effectively zero. DeepSeek's are small and in opposite directions. Qwen text-mode point estimates are -0.0177 for property order and +0.0063 for additional member order; both intervals include zero. In JSON Mode they are -0.0246 and +0.0089, again with intervals including zero.
 
 | System/interface | Property-order accuracy difference (95% CI) | Additional-member accuracy difference (95% CI) |
 |---|---:|---:|
@@ -239,7 +256,7 @@ The intervals include modest attenuation and amplification, so this result is no
 
 ### 4.6 RQ5: mean effects are heterogeneous, but matched-interface profiles persist
 
-Every system has a median record effect of zero. Means are therefore driven by a minority of positive records rather than a uniform shift. Table 4 shows how estimates change under two post-hoc concentration checks. Removing the largest-effect decile substantially reduces all means. Sonnet falls to 0.0068 and 0.0166; GPT and DeepSeek become slightly negative. Qwen text remains 0.0488 for property order and 0.0526 for additional member order, while JSON Mode remains 0.0752 and 0.0443. These deletions are stress tests, not alternative confirmatory estimators.
+Every system has a median record effect of zero. Means are therefore driven by a minority of positive records rather than a uniform shift. Table 5 shows how estimates change under two post-hoc concentration checks. Removing the largest-effect decile substantially reduces all means. Sonnet falls to 0.0068 and 0.0166; GPT and DeepSeek become slightly negative. Qwen text remains 0.0488 for property order and 0.0526 for additional member order, while JSON Mode remains 0.0752 and 0.0443. These deletions are stress tests, not alternative confirmatory estimators.
 
 | System/interface | Contrast | Mean | 10% trimmed mean | Mean after largest-decile deletion | Top-decile positive mass |
 |---|---|---:|---:|---:|---:|
@@ -254,13 +271,13 @@ Every system has a median record effect of zero. Means are therefore driven by a
 | Qwen JSON Mode | property | 0.1582 | 0.0854 | 0.0752 | 57.0% |
 | Qwen JSON Mode | additional member | 0.1219 | 0.0546 | 0.0443 | 65.2% |
 
-Descriptively, hard records have larger effects than medium records in most Sonnet, GPT-property, and Qwen comparisons, but not in both DeepSeek contrasts. The study was neither powered nor preregistered for complexity interaction, so this pattern is a hypothesis for replication.
+Descriptively, hard records have larger effects than medium records in most Sonnet, GPT-property, and Qwen comparisons, but not in both DeepSeek contrasts. The study was neither powered nor prospectively specified for complexity interaction, so this pattern is a hypothesis for replication.
 
 Cross-system record-level correlations are small and none survives global Holm correction. For example, Sonnet versus GPT correlations are -0.030 for property order and -0.132 for additional member order; Sonnet versus Qwen text correlations are 0.058 and 0.172. In contrast, Qwen text versus JSON Mode—same alias, endpoint, and records—shows correlations 0.618 and 0.626, both with global Holm (p=0.0040). **Answer to RQ5:** average effects are concentrated, and “vulnerable records” do not transfer reliably across different deployed systems. They do persist across the matched Qwen interfaces, suggesting that task/Schema features and system-specific behavior jointly shape susceptibility.
 
 ### 4.7 High-effect records include substantive and surface-level changes
 
-To make the estimand concrete, we inspected Qwen text-mode records with the maximum observed record effect, (E_i=1.0). Table 5 presents three deliberately contrasting cases. This inspection was post-hoc and selected from the upper tail; it is not a random sample, does not estimate how often each pattern occurs, and does not alter any confirmatory decision. In each case, all five responses under each representation were identical within condition and all ten responses were Schema-valid.
+To make the estimand concrete, we inspected Qwen text-mode records with the maximum observed record effect, \(E_i=1.0\). Table 6 presents three deliberately contrasting cases. This inspection was post-hoc and selected from the upper tail; it is not a random sample, does not estimate how often each pattern occurs, and does not alter any confirmatory decision. In each case, all five responses under each representation were identical within condition and all ten responses were Schema-valid.
 
 | Case | Contrast | Five responses under the left representation | Five responses under the right representation | Interpretation |
 |---|---|---|---|---|
@@ -268,7 +285,7 @@ To make the estimand concrete, we inspected Qwen text-mode records with the maxi
 | Q-P2 | original vs. properties reversed | `award_name`: Ron Evans medal | `award_name`: AFL Rising Star | Stable factual substitution in one field; both objects validate |
 | Q-P3 | original vs. properties reversed | two dates rendered as `May 1, 1999` | the same dates rendered as `1999-05-01` | Surface normalization that changes exact outputs without changing the calendar date |
 
-The cases show why excess disagreement is a diagnostic rather than a harm score. It captures both task-relevant content changes (Q-P1 and Q-P2) and potentially benign representational changes (Q-P3). All three are operationally observable to exact-output caches, snapshot tests, audit diffs, or downstream string consumers, but they do not by themselves establish economic, safety, or user-experience harm. Production thresholds should therefore be paired with domain-specific consequence metrics.
+The cases show why excess disagreement is a diagnostic rather than a harm score. Q-P1 is a gold-content loss, Q-P2 is a task-relevant factual substitution, and Q-P3 is a surface-equivalent date rendering change. We observed no action-changing or unsafe case in this small post-hoc inspection, so we do not infer their absence in production. All three are operationally observable to exact-output caches, snapshot tests, audit diffs, or downstream string consumers, but they do not by themselves establish economic, safety, or user-experience harm. Production thresholds should therefore be paired with domain-specific consequence metrics and, where available, a domain-specific semantic/action classifier.
 
 ## 5. Engineering Method and Practical Use
 
@@ -293,7 +310,7 @@ Canonicalization offers three engineering benefits. It stabilizes prompt diffs, 
 
 Our 0.05 screen is transparent but not universal. A deployment should connect its threshold to consequences. If a generated object triggers a payment or destructive API action, any change in unsafe-acceptance probability may matter more than average disagreement. If outputs are suggestions reviewed by a human, a larger distribution shift may be acceptable. Teams should therefore retain the distribution statistic as a diagnostic while defining guardrails on business outcomes, unsafe actions, latency, and cost.
 
-A descriptive sensitivity check makes the dependence on this engineering choice explicit. Holding the positive-interval and adjusted-(p<0.05) requirements fixed, a 0.03 magnitude screen would classify both contrasts for the Sonnet gateway, GPT gateway, and Qwen deployment, but neither DeepSeek contrast. The frozen 0.05 screen classifies both Sonnet and Qwen contrasts and neither GPT nor DeepSeek contrast. At 0.08, only the two Qwen contrasts remain above the screen. These post-hoc alternatives do not replace the preregistered decision; they show that the general finding of nonzero, deployment-contingent sensitivity is stable while the label “practically material” necessarily depends on local costs.
+A descriptive sensitivity check makes the dependence on this engineering choice explicit. Holding the positive-interval and adjusted-(p<0.05) requirements fixed, a 0.03 magnitude screen would classify both contrasts for the Sonnet gateway, GPT gateway, and Qwen deployment, but neither DeepSeek contrast. The frozen 0.05 screen, prospectively specified in a local analysis plan, classifies both Sonnet and Qwen contrasts and neither GPT nor DeepSeek contrast. At 0.08, only the two Qwen contrasts remain above the screen. These alternative cutoffs do not replace the locally prospectively specified decision; they show that the general finding of nonzero, deployment-contingent sensitivity is stable while the label “practically material” necessarily depends on local costs.
 
 ## 6. Discussion
 
@@ -329,7 +346,7 @@ The zero medians and large top-decile mass shares show that a small set of recor
 
 ### 7.1 Construct validity
 
-Normalized excess disagreement is not a direct utility measure. It intentionally treats any normalized content change as distributional movement. Token normalization may merge distinctions that matter in some domains or retain differences that do not. We counter this by reporting Schema compliance, exact leaf accuracy, token F1 in the artifact, and perfect-response rate separately. The (\ell_2)-distance interpretation clarifies the estimand but does not make 0.05 a universal threshold.
+Normalized excess disagreement is not a direct utility measure. It intentionally treats any normalized content change as distributional movement. Token normalization may merge distinctions that matter in some domains or retain differences that do not. We counter this by reporting Schema compliance, exact leaf accuracy, token F1 in the artifact, and perfect-response rate separately. The \(L_2\)-distance interpretation clarifies the estimand but does not make 0.05 a universal threshold.
 
 Our transformations are validation-equivalent under the audited subset and dialects, not under every possible vocabulary, custom keyword, annotation consumer, or code-generation tool. `description` is an annotation that may intentionally guide an LM even though it does not constrain validation. The canonicalizer's preservation of non-`required` arrays is deliberately conservative, but arbitrary extensions could still attach order semantics to object members outside standard validation.
 
@@ -341,7 +358,7 @@ The prompt wrapper and task content were held fixed within each experiment, requ
 
 Gateway model identities are not independently verified. Informal operator communication supports commercial-API routes to Anthropic for Sonnet and OpenAI for GPT, but it does not authenticate either checkpoint, wrapper, or request-by-request routing and was not accompanied by documentary evidence. We therefore refer to gateway aliases rather than official vendor checkpoints. Official endpoints improve provenance but remain mutable services. The Qwen text design used a staged futility rule; continuation followed the frozen criterion, and the full report retains the interim records. The separate fixed-snapshot Qwen pilot was inspected, then excluded from the resource study and never pooled.
 
-The JSON Mode design followed inspection of the Qwen text interim. Even though records and interaction rules were frozen before JSON calls, choosing that follow-up was outcome-informed. We disclose this selection, treat the mode result as a later boundary study, and avoid claiming that it was part of the original preregistration.
+The JSON Mode design followed inspection of the Qwen text interim. Even though records and interaction rules were frozen before JSON calls, choosing that follow-up was outcome-informed. We disclose this selection, treat the mode result as a later boundary study, and avoid claiming that it was part of the earlier local frozen analysis plan.
 
 ### 7.3 External validity
 
@@ -351,7 +368,7 @@ The use of five repeats balances cost against estimation, but rare outputs may r
 
 ### 7.4 Statistical conclusion validity
 
-Cluster bootstrap and permutation tests respect record dependence, and Holm correction controls each declared family. However, several study stages were designed sequentially. We do not pool p-values across stages or reinterpret later results as preregistered earlier. Cross-system comparisons, concentration deletions, complexity strata, and concordance are explicitly exploratory.
+Cluster bootstrap and permutation tests respect record dependence, and Holm correction controls each declared family. However, several study stages were designed sequentially. The manifests were frozen locally before their corresponding API calls; no OSF, Zenodo, public-commit, or independent timestamp registration is claimed. We therefore describe the local analysis plans as “prospectively specified” and make no formal preregistration claim. We do not pool p-values across stages or reinterpret later results as prospectively specified earlier. Cross-system comparisons, concentration deletions, complexity strata, and concordance are explicitly exploratory.
 
 Failure to cross 0.05 is not evidence of no effect, and failure to confirm a 0.03 mode interaction is not equivalence. The reported confidence intervals are the proper uncertainty bounds. The concentration audit also shows that the mean can be sensitive to the upper tail; this motivates distributional reporting and replication rather than invalidating the frozen mean estimand.
 

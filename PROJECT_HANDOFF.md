@@ -1,6 +1,6 @@
 # Project handoff — JSON Schema instruction-artifact robustness paper
 
-Last updated: 2026-08-02
+Last updated: 2026-08-06
 
 ## Current objective
 
@@ -79,14 +79,16 @@ Schema equivalence checker.
 
 ## Completed paper package
 
-- Authoritative manuscript: `paper/manuscript.md` (8,004 audited words).
+- Authoritative manuscript: `paper/manuscript.md` (8,540 audited words).
 - Flat editable source: `paper/emse/main.tex` plus `references.bib` and four
   flat figure files.
-- Review PDF: `output/pdf/schema_order_emse_promptse.pdf` (17 A4 pages).
+- Review PDF: `output/pdf/schema_order_emse_promptse_revision.pdf` (18 A4 pages;
+  generated because the original output path was locked by an open viewer).
 - Online Resource 1: `output/artifact/schema_order_emse_online_resource1.zip`
   (137 allowlisted material files, no raw provider outputs, credentials,
   restricted gold, or downloaded benchmark contexts).
 - Cover letter: `paper/emse/cover_letter.md`.
+- Standalone EMSE title page: `output/pdf/schema_order_emse_title_page.pdf`.
 - Submission checklist: `paper/emse/submission_checklist.md`.
 - Claim audit: `paper/claim_evidence_audit.md`.
 
@@ -118,17 +120,20 @@ No step calls a model API.
 EMSE uses single-blind review. The confirmed title-page metadata is Shengyao
 Sun, Shanghai Jiao Tong University, Shanghai, China; corresponding email
 `sthfornothing@sjtu.edu.cn`. The cover letter identifies the author as an
-undergraduate student. No department was invented. ORCID is omitted because the
-author does not currently have one.
+undergraduate student. No department was invented. ORCID is
+`0009-0008-9175-8226`.
 
 ## Adversarial-review disposition
 
 The actionable suggestions were incorporated: a clearer method contribution,
-retry/error accounting, threshold sensitivity at 0.03/0.05/0.08, high-effect
-case inspection, gateway-provenance limits, and an explicit three-layer
-reproducibility claim. The review's 10-page ACM-format recommendation was
-rejected because it confused the completed EASE Prompt-SE workshop with the
-currently open EMSE PROMPT-SE special issue.
+retry/error accounting, an execution-settings table in the main text, exact
+prompt and request-contract disclosure, threshold sensitivity at 0.03/0.05/0.08,
+high-effect case inspection, gateway-provenance limits, and an explicit
+three-layer reproducibility claim. The two reported rendering defects were
+fixed in the revision PDF: long SHA-256 paragraphs are left-aligned and the
+two display equations use readable mathematical markup. The review's 10-page
+ACM-format recommendation was rejected because it confused the completed EASE
+Prompt-SE workshop with the currently open EMSE PROMPT-SE special issue.
 
 An August 2026 informal communication from the third-party gateway operator
 states that the Sonnet and GPT routes ultimately used Anthropic and OpenAI
@@ -142,15 +147,13 @@ identifying information.
 ## Final hashes
 
 - Manuscript SHA-256:
-  `26EF8A3755178C280607B4208C7F9ED0A82CB07333CC2443C29C0BA8598B763C`
-- EMSE `main.tex` SHA-256 (GitHub/public LF-normalized source):
-  `AAAAD61ADB0C8E282B4F23C3C745C90D3C39A8248683B89D9EFD9F180EA5A651`
-- EMSE `main.tex` SHA-256 (locally generated Windows CRLF source):
-  `C6F6BB91822BC145C74E92AFCB6B4AFEAC284379D3F059078A261202A80E4CD8`
+  `A6A81C190BCB2B6612DE78DCEA40D07F6515CDDD9A51BDE4801D1281D572C596`
+- EMSE `main.tex` SHA-256:
+  `03AC83C5FE960EE05163162F8E96C406E93810C20230CCD673B017446BB8669B`
 - Review PDF SHA-256:
-  `4AE1A92E8A967D6404C642BEC8D16E1C2B0626E24592BD0F5DB48CF7D9379E91`
+  `02A3A60AAAB4370854CC2B1697035441EEBF758CF6883648389028C59C0CF817`
 - Online Resource 1 SHA-256:
-  `64C134C1A56DF4A7D9D15F0A5B487BBB5A6FF78A9902D3E0B71CE39BEF13E8FC`
+  `4C391191D232C022C63076E01712257077F76850DB64A19A3D981986D00C3F5A`
 
 ## Exact next local command
 
