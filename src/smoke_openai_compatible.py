@@ -15,6 +15,7 @@ import json
 import os
 import re
 import sys
+import time
 import urllib.error
 import urllib.request
 from datetime import UTC, datetime
@@ -31,6 +32,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--repeats", type=int, default=3)
     parser.add_argument("--catalog-only", action="store_true")
     parser.add_argument("--timeout", type=float, default=120.0)
+    parser.add_argument(
+        "--request-interval",
+        type=float,
+        default=0.0,
+        help="Minimum seconds between completion smoke request starts.",
+    )
     return parser.parse_args()
 
 
@@ -171,6 +178,7 @@ def main() -> int:
             "sampling_parameters": "omitted",
             "response_format": "omitted",
             "tools": "omitted",
+            "request_interval_seconds": max(0.0, args.request_interval),
         },
         "catalog": None,
         "runs": [],
@@ -210,6 +218,7 @@ def main() -> int:
         )
         record["gate"] = gate_status(record, args.repeats)
     else:
+        last_request_started: float | None = None
         for repeat_index in range(1, args.repeats + 1):
             payload = {
                 "model": args.model,
@@ -221,6 +230,13 @@ def main() -> int:
                 "stream": False,
             }
             try:
+                if last_request_started is not None:
+                    remaining = args.request_interval - (
+                        time.monotonic() - last_request_started
+                    )
+                    if remaining > 0:
+                        time.sleep(remaining)
+                last_request_started = time.monotonic()
                 response = request_json(
                     f"{base_url}/chat/completions", api_key, args.timeout, payload
                 )
