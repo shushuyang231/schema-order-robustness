@@ -261,7 +261,10 @@ def main() -> int:
 
     output_dir = Path("data/raw/official_smoke")
     output_dir.mkdir(parents=True, exist_ok=True)
-    output_path = output_dir / f"{safe_label(args.provider_label)}_{timestamp.strftime('%Y%m%dT%H%M%SZ')}.json"
+    output_path = output_dir / (
+        f"{safe_label(args.provider_label)}_{safe_label(args.model)}_"
+        f"{timestamp.strftime('%Y%m%dT%H%M%S%fZ')}.json"
+    )
     output_path.write_text(json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"Saved sanitized metadata to {output_path}")
     print(json.dumps(record["gate"], ensure_ascii=False, indent=2))
