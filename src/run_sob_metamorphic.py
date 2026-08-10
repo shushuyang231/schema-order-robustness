@@ -100,8 +100,16 @@ def validate_smoke_record(
 
 
 class GatewayClient:
-    def __init__(self, base_url: str, api_key: str, timeout_seconds: float) -> None:
+    def __init__(
+        self,
+        base_url: str,
+        api_key: str,
+        timeout_seconds: float,
+        request_interval_seconds: float = 0.0,
+    ) -> None:
         self.url = base_url.rstrip("/") + "/chat/completions"
+        self.request_interval_seconds = max(0.0, request_interval_seconds)
+        self._last_request_started: float | None = None
         self.client = httpx.Client(
             timeout=timeout_seconds,
             headers={
@@ -140,6 +148,12 @@ class GatewayClient:
             payload.update(request_body_extra)
         for attempt in range(1, 4):
             try:
+                if self._last_request_started is not None:
+                    elapsed = time.monotonic() - self._last_request_started
+                    remaining = self.request_interval_seconds - elapsed
+                    if remaining > 0:
+                        time.sleep(remaining)
+                self._last_request_started = time.monotonic()
                 # Sampling parameters are intentionally absent: Sonnet 5 rejects
                 # non-default temperature/top_p/top_k on the official API.
                 response = self.client.post(
@@ -260,6 +274,15 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--max-tokens", type=int, default=4096)
     parser.add_argument("--request-timeout", type=float, default=240.0)
+    parser.add_argument(
+        "--request-interval",
+        type=float,
+        default=None,
+        help=(
+            "Minimum seconds between request starts. If omitted, use the frozen "
+            "manifest value (required for rate-limited institutional endpoints)."
+        ),
+    )
     parser.add_argument("--mock", action="store_true")
     return parser.parse_args()
 
@@ -303,6 +326,18 @@ def main() -> int:
     frozen_max_tokens = int(manifest.get("max_tokens", args.max_tokens))
     if args.max_tokens != frozen_max_tokens and not args.mock:
         print("Max tokens differs from the frozen pilot manifest.", file=sys.stderr)
+        return 2
+    frozen_request_interval = float(manifest.get("request_interval_seconds", 0.0))
+    request_interval = (
+        frozen_request_interval
+        if args.request_interval is None
+        else float(args.request_interval)
+    )
+    if abs(request_interval - frozen_request_interval) > 1e-9 and not args.mock:
+        print(
+            "Request interval differs from the frozen pilot manifest.",
+            file=sys.stderr,
+        )
         return 2
     request_body_extra = manifest.get("request_body_extra") or {}
     if not isinstance(request_body_extra, dict):
@@ -379,7 +414,16 @@ def main() -> int:
     if len(jobs) != int(manifest["expected_requests"]):
         raise ValueError("Job count differs from frozen manifest")
     existing = latest_successes(args.output)
-    client = None if args.mock else GatewayClient(args.base_url, str(api_key), args.request_timeout)
+    client = (
+        None
+        if args.mock
+        else GatewayClient(
+            args.base_url,
+            str(api_key),
+            args.request_timeout,
+            request_interval,
+        )
+    )
     consecutive_request_errors = 0
     try:
         for index, (
@@ -457,6 +501,7 @@ def main() -> int:
                     ],
                     "request_parameters": {
                         "max_tokens": args.max_tokens,
+                        "request_interval_seconds": request_interval,
                         "stream": False,
                         "sampling_parameters": "omitted",
                         "thinking": (
