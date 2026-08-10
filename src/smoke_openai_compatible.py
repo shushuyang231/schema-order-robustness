@@ -120,12 +120,20 @@ def gate_status(record: dict[str, Any], required_repeats: int) -> dict[str, Any]
         not catalog.get("error")
         and catalog.get("requested_model_present") is True
     )
-    runs_passed = stable is not None
+    api_contract_passed = (
+        len(ok_runs) == required_repeats
+        and all(
+            run.get("response", {}).get("content_exact_api_ok") is True
+            for run in ok_runs
+        )
+    )
+    runs_passed = stable is not None and api_contract_passed
     return {
         "required_repeats": required_repeats,
         "catalog_passed": catalog_passed,
         "successful_runs": len(ok_runs),
         "stable_returned_model": stable,
+        "api_contract_passed": api_contract_passed,
         "runs_passed": runs_passed,
         "gate_passed": catalog_passed and runs_passed,
     }
