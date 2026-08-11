@@ -308,8 +308,8 @@
   "tools": "omitted",
   "operational_pause_rule": "Stop on non-retryable 4xx or returned-model mismatch; pause after five consecutive request errors and resume identical keys.",
   "multiple_testing": "Holm across the two model-local primary contrasts; no cross-model ranking.",
-  "protocol": "protocol/32_institutional_and_documented_endpoint_panel.md",
-  "request_interval_seconds": 0.0,
+  "protocol": "protocol/33_tokenrhythm_deepseek_v4_flash_rate_amendment.md",
+  "request_interval_seconds": 1.0,
   "request_body_extra": {},
   "require_smoke_request_contract_match": true
 }
