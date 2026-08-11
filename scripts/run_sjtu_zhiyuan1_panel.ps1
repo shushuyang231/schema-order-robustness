@@ -36,6 +36,8 @@ $specs = @(
 
 $smokeFiles = @{}
 $passed = New-Object System.Collections.Generic.List[object]
+$completed = New-Object System.Collections.Generic.List[object]
+$failed = New-Object System.Collections.Generic.List[object]
 
 Push-Location $projectRoot
 try {
@@ -88,12 +90,19 @@ try {
             --smoke-record $smokeFiles[$spec.Model] `
             --no-key-prompt
         if ($LASTEXITCODE -ne 0) {
-            throw "Full run failed for $($spec.Model). Inspect the JSONL output and resume only after checking the failure."
+            Write-Warning "Full run paused for $($spec.Model). Its successful request keys remain resumable; continuing to the next predeclared model."
+            $failed.Add($spec)
+            continue
         }
+        $completed.Add($spec)
     }
 }
 finally {
     Pop-Location
 }
 
+if ($failed.Count -gt 0) {
+    Write-Warning "Some fixed models paused and can be resumed with the same script: $((@($failed | ForEach-Object Model) -join ', ')). Completed: $((@($completed | ForEach-Object Model) -join ', '))."
+    exit 1
+}
 Write-Host "All selected SJTU runs completed." -ForegroundColor Green
