@@ -3,6 +3,8 @@ param()
 
 $ErrorActionPreference = "Stop"
 
+throw "This panel-gate script is retired because the frozen availability gates have already been observed. Resume one completed-gate model at a time with: powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\resume_sjtu_model.ps1 -Model deepseek-chat (or deepseek-reasoner)."
+
 if (-not $env:SJTU_ZHIYUAN1_API_KEY) {
     throw "SJTU_ZHIYUAN1_API_KEY is not set in this PowerShell process. Set it with the hidden SecureString prompt first."
 }

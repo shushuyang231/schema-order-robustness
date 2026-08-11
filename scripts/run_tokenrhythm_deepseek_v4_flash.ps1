@@ -3,8 +3,18 @@ param()
 
 $ErrorActionPreference = "Stop"
 
+$createdProcessKey = $false
 if (-not $env:TOKENRHYTHM_API_KEY) {
-    throw "TOKENRHYTHM_API_KEY is not set in this PowerShell process. Set it with the hidden SecureString prompt first."
+    $secret = Read-Host "Paste TokenRhythm API key" -AsSecureString
+    $ptr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secret)
+    try {
+        $env:TOKENRHYTHM_API_KEY =
+            [Runtime.InteropServices.Marshal]::PtrToStringBSTR($ptr)
+        $createdProcessKey = $true
+    }
+    finally {
+        [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($ptr)
+    }
 }
 
 $projectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
@@ -18,29 +28,45 @@ $output = "results\api\sob_tokenrhythm_deepseek_v4_flash.jsonl"
 
 Push-Location $projectRoot
 try {
-    Write-Host "[1/2] TokenRhythm catalog + three-call smoke gate" -ForegroundColor Cyan
-    & $python src\smoke_openai_compatible.py `
-        --provider-label $provider `
-        --base-url $baseUrl `
-        --model $model `
-        --api-key-env TOKENRHYTHM_API_KEY `
-        --repeats 3 `
-        --request-interval 1.0
-    if ($LASTEXITCODE -ne 0) {
-        throw "TokenRhythm smoke gate command failed; no 3,000-call run was started."
+    $pattern = "tokenrhythm_$($model)_*.json"
+    $priorSmokeFiles = @(Get-ChildItem $smokeDir -File -ErrorAction SilentlyContinue |
+        Where-Object { $_.Name -like $pattern } |
+        Sort-Object LastWriteTime)
+    $smokePath = $null
+    foreach ($candidate in ($priorSmokeFiles | Sort-Object LastWriteTime -Descending)) {
+        $candidateRecord = Get-Content $candidate.FullName -Encoding UTF8 -Raw | ConvertFrom-Json
+        if ($candidateRecord.gate.gate_passed -eq $true) {
+            $smokePath = $candidate
+            break
+        }
     }
 
-    $pattern = "tokenrhythm_$($model)_*.json"
-    $smokePath = Get-ChildItem $smokeDir -File -ErrorAction SilentlyContinue |
-        Where-Object { $_.Name -like $pattern } |
-        Sort-Object LastWriteTime |
-        Select-Object -Last 1
-    if (-not $smokePath) {
-        throw "No model-specific TokenRhythm smoke record was found."
+    if (-not $smokePath -and $priorSmokeFiles.Count -gt 0) {
+        throw "A prior TokenRhythm completion gate exists and failed. The frozen rule forbids repeating gates until one passes; no 3,000-call run was started."
     }
-    $smoke = Get-Content $smokePath.FullName -Raw | ConvertFrom-Json
-    if ($smoke.gate.gate_passed -ne $true) {
-        throw "TokenRhythm smoke gate did not pass; no 3,000-call run was started."
+    if (-not $smokePath) {
+        Write-Host "[1/2] First and only TokenRhythm catalog + three-call smoke gate" -ForegroundColor Cyan
+        & $python src\smoke_openai_compatible.py `
+            --provider-label $provider `
+            --base-url $baseUrl `
+            --model $model `
+            --api-key-env TOKENRHYTHM_API_KEY `
+            --repeats 3 `
+            --request-interval 1.0
+        if ($LASTEXITCODE -ne 0) {
+            throw "TokenRhythm smoke gate command failed; no 3,000-call run was started and the failed gate is retained."
+        }
+        $smokePath = Get-ChildItem $smokeDir -File |
+            Where-Object { $_.Name -like $pattern } |
+            Sort-Object LastWriteTime |
+            Select-Object -Last 1
+        $smoke = Get-Content $smokePath.FullName -Encoding UTF8 -Raw | ConvertFrom-Json
+        if ($smoke.gate.gate_passed -ne $true) {
+            throw "TokenRhythm smoke gate did not pass; no 3,000-call run was started."
+        }
+    }
+    else {
+        Write-Host "[1/2] Reusing the previously passed TokenRhythm smoke record; no new gate calls." -ForegroundColor Cyan
     }
     Write-Host "Gate passed: $($smokePath.Name)" -ForegroundColor Green
 
@@ -62,6 +88,9 @@ try {
 }
 finally {
     Pop-Location
+    if ($createdProcessKey) {
+        Remove-Item Env:TOKENRHYTHM_API_KEY -ErrorAction SilentlyContinue
+    }
 }
 
 Write-Host "TokenRhythm deepseek-v4-flash run completed." -ForegroundColor Green
