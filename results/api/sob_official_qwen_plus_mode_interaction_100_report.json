@@ -1,0 +1,58 @@
+{
+  "decision": "NO_MATERIAL_JSON_MODE_INTERACTION_CONFIRMED",
+  "analysis_stage": "prospective_qwen_plus_text_vs_json_mode_interaction_100",
+  "selection_disclosure": "This matched mode ablation was designed after inspecting the Qwen-Plus text-mode 100-record futility report. The record IDs themselves were frozen by SHA-256 ranking before any Qwen-Plus response.",
+  "record_count": 100,
+  "text_mode_successful_responses": 1500,
+  "json_mode_successful_responses": 1500,
+  "returned_model_counts_text": {
+    "qwen-plus": 1500
+  },
+  "returned_model_counts_json": {
+    "qwen-plus": 1500
+  },
+  "json_mode_request_contract_rows": 1500,
+  "operational_gate": true,
+  "material_mode_change_threshold": 0.03,
+  "multiple_testing": "Holm across two mode-by-order interactions",
+  "contrasts": {
+    "property_order": {
+      "left": "original",
+      "right": "properties_reversed",
+      "text_mode_excess": 0.1391,
+      "json_mode_excess": 0.1582,
+      "mode_change": 0.0191,
+      "mode_change_ci95": [
+        -0.019902499999999997,
+        0.059399999999999994
+      ],
+      "leaf_accuracy_interaction": 0.004600266400266394,
+      "leaf_accuracy_interaction_ci95": [
+        -0.007805837495837506,
+        0.018613058608058595
+      ],
+      "mode_change_sign_flip_p": 0.34033193361327735,
+      "mode_change_holm_p": 0.49510097980403917,
+      "classification": "NO_MATERIAL_MODE_CHANGE_CONFIRMED"
+    },
+    "additional_keyword_order_given_reversed_properties": {
+      "left": "properties_reversed",
+      "right": "keywords_reversed",
+      "text_mode_excess": 0.14679999999999999,
+      "json_mode_excess": 0.1219,
+      "mode_change": -0.024900000000000002,
+      "mode_change_ci95": [
+        -0.0677025,
+        0.016199999999999996
+      ],
+      "leaf_accuracy_interaction": -0.0007399489399489407,
+      "leaf_accuracy_interaction_ci95": [
+        -0.017344530469530474,
+        0.014661926961926959
+      ],
+      "mode_change_sign_flip_p": 0.24755048990201958,
+      "mode_change_holm_p": 0.49510097980403917,
+      "classification": "NO_MATERIAL_MODE_CHANGE_CONFIRMED"
+    }
+  }
+}

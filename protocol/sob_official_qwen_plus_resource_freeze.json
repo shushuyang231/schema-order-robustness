@@ -1,0 +1,44 @@
+{
+  "status": "FROZEN_BEFORE_QWEN_PLUS_API_CALLS",
+  "frozen_date": "2026-08-01",
+  "study_name": "sob_qwen_plus_resource_staged_validation_20260801_v1",
+  "requested_model_alias": "qwen-plus",
+  "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+  "thinking_mode": "explicitly_disabled",
+  "resource_plan_scope": "Requested alias qwen-plus, real-time chat completions, non-thinking; billing eligibility remains an Alibaba Cloud account property.",
+  "prior_exploratory_qwen3_7_result": {
+    "record_count": 40,
+    "successful_responses": 600,
+    "decision": "CONTINUE_TO_FULL_200",
+    "property_order_interim_mean": 0.04175,
+    "additional_keyword_order_interim_mean": 0.058499999999999996,
+    "report_sha256": "6f8a74c74a4236dd9a721a5daa7df5aa93e8e16cd4660434006bed701af2ac90",
+    "predictions_sha256": "98d720ef7a5bc8bed4ee4a15134e8793a3b0c2018f1a269ec50cbc000e6ec368",
+    "role": "reported exploratory fixed-snapshot example; not pooled with Qwen-Plus inference"
+  },
+  "interim_manifest": "protocol/sob_official_qwen_plus_resource_interim100_manifest.json",
+  "interim_manifest_sha256": "c255d67a6890a2e5d41bb408a5513d47bc1e91ac1a608c7b2dd5b3cd861eddcf",
+  "full_manifest": "protocol/sob_official_qwen_plus_resource_full160_manifest.json",
+  "full_manifest_sha256": "affbe9cd6d7c7826d16775eeccd21eef5f020b897445352bedbe0faa549c2939",
+  "interim_design": {
+    "design": "single_futility_interim_no_early_success",
+    "display_name": "Qwen-Plus 100-Record Futility Interim",
+    "maximum_record_count": 160,
+    "interim_record_count": 100,
+    "interim_strata": {
+      "medium": 50,
+      "hard": 50
+    },
+    "maximum_strata": {
+      "medium": 80,
+      "hard": 80
+    },
+    "practical_effect_threshold": 0.05,
+    "per_contrast_continuation_probability": 0.1,
+    "continue_decision": "CONTINUE_TO_FULL_160",
+    "stop_decision": "STOP_FOR_FUTILITY",
+    "probability_method": "Plug-in normal prediction for the final record mean, conditional on the interim mean and sample standard deviation: future records are assumed iid with the interim moments.",
+    "futility_rule": "Stop after 100 records only when both primary contrasts have conditional probability < 0.10 of reaching a final 160-record point estimate >= 0.05. Otherwise continue to all 160 records.",
+    "reporting_rule": "No efficacy claim or formal confirmation is allowed at interim. The interim result is retained whether the run stops or continues."
+  }
+}

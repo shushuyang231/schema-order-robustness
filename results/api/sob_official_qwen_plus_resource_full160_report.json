@@ -1,0 +1,69 @@
+{
+  "decision": "BOTH_DECOMPOSED_CONTRASTS_CONFIRMED",
+  "analysis_stage": "prospective_qwen_plus_resource_confirmation_full_160",
+  "model_alias": "qwen-plus",
+  "record_count": 160,
+  "successful_response_count": 2400,
+  "overall_schema_pass_rate": 0.9933333333333333,
+  "returned_model_counts": {
+    "qwen-plus": 2400
+  },
+  "source_log_audit": {
+    "raw_line_count": 2401,
+    "successful_line_count": 2400,
+    "error_line_count": 1,
+    "unique_successful_request_key_count": 2400
+  },
+  "token_usage": {
+    "input_tokens": 4033665,
+    "output_tokens": 173769,
+    "cached_input_tokens": 563328,
+    "total_tokens": 4207434
+  },
+  "operational_gate": true,
+  "minimum_practical_effect": 0.05,
+  "multiple_testing_family": [
+    "property_order",
+    "additional_keyword_order_given_reversed_properties"
+  ],
+  "contrasts": {
+    "property_order": {
+      "left": "original",
+      "right": "properties_reversed",
+      "normalized_excess_disagreement": 0.1255,
+      "normalized_excess_ci95": [
+        0.08612500000000001,
+        0.1674375
+      ],
+      "leaf_value_accuracy_difference": -0.017677235958485953,
+      "leaf_accuracy_ci95": [
+        -0.03919767697580197,
+        0.00029365937881563277
+      ],
+      "normalized_energy_permutation_p": 0.0001999600079984003,
+      "normalized_energy_holm_p": 0.0003999200159968006,
+      "leaf_accuracy_sign_flip_p": 0.08038392321535692,
+      "leaf_accuracy_holm_p": 0.16076784643071385,
+      "confirmed": true
+    },
+    "additional_keyword_order_given_reversed_properties": {
+      "left": "properties_reversed",
+      "right": "keywords_reversed",
+      "normalized_excess_disagreement": 0.1229375,
+      "normalized_excess_ci95": [
+        0.0853109375,
+        0.1624375
+      ],
+      "leaf_value_accuracy_difference": 0.0062762168387168376,
+      "leaf_accuracy_ci95": [
+        -0.014150985993173496,
+        0.025137702922077898
+      ],
+      "normalized_energy_permutation_p": 0.0001999600079984003,
+      "normalized_energy_holm_p": 0.0003999200159968006,
+      "leaf_accuracy_sign_flip_p": 0.5522895420915817,
+      "leaf_accuracy_holm_p": 0.5522895420915817,
+      "confirmed": true
+    }
+  }
+}

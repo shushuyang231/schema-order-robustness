@@ -36,9 +36,28 @@ def main() -> int:
     bib = bib_path.read_text(encoding="utf-8")
     sonnet = load_json(ROOT / "results/api/sob_sonnet5_confirmatory_report.json")
     gpt = load_json(ROOT / "results/api/sob_gpt55_cross_model_report.json")
+    qwen = load_json(ROOT / "results/api/sob_official_qwen_plus_resource_full160_report.json")
+    endpoint_chat = load_json(ROOT / "results/api/sob_sjtu_deepseek_chat_report.json")
+    endpoint_reasoner = load_json(ROOT / "results/api/sob_sjtu_deepseek_reasoner_report.json")
+    endpoint_tokenrhythm = load_json(
+        ROOT / "results/api/sob_tokenrhythm_deepseek_v4_flash_report.json"
+    )
+    endpoint_summary = load_json(ROOT / "results/api/sob_endpoint_panel_summary.json")
+    endpoint_audit = load_json(
+        ROOT / "results/api/sob_endpoint_panel_completion_audit.json"
+    )
+    interaction = load_json(
+        ROOT / "results/api/sob_official_qwen_plus_mode_interaction_100_report.json"
+    )
+    retry_audit = load_json(ROOT / "results/api/sob_core_retry_audit.json")
+    qualitative_cases = load_json(
+        ROOT / "results/analysis/sob_qwen_high_effect_cases.json"
+    )
     dialect = load_json(PAPER / "robustness/dialect_validation_audit.json")
 
-    cited = set(re.findall(r"@([A-Za-z0-9_:-]+)", manuscript))
+    cited = set(
+        re.findall(r"(?<![A-Za-z0-9._%+-])@([A-Za-z0-9_:-]+)", manuscript)
+    )
     defined = set(re.findall(r"@[A-Za-z]+\{([^,\s]+)", bib))
     missing_bib = sorted(cited - defined)
     unused_bib = sorted(defined - cited)
@@ -59,24 +78,57 @@ def main() -> int:
     expected_snippets = [
         f"{sonnet['comparisons_vs_original']['properties_reversed']['normalized_excess_disagreement']:.3f}",
         f"{sonnet['comparisons_vs_original']['keywords_reversed']['normalized_excess_disagreement']:.3f}",
-        f"{gpt['comparisons_vs_original']['properties_reversed']['normalized_excess_disagreement']:.3f}",
-        f"{gpt['comparisons_vs_original']['keywords_reversed']['normalized_excess_disagreement']:.3f}",
-        "14,000 successful black-box responses",
+        f"{gpt['comparisons_vs_original']['properties_reversed']['normalized_excess_disagreement']:.4f}",
+        f"{gpt['comparisons_vs_original']['keywords_reversed']['normalized_excess_disagreement']:.4f}",
+        "17,900 successful responses",
         "100 record",
         "not independently verified",
-        "does not evaluate a provider's native",
+        f"{qwen['contrasts']['property_order']['normalized_excess_disagreement']:.4f}",
+        f"{qwen['contrasts']['additional_keyword_order_given_reversed_properties']['normalized_excess_disagreement']:.4f}",
+        f"{interaction['contrasts']['property_order']['mode_change']:+.4f}",
+        "9,000 successful responses",
+        f"{endpoint_chat['contrasts']['property_order']['normalized_excess_disagreement']:.4f}",
+        f"{endpoint_reasoner['contrasts']['property_order']['normalized_excess_disagreement']:.4f}",
+        f"{endpoint_tokenrhythm['contrasts']['property_order']['normalized_excess_disagreement']:.4f}",
+        "post-submission endpoint panel",
+        "panel-wide Holm",
+        "not evidence of equivalence",
+        "200/200 audit pass",
+        f"{retry_audit['totals']['top_level_error_rows']} standalone top-level error rows",
+        f"{retry_audit['totals']['successful_rows_with_internal_retry']} successful rows",
+        "a 0.03 magnitude screen",
+        "The frozen 0.05 screen",
+        "At 0.08",
+        "sthfornothing@sjtu.edu.cn",
     ]
     missing_snippets = [value for value in expected_snippets if value not in manuscript]
 
     effects = csv_rows(PAPER / "tables/table2_distribution_effects.csv")
     quality = csv_rows(PAPER / "tables/table3_quality_metrics.csv")
+    decomposed = csv_rows(PAPER / "tables/table5_decomposed_confirmation.csv")
+    mode_interaction = csv_rows(PAPER / "tables/table7_qwen_mode_interaction.csv")
+    concentration = csv_rows(PAPER / "tables/table8_effect_concentration.csv")
     table_checks = {
         "distribution_effect_rows": len(effects) == 8,
         "quality_metric_rows": len(quality) == 10,
+        "decomposed_rows": len(decomposed) == 14,
+        "qwen_mode_rows": len(mode_interaction) == 2,
+        "concentration_rows": len(concentration) == 10,
+        "qualitative_case_count": len(qualitative_cases["cases"]) == 3,
         "practical_threshold_yes_count": sum(
             row["meets_0_05_practical_threshold"] == "yes" for row in effects
         )
         == 2,
+        "endpoint_panel_complete": endpoint_audit.get("status") == "PASS"
+        and endpoint_audit.get("totals", {}).get("expected_successful_requests") == 9000
+        and endpoint_audit.get("totals", {}).get("unique_successful_request_keys") == 9000,
+        "endpoint_panel_summary_complete": endpoint_summary.get("analysis_status")
+        == "SUPPLEMENTAL_POST_SUBMISSION_EVIDENCE"
+        and sum(
+            deployment.get("successful_response_count", 0)
+            for deployment in endpoint_summary.get("deployments", {}).values()
+        )
+        == 9000,
     }
 
     required_sections = (
@@ -85,11 +137,13 @@ def main() -> int:
         "## 2. Background and Related Work",
         "## 3. Study Design",
         "## 4. Results",
-        "## 5. Discussion",
-        "## 6. Threats to Validity",
-        "## 7. Reproducibility and Artifact Scope",
-        "## 8. Ethics and Broader Impact",
-        "## 9. Conclusion",
+        "## 5. Engineering Method and Practical Use",
+        "## 6. Discussion",
+        "## 7. Threats to Validity",
+        "## 8. Reproducibility and Artifact Scope",
+        "## 9. Ethics and Broader Impact",
+        "## 10. Conclusion",
+        "## Statements and Declarations",
     )
     missing_sections = [section for section in required_sections if section not in manuscript]
     dialect_ok = (

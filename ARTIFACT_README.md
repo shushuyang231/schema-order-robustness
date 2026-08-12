@@ -1,8 +1,10 @@
-# Anonymous paper artifact
+# Online Resource 1 - Schema-order robustness artifact
 
-This artifact supports the paper *Equivalent Schemas, Different
-Distributions*. It is designed for offline inspection and regeneration of
-paper tables and figures. It never calls a model API.
+This offline artifact supports *Testing JSON Schema Instruction Artifacts:
+Distributional Robustness under Validation-Equivalent Serialization and JSON
+Mode*. It contains the transformation, evaluation, canonicalization, and
+paper-build code; frozen manifests and aggregate reports; generated tables and
+figures; and unit tests. Reproduction never calls a model API.
 
 ## Reproduce locally
 
@@ -12,28 +14,25 @@ On Windows PowerShell:
 .\scripts\reproduce_paper_offline.ps1
 ```
 
-The script:
-
-1. compiles local Python sources;
-2. runs the unit-test suite;
-3. rebuilds all paper tables and figures from frozen aggregate JSON reports;
-4. audits manuscript citations, required sections, figure presence, and
-   reported values; and
-5. verifies that the anonymous ZIP allowlist excludes raw responses,
-   credentials, restricted gold, and downloaded benchmark data.
-
-Use `-Python <path>` to select another Python 3.12 interpreter. Exact packages
-from the validated environment are recorded in `requirements-lock.txt`.
+The script compiles Python sources, runs the offline unit tests, rebuilds paper
+tables and figures from frozen reports, audits citations and headline values,
+regenerates the flat EMSE LaTeX source and review PDF, and validates the
+Online Resource archive and secret scan. Use `-Python <path>` to select a
+Python 3.12 interpreter. Install the declared dependencies from
+`requirements-paper.txt` and `requirements-lock.txt`.
 
 ## Reproducibility levels
 
-- **Directly reproducible offline:** transformations on synthetic examples,
-  unit tests, paper tables, paper figures, source-report hashes, and manuscript
-  consistency checks.
-- **Auditable from frozen reports and hashes:** model-specific estimates,
-  intervals, p-values, operational counts, and provider metadata.
-- **Not redistributed:** raw provider responses, reasoning text, benchmark
-  contexts, and restricted gold answers. See `LICENSES.md`.
+- **Directly reproducible offline:** schema transformations and
+  canonicalization on redistributable examples, unit tests, paper tables and
+  figures, source-report hashes, and manuscript consistency checks.
+- **Auditable from frozen aggregate reports:** deployment-specific estimates,
+  confidence intervals, p-values, operational counts, token totals, and
+  provider/request metadata.
+- **Not redistributed:** raw provider responses, credentials, reasoning text,
+  restricted gold answers, and benchmark contexts whose redistribution is not
+  authorized. The API runners are included for method inspection only.
 
-The inference runner remains included for method inspection and reuse, but the
-offline reproduction script does not invoke it.
+The public archive intentionally omits private gateway communications and
+unpublished provider data. See `LICENSES.md` for the licensing and data-use
+boundaries.

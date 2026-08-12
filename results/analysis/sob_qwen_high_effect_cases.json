@@ -1,0 +1,75 @@
+{
+  "analysis_status": "POST_HOC_SELECTED_QUALITATIVE_INSPECTION",
+  "model_alias": "qwen-plus",
+  "source_predictions": "results/api/sob_official_qwen_plus_resource.jsonl",
+  "source_predictions_sha256": "d76c36a726b19b328900172055ca48ac8ab85598172f3d4caf8fdd97407c57a7",
+  "selection": "Three deliberately contrasting records among the maximum observed property-order effects (E_i = 1.0); not random or representative.",
+  "contains_complete_raw_response": false,
+  "cases": [
+    {
+      "case": "Q-P1",
+      "record_id": "a1acea9d5b923ad5dca100f8a57e7b763165f50ce64895a40f548ad54948a623",
+      "contrast": "property_order",
+      "left_variant": "original",
+      "right_variant": "properties_reversed",
+      "record_effect": 1.0,
+      "left_excerpt": {
+        "included_creatures": ["ghosts", "vampires", "skeletons", "mummies"]
+      },
+      "right_excerpt": {
+        "included_creatures": ["ghosts", "vampires"]
+      },
+      "left_identical_response_count": 5,
+      "right_identical_response_count": 5,
+      "left_schema_valid_count": 5,
+      "right_schema_valid_count": 5,
+      "left_leaf_value_accuracy": 1.0,
+      "right_leaf_value_accuracy": 0.0,
+      "pattern": "gold_list_element_omission"
+    },
+    {
+      "case": "Q-P2",
+      "record_id": "a526cb822bdaf9603517d4c5323f2203fb6ecabb382ab523b0c844ddb2e7efd9",
+      "contrast": "property_order",
+      "left_variant": "original",
+      "right_variant": "properties_reversed",
+      "record_effect": 1.0,
+      "left_excerpt": {
+        "award_details": {"award_name": "Ron Evans medal"}
+      },
+      "right_excerpt": {
+        "award_details": {"award_name": "AFL Rising Star"}
+      },
+      "left_identical_response_count": 5,
+      "right_identical_response_count": 5,
+      "left_schema_valid_count": 5,
+      "right_schema_valid_count": 5,
+      "left_leaf_value_accuracy": 0.5714285714285714,
+      "right_leaf_value_accuracy": 0.42857142857142855,
+      "pattern": "factual_field_substitution"
+    },
+    {
+      "case": "Q-P3",
+      "record_id": "89e6dd64dbc887bf2489ea5e95d0bc22fad2a212389c0d031449291ebc5f99ef",
+      "contrast": "property_order",
+      "left_variant": "original",
+      "right_variant": "properties_reversed",
+      "record_effect": 1.0,
+      "left_excerpt": {
+        "awards_show_date": "May 1, 1999",
+        "episode_air_date": "May 1, 1999"
+      },
+      "right_excerpt": {
+        "awards_show_date": "1999-05-01",
+        "episode_air_date": "1999-05-01"
+      },
+      "left_identical_response_count": 5,
+      "right_identical_response_count": 5,
+      "left_schema_valid_count": 5,
+      "right_schema_valid_count": 5,
+      "left_leaf_value_accuracy": 1.0,
+      "right_leaf_value_accuracy": 0.5,
+      "pattern": "semantically_equivalent_surface_normalization"
+    }
+  ]
+}

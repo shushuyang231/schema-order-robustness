@@ -14,7 +14,10 @@ from smoke_official_provider import (  # noqa: E402
     evaluate_gate,
     sanitized_completion,
 )
-from run_sob_metamorphic import validate_smoke_record  # noqa: E402
+from run_sob_metamorphic import (  # noqa: E402
+    missing_successful_request_keys,
+    validate_smoke_record,
+)
 from evaluate_sob_decomposed_confirmation import (  # noqa: E402
     validate_decomposed_manifest,
 )
@@ -145,6 +148,32 @@ class OfficialProviderPanelTests(unittest.TestCase):
         self.assertNotIn("reasoning_content", sanitized)
         self.assertEqual(sanitized["system_fingerprint"], "fp_test")
 
+    def test_json_mode_gate_requires_a_json_object_response(self) -> None:
+        record = {
+            "request_body_extra": {
+                "enable_thinking": False,
+                "response_format": {"type": "json_object"},
+            },
+            "catalog": {"requested_model_present": True},
+            "runs": [
+                {
+                    "status": "ok",
+                    "response": {
+                        "returned_model": "qwen-plus",
+                        "content_json_object": True,
+                    },
+                }
+                for _ in range(3)
+            ],
+        }
+        gate = evaluate_gate(record)
+        self.assertTrue(gate["json_mode_requested"])
+        self.assertTrue(gate["json_contract_passed"])
+        self.assertTrue(gate["gate_passed"])
+
+        record["runs"][2]["response"]["content_json_object"] = False
+        self.assertFalse(evaluate_gate(record)["gate_passed"])
+
     def test_formal_runner_accepts_only_a_passed_matching_smoke_record(
         self,
     ) -> None:
@@ -189,8 +218,20 @@ class OfficialProviderPanelTests(unittest.TestCase):
         validate_decomposed_manifest(
             {"analysis_stage": "preregistered_decomposed_contrast_confirmation"}
         )
+        validate_decomposed_manifest(
+            {"analysis_stage": "prospective_endpoint_panel"}
+        )
         with self.assertRaises(ValueError):
             validate_decomposed_manifest({"analysis_stage": "unrelated_analysis"})
+
+    def test_runner_completion_uses_successful_keys_not_attempted_positions(
+        self,
+    ) -> None:
+        successes = {"a": {"status": "ok"}, "c": {"status": "ok"}}
+        self.assertEqual(
+            missing_successful_request_keys({"a", "b", "c"}, successes),
+            ["b"],
+        )
 
 
 if __name__ == "__main__":

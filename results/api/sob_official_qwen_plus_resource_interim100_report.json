@@ -1,0 +1,44 @@
+{
+  "decision": "CONTINUE_TO_FULL_160",
+  "analysis_stage": "prospective_qwen_plus_resource_futility_interim_100",
+  "model_alias": "qwen-plus",
+  "record_count": 100,
+  "maximum_record_count": 160,
+  "successful_response_count": 1500,
+  "overall_schema_pass_rate": 0.9893333333333333,
+  "returned_model_counts": {
+    "qwen-plus": 1500
+  },
+  "operational_gate": true,
+  "minimum_practical_effect": 0.05,
+  "per_contrast_continuation_probability": 0.1,
+  "no_early_efficacy_test": true,
+  "display_name": "Qwen-Plus 100-Record Futility Interim",
+  "token_usage": {
+    "input_tokens": 2498580,
+    "output_tokens": 111355,
+    "total_tokens": 2609935
+  },
+  "contrasts": {
+    "property_order": {
+      "interim_mean_excess": 0.1391,
+      "interim_sample_sd": 0.28151500309876376,
+      "descriptive_bootstrap_ci95": [
+        0.08699,
+        0.1948
+      ],
+      "conditional_probability_final_ge_0_05": 0.9999999999687499,
+      "passes_continuation_probability": true
+    },
+    "additional_keyword_order_given_reversed_properties": {
+      "interim_mean_excess": 0.14679999999999999,
+      "interim_sample_sd": 0.2761966800318318,
+      "descriptive_bootstrap_ci95": [
+        0.09530000000000001,
+        0.2027
+      ],
+      "conditional_probability_final_ge_0_05": 0.9999999999997746,
+      "passes_continuation_probability": true
+    }
+  }
+}

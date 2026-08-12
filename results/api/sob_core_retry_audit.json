@@ -1,0 +1,136 @@
+{
+  "status": "PASS",
+  "analysis_scope": "aggregate transport metadata for the seven frozen core run logs",
+  "contains_response_content": false,
+  "runs": {
+    "sonnet_initial": {
+      "path": "results/api/sob_sonnet5_confirmatory.jsonl",
+      "sha256": "afd84592c369bfae7f4f0f6bbd1c46d1816ff1be7e4d77cb0acc7ad002a3c239",
+      "raw_line_count": 2511,
+      "successful_line_count": 2500,
+      "expected_successful_line_count": 2500,
+      "unique_successful_request_key_count": 2500,
+      "top_level_error_line_count": 11,
+      "successful_rows_with_internal_retry": 17,
+      "top_level_errors_by_schema_variant": {
+        "descriptions_first": 3,
+        "keywords_reversed": 2,
+        "original": 1,
+        "properties_reversed": 1,
+        "required_reversed": 4
+      },
+      "top_level_errors_by_class": {
+        "ConnectError": 7,
+        "RemoteProtocolError": 4
+      },
+      "complete": true
+    },
+    "gpt_initial": {
+      "path": "results/api/sob_gpt55_cross_model.jsonl",
+      "sha256": "c4c5fc61616b13463b58b4fbac850b9eea686dd706222a4c99fa5e13cfd3ab33",
+      "raw_line_count": 2503,
+      "successful_line_count": 2500,
+      "expected_successful_line_count": 2500,
+      "unique_successful_request_key_count": 2500,
+      "top_level_error_line_count": 3,
+      "successful_rows_with_internal_retry": 5,
+      "top_level_errors_by_schema_variant": {
+        "descriptions_first": 1,
+        "required_reversed": 2
+      },
+      "top_level_errors_by_class": {
+        "ConnectError": 2,
+        "RemoteProtocolError": 1
+      },
+      "complete": true
+    },
+    "sonnet_decomposed": {
+      "path": "results/api/sob_decomposed_sonnet5.jsonl",
+      "sha256": "83bfb631498394f75a215c6df80cdade455c58cb1d6ecda8a12b785acd2cff1a",
+      "raw_line_count": 3001,
+      "successful_line_count": 3000,
+      "expected_successful_line_count": 3000,
+      "unique_successful_request_key_count": 3000,
+      "top_level_error_line_count": 1,
+      "successful_rows_with_internal_retry": 2,
+      "top_level_errors_by_schema_variant": {
+        "properties_reversed": 1
+      },
+      "top_level_errors_by_class": {
+        "RemoteProtocolError": 1
+      },
+      "complete": true
+    },
+    "gpt_decomposed": {
+      "path": "results/api/sob_decomposed_gpt55.jsonl",
+      "sha256": "d9c0764cb6cc0de696feb2b08b49fe867a66039912d265a172dad2d24783facb",
+      "raw_line_count": 3002,
+      "successful_line_count": 3000,
+      "expected_successful_line_count": 3000,
+      "unique_successful_request_key_count": 3000,
+      "top_level_error_line_count": 2,
+      "successful_rows_with_internal_retry": 3,
+      "top_level_errors_by_schema_variant": {
+        "keywords_reversed": 2
+      },
+      "top_level_errors_by_class": {
+        "RemoteProtocolError": 2
+      },
+      "complete": true
+    },
+    "deepseek_decomposed": {
+      "path": "results/api/sob_official_deepseek_v4_flash.jsonl",
+      "sha256": "0c3b8cac96b1e6310fb048278804e465e818fa54a35e96ada91441dd81ed2491",
+      "raw_line_count": 3002,
+      "successful_line_count": 3000,
+      "expected_successful_line_count": 3000,
+      "unique_successful_request_key_count": 3000,
+      "top_level_error_line_count": 2,
+      "successful_rows_with_internal_retry": 1,
+      "top_level_errors_by_schema_variant": {
+        "keywords_reversed": 1,
+        "original": 1
+      },
+      "top_level_errors_by_class": {
+        "RemoteProtocolError": 2
+      },
+      "complete": true
+    },
+    "qwen_text_decomposed": {
+      "path": "results/api/sob_official_qwen_plus_resource.jsonl",
+      "sha256": "d76c36a726b19b328900172055ca48ac8ab85598172f3d4caf8fdd97407c57a7",
+      "raw_line_count": 2401,
+      "successful_line_count": 2400,
+      "expected_successful_line_count": 2400,
+      "unique_successful_request_key_count": 2400,
+      "top_level_error_line_count": 1,
+      "successful_rows_with_internal_retry": 0,
+      "top_level_errors_by_schema_variant": {
+        "keywords_reversed": 1
+      },
+      "top_level_errors_by_class": {
+        "FatalRunError": 1
+      },
+      "complete": true
+    },
+    "qwen_json_mode": {
+      "path": "results/api/sob_official_qwen_plus_json_mode_100.jsonl",
+      "sha256": "0e471ed92c09d79510505e1cb69ced7245405e1bbfdd984b522f136927fe6966",
+      "raw_line_count": 1500,
+      "successful_line_count": 1500,
+      "expected_successful_line_count": 1500,
+      "unique_successful_request_key_count": 1500,
+      "top_level_error_line_count": 0,
+      "successful_rows_with_internal_retry": 0,
+      "top_level_errors_by_schema_variant": {},
+      "top_level_errors_by_class": {},
+      "complete": true
+    }
+  },
+  "totals": {
+    "logged_rows": 17920,
+    "successful_rows": 17900,
+    "top_level_error_rows": 20,
+    "successful_rows_with_internal_retry": 28
+  }
+}

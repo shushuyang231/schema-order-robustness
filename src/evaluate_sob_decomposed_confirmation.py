@@ -24,6 +24,10 @@ DECOMPOSED_CONFIRMATION_STAGES = frozenset(
     {
         "preregistered_decomposed_contrast_confirmation",
         "preregistered_official_deepseek_replication",
+        "prospective_qwen_staged_confirmation_full_200",
+        "prospective_qwen_plus_resource_confirmation_full_160",
+        "prospective_qwen_plus_json_mode_ablation_100",
+        "prospective_endpoint_panel",
     }
 )
 
@@ -84,9 +88,16 @@ def main() -> int:
     args = parse_args()
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
     validate_decomposed_manifest(manifest)
-    public = {str(row["record_id"]): row for row in load_jsonl(args.public_input)}
+    manifest_record_ids = {str(value) for value in manifest["record_ids"]}
+    public = {
+        str(row["record_id"]): row
+        for row in load_jsonl(args.public_input)
+        if str(row["record_id"]) in manifest_record_ids
+    }
     gold = {
-        str(row["record_id"]): row["ground_truth"] for row in load_jsonl(args.gold_input)
+        str(row["record_id"]): row["ground_truth"]
+        for row in load_jsonl(args.gold_input)
+        if str(row["record_id"]) in manifest_record_ids
     }
     record_ids, cells = load_run_cells(
         manifest_path=args.manifest,
@@ -151,17 +162,38 @@ def main() -> int:
             and item["normalized_energy_holm_p"] < 0.05
         )
 
-    successful_rows = [
-        row for row in load_jsonl(args.predictions) if row.get("status") == "ok"
+    raw_rows = load_jsonl(args.predictions)
+    successful_line_rows = [
+        row
+        for row in raw_rows
+        if row.get("status") == "ok"
+        and str(row.get("record_id")) in manifest_record_ids
     ]
+    successful_by_key: dict[str, dict[str, Any]] = {}
+    for row in successful_line_rows:
+        successful_by_key[str(row.get("request_key"))] = row
+    successful_rows = list(successful_by_key.values())
     returned_models = Counter(str(row.get("returned_model")) for row in successful_rows)
+    smoke_hashes = {
+        str(row.get("smoke_record_sha256"))
+        for row in successful_rows
+        if row.get("smoke_record_sha256") is not None
+    }
+    non_null_fingerprints = {
+        str(row.get("system_fingerprint"))
+        for row in successful_rows
+        if row.get("system_fingerprint") is not None
+    }
     response_ids = [str(row["response_id"]) for row in successful_rows if row.get("response_id")]
     schema_pass_rate = statistics.fmean(
         bool(row.get("schema_valid")) for row in successful_rows
     )
     operational_gate = (
         len(successful_rows) == int(manifest["expected_requests"])
+        and len(successful_line_rows) == int(manifest["expected_requests"])
         and len(returned_models) == 1
+        and len(smoke_hashes) == 1
+        and len(non_null_fingerprints) <= 1
         and schema_pass_rate >= 0.95
         and (not response_ids or len(response_ids) == len(set(response_ids)))
     )
@@ -175,6 +207,18 @@ def main() -> int:
     else:
         decision = "DECOMPOSED_CONFIRMATION_NOT_FOUND"
 
+    token_usage = {
+        "input_tokens": sum(int(row.get("input_tokens") or 0) for row in successful_rows),
+        "output_tokens": sum(int(row.get("output_tokens") or 0) for row in successful_rows),
+        "cached_input_tokens": sum(
+            int(((row.get("usage") or {}).get("prompt_tokens_details") or {}).get("cached_tokens") or 0)
+            for row in successful_rows
+        ),
+    }
+    token_usage["total_tokens"] = (
+        token_usage["input_tokens"] + token_usage["output_tokens"]
+    )
+
     report = {
         "decision": decision,
         "analysis_stage": manifest["analysis_stage"],
@@ -183,6 +227,15 @@ def main() -> int:
         "successful_response_count": len(successful_rows),
         "overall_schema_pass_rate": schema_pass_rate,
         "returned_model_counts": dict(returned_models),
+        "smoke_record_sha256_count": len(smoke_hashes),
+        "non_null_system_fingerprint_count": len(non_null_fingerprints),
+        "source_log_audit": {
+            "raw_line_count": len(raw_rows),
+            "successful_line_count": len(successful_line_rows),
+            "error_line_count": sum(row.get("status") != "ok" for row in raw_rows),
+            "unique_successful_request_key_count": len(successful_by_key),
+        },
+        "token_usage": token_usage,
         "operational_gate": operational_gate,
         "minimum_practical_effect": threshold,
         "multiple_testing_family": list(primary),

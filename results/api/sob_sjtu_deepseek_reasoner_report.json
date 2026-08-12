@@ -1,0 +1,71 @@
+{
+  "decision": "DECOMPOSED_CONFIRMATION_NOT_FOUND",
+  "analysis_stage": "prospective_endpoint_panel",
+  "model_alias": "deepseek-reasoner",
+  "record_count": 200,
+  "successful_response_count": 3000,
+  "overall_schema_pass_rate": 0.9973333333333333,
+  "returned_model_counts": {
+    "deepseek-reasoner": 3000
+  },
+  "smoke_record_sha256_count": 1,
+  "non_null_system_fingerprint_count": 1,
+  "source_log_audit": {
+    "raw_line_count": 3015,
+    "successful_line_count": 3000,
+    "error_line_count": 15,
+    "unique_successful_request_key_count": 3000
+  },
+  "token_usage": {
+    "input_tokens": 4861845,
+    "output_tokens": 1077084,
+    "cached_input_tokens": 0,
+    "total_tokens": 5938929
+  },
+  "operational_gate": true,
+  "minimum_practical_effect": 0.05,
+  "multiple_testing_family": [
+    "property_order",
+    "additional_keyword_order_given_reversed_properties"
+  ],
+  "contrasts": {
+    "property_order": {
+      "left": "original",
+      "right": "properties_reversed",
+      "normalized_excess_disagreement": -0.0004999999999999983,
+      "normalized_excess_ci95": [
+        -0.011099999999999999,
+        0.0114
+      ],
+      "leaf_value_accuracy_difference": 0.006499314574314574,
+      "leaf_accuracy_ci95": [
+        -0.008471691017316015,
+        0.02197979978354979
+      ],
+      "normalized_energy_permutation_p": 0.5444911017796441,
+      "normalized_energy_holm_p": 0.6150769846030794,
+      "leaf_accuracy_sign_flip_p": 0.4267146570685863,
+      "leaf_accuracy_holm_p": 0.5278944211157769,
+      "confirmed": false
+    },
+    "additional_keyword_order_given_reversed_properties": {
+      "left": "properties_reversed",
+      "right": "keywords_reversed",
+      "normalized_excess_disagreement": 0.0027999999999999995,
+      "normalized_excess_ci95": [
+        -0.0069512500000000026,
+        0.01295
+      ],
+      "leaf_value_accuracy_difference": -0.008048484848484846,
+      "leaf_accuracy_ci95": [
+        -0.0220966369047619,
+        0.005685528499278494
+      ],
+      "normalized_energy_permutation_p": 0.3075384923015397,
+      "normalized_energy_holm_p": 0.6150769846030794,
+      "leaf_accuracy_sign_flip_p": 0.26394721055788845,
+      "leaf_accuracy_holm_p": 0.5278944211157769,
+      "confirmed": false
+    }
+  }
+}

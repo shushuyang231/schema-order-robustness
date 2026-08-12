@@ -1,0 +1,42 @@
+{
+  "decision": "CONTINUE_TO_FULL_200",
+  "analysis_stage": "prospective_qwen_futility_interim_40",
+  "model_alias": "qwen3.7-plus-2026-05-26",
+  "record_count": 40,
+  "successful_response_count": 600,
+  "overall_schema_pass_rate": 0.9866666666666667,
+  "returned_model_counts": {
+    "qwen3.7-plus-2026-05-26": 600
+  },
+  "operational_gate": true,
+  "minimum_practical_effect": 0.05,
+  "per_contrast_continuation_probability": 0.1,
+  "no_early_efficacy_test": true,
+  "token_usage": {
+    "input_tokens": 1018370,
+    "output_tokens": 54921,
+    "total_tokens": 1073291
+  },
+  "contrasts": {
+    "property_order": {
+      "interim_mean_excess": 0.04175,
+      "interim_sample_sd": 0.130381835686276,
+      "descriptive_bootstrap_ci95": [
+        0.006750000000000002,
+        0.0855
+      ],
+      "conditional_probability_final_ge_0_05": 0.15853999932247956,
+      "passes_continuation_probability": true
+    },
+    "additional_keyword_order_given_reversed_properties": {
+      "interim_mean_excess": 0.058499999999999996,
+      "interim_sample_sd": 0.18816999951625848,
+      "descriptive_bootstrap_ci95": [
+        0.010000000000000004,
+        0.123
+      ],
+      "conditional_probability_final_ge_0_05": 0.7624577484409053,
+      "passes_continuation_probability": true
+    }
+  }
+}

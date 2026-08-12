@@ -87,6 +87,9 @@ def validate_smoke_record(
     smoke_provider = manifest.get("smoke_provider")
     if smoke_provider and record.get("provider") != smoke_provider:
         raise ValueError("Smoke record provider differs from the frozen manifest")
+    if manifest.get("require_smoke_request_contract_match"):
+        if record.get("request_body_extra") != manifest.get("request_body_extra"):
+            raise ValueError("Smoke request contract differs from the frozen manifest")
     gate = record.get("gate") or {}
     if gate.get("gate_passed") is not True:
         raise ValueError("Smoke record did not pass the frozen availability gate")
@@ -97,8 +100,16 @@ def validate_smoke_record(
 
 
 class GatewayClient:
-    def __init__(self, base_url: str, api_key: str, timeout_seconds: float) -> None:
+    def __init__(
+        self,
+        base_url: str,
+        api_key: str,
+        timeout_seconds: float,
+        request_interval_seconds: float = 0.0,
+    ) -> None:
         self.url = base_url.rstrip("/") + "/chat/completions"
+        self.request_interval_seconds = max(0.0, request_interval_seconds)
+        self._last_request_started: float | None = None
         self.client = httpx.Client(
             timeout=timeout_seconds,
             headers={
@@ -112,22 +123,42 @@ class GatewayClient:
         self.client.close()
 
     def complete(
-        self, *, model_alias: str, messages: list[dict[str, str]], max_tokens: int
+        self,
+        *,
+        model_alias: str,
+        messages: list[dict[str, str]],
+        max_tokens: int,
+        request_body_extra: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         started = time.perf_counter()
         attempts: list[dict[str, Any]] = []
+        payload: dict[str, Any] = {
+            "model": model_alias,
+            "messages": messages,
+            "max_tokens": max_tokens,
+            "stream": False,
+        }
+        if request_body_extra:
+            collisions = set(payload).intersection(request_body_extra)
+            if collisions:
+                raise ValueError(
+                    "Frozen request_body_extra overrides core request fields: "
+                    f"{sorted(collisions)}"
+                )
+            payload.update(request_body_extra)
         for attempt in range(1, 4):
             try:
+                if self._last_request_started is not None:
+                    elapsed = time.monotonic() - self._last_request_started
+                    remaining = self.request_interval_seconds - elapsed
+                    if remaining > 0:
+                        time.sleep(remaining)
+                self._last_request_started = time.monotonic()
                 # Sampling parameters are intentionally absent: Sonnet 5 rejects
                 # non-default temperature/top_p/top_k on the official API.
                 response = self.client.post(
                     self.url,
-                    json={
-                        "model": model_alias,
-                        "messages": messages,
-                        "max_tokens": max_tokens,
-                        "stream": False,
-                    },
+                    json=payload,
                 )
                 attempts.append({"attempt": attempt, "status_code": response.status_code})
                 if response.status_code == 429 or response.status_code >= 500:
@@ -211,23 +242,30 @@ def latest_successes(path: Path) -> dict[str, dict[str, Any]]:
     return successes
 
 
+def missing_successful_request_keys(
+    expected_keys: set[str],
+    successes: dict[str, dict[str, Any]],
+) -> list[str]:
+    """Return frozen request keys that still lack a successful response."""
+
+    return sorted(expected_keys - set(successes))
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--public-input", type=Path, required=True)
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--model-alias", default="claude-sonnet-5")
-    parser.add_argument(
-        "--base-url", default=os.environ.get("PRISM_BASE_URL", "https://ai.prism.uno/v1")
-    )
+    parser.add_argument("--base-url", default=os.environ.get("GATEWAY_BASE_URL", ""))
     parser.add_argument(
         "--api-key-env",
-        default="PRISM_API_KEY",
+        default="GATEWAY_API_KEY",
         help="Environment variable containing the API key (prompted securely if absent).",
     )
     parser.add_argument(
         "--provider-label",
-        default="prism_gateway",
+        default="third_party_gateway",
         help="Non-secret provider/provenance label written to every result row.",
     )
     parser.add_argument(
@@ -245,12 +283,27 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--max-tokens", type=int, default=4096)
     parser.add_argument("--request-timeout", type=float, default=240.0)
+    parser.add_argument(
+        "--request-interval",
+        type=float,
+        default=None,
+        help=(
+            "Minimum seconds between request starts. If omitted, use the frozen "
+            "manifest value (required for rate-limited institutional endpoints)."
+        ),
+    )
     parser.add_argument("--mock", action="store_true")
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
+    if not args.mock and not args.base_url:
+        print(
+            "GATEWAY_BASE_URL is not set and --base-url was not provided.",
+            file=sys.stderr,
+        )
+        return 2
     api_key = os.environ.get(args.api_key_env)
     if not args.mock and not api_key and not args.no_key_prompt and sys.stdin.isatty():
         api_key = getpass.getpass(
@@ -282,6 +335,22 @@ def main() -> int:
     frozen_max_tokens = int(manifest.get("max_tokens", args.max_tokens))
     if args.max_tokens != frozen_max_tokens and not args.mock:
         print("Max tokens differs from the frozen pilot manifest.", file=sys.stderr)
+        return 2
+    frozen_request_interval = float(manifest.get("request_interval_seconds", 0.0))
+    request_interval = (
+        frozen_request_interval
+        if args.request_interval is None
+        else float(args.request_interval)
+    )
+    if abs(request_interval - frozen_request_interval) > 1e-9 and not args.mock:
+        print(
+            "Request interval differs from the frozen pilot manifest.",
+            file=sys.stderr,
+        )
+        return 2
+    request_body_extra = manifest.get("request_body_extra") or {}
+    if not isinstance(request_body_extra, dict):
+        print("Manifest request_body_extra must be an object.", file=sys.stderr)
         return 2
 
     expected_returned_model: str | None = None
@@ -353,8 +422,48 @@ def main() -> int:
 
     if len(jobs) != int(manifest["expected_requests"]):
         raise ValueError("Job count differs from frozen manifest")
+    expected_keys = {job[-1] for job in jobs}
     existing = latest_successes(args.output)
-    client = None if args.mock else GatewayClient(args.base_url, str(api_key), args.request_timeout)
+    initially_remaining = missing_successful_request_keys(expected_keys, existing)
+    print(
+        f"Resume status: {len(expected_keys) - len(initially_remaining)}/"
+        f"{len(expected_keys)} frozen request keys already successful; "
+        f"{len(initially_remaining)} will be attempted.",
+        flush=True,
+    )
+    existing_returned_models = {
+        str(row.get("returned_model"))
+        for row in existing.values()
+        if row.get("returned_model") is not None
+    }
+    if expected_returned_model is not None and existing_returned_models not in (
+        set(),
+        {expected_returned_model},
+    ):
+        raise FatalProvenanceError(
+            "Existing successful rows contain a returned-model identity that "
+            "differs from the passed smoke gate."
+        )
+    existing_fingerprints = {
+        str(row.get("system_fingerprint"))
+        for row in existing.values()
+        if row.get("system_fingerprint") is not None
+    }
+    if len(existing_fingerprints) > 1:
+        raise FatalProvenanceError(
+            "Existing successful rows contain multiple non-null system fingerprints."
+        )
+    expected_fingerprint = next(iter(existing_fingerprints), None)
+    client = (
+        None
+        if args.mock
+        else GatewayClient(
+            args.base_url,
+            str(api_key),
+            args.request_timeout,
+            request_interval,
+        )
+    )
     consecutive_request_errors = 0
     try:
         for index, (
@@ -367,10 +476,6 @@ def main() -> int:
         ) in enumerate(jobs, start=1):
             fatal_error: FatalRunError | None = None
             if key in existing:
-                print(
-                    f"[{index}/{len(jobs)}] SKIP "
-                    f"{row['record_id'][:8]} {condition_name}"
-                )
                 continue
             started = time.perf_counter()
             try:
@@ -383,6 +488,7 @@ def main() -> int:
                         model_alias=args.model_alias,
                         messages=messages,
                         max_tokens=args.max_tokens,
+                        request_body_extra=request_body_extra,
                     )
                 )
                 if (
@@ -393,6 +499,16 @@ def main() -> int:
                         "Returned model differs from the passed smoke gate: "
                         f"{result['returned_model']!r} != "
                         f"{expected_returned_model!r}"
+                    )
+                if (
+                    expected_fingerprint is not None
+                    and result["system_fingerprint"] is not None
+                    and str(result["system_fingerprint"]) != expected_fingerprint
+                ):
+                    raise FatalProvenanceError(
+                        "System fingerprint differs from the existing successful "
+                        f"deployment rows: {result['system_fingerprint']!r} != "
+                        f"{expected_fingerprint!r}"
                     )
                 parsed, parse_status = parse_json_object(result["raw_response"])
                 schema = json.loads(row["schema_variants"][schema_variant])
@@ -431,10 +547,19 @@ def main() -> int:
                     ],
                     "request_parameters": {
                         "max_tokens": args.max_tokens,
+                        "request_interval_seconds": request_interval,
                         "stream": False,
                         "sampling_parameters": "omitted",
-                        "thinking": "omitted_provider_default",
-                        "response_format": "omitted_text_mode",
+                        "thinking": (
+                            "disabled_explicitly"
+                            if request_body_extra.get("enable_thinking") is False
+                            else "omitted_provider_default"
+                        ),
+                        "request_body_extra": request_body_extra,
+                        "response_format": (
+                            request_body_extra.get("response_format")
+                            or "omitted_text_mode"
+                        ),
                         "tools": "omitted",
                     },
                     "latency_ms": result["latency_ms"],
@@ -487,6 +612,22 @@ def main() -> int:
     finally:
         if client is not None:
             client.close()
+    final_successes = latest_successes(args.output)
+    remaining = missing_successful_request_keys(expected_keys, final_successes)
+    if remaining:
+        completed = len(expected_keys) - len(remaining)
+        print(
+            f"Run incomplete: {completed}/{len(expected_keys)} frozen request "
+            f"keys have successful responses; {len(remaining)} remain. "
+            "Rerun the identical command to retry only those keys.",
+            file=sys.stderr,
+        )
+        return 1
+    print(
+        f"Run complete: {len(expected_keys)}/{len(expected_keys)} frozen request "
+        "keys have successful responses.",
+        flush=True,
+    )
     return 0
 
 

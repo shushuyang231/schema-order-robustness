@@ -1,0 +1,21 @@
+﻿left,right,contrast,shared_records,spearman_rho,ci95_low,ci95_high,global_holm_p,analysis_status
+sonnet_gateway,gpt_gateway,Additional member order,200,-0.1324,-0.2890,0.0304,1.000000,post-hoc exploratory
+sonnet_gateway,gpt_gateway,Property order,200,-0.0300,-0.1993,0.1417,1.000000,post-hoc exploratory
+sonnet_gateway,deepseek_official,Additional member order,200,0.0929,-0.0785,0.2620,1.000000,post-hoc exploratory
+sonnet_gateway,deepseek_official,Property order,200,0.0919,-0.0724,0.2555,1.000000,post-hoc exploratory
+sonnet_gateway,qwen_plus_official,Additional member order,160,0.1718,-0.0022,0.3393,0.543491,post-hoc exploratory
+sonnet_gateway,qwen_plus_official,Property order,160,0.0581,-0.1237,0.2386,1.000000,post-hoc exploratory
+sonnet_gateway,qwen_plus_json_mode,Additional member order,100,0.1033,-0.1086,0.3108,1.000000,post-hoc exploratory
+sonnet_gateway,qwen_plus_json_mode,Property order,100,0.1253,-0.1047,0.3439,1.000000,post-hoc exploratory
+gpt_gateway,deepseek_official,Additional member order,200,-0.0240,-0.1876,0.1383,1.000000,post-hoc exploratory
+gpt_gateway,deepseek_official,Property order,200,0.0236,-0.1313,0.1799,1.000000,post-hoc exploratory
+gpt_gateway,qwen_plus_official,Additional member order,160,0.0890,-0.0883,0.2601,1.000000,post-hoc exploratory
+gpt_gateway,qwen_plus_official,Property order,160,0.0861,-0.0901,0.2630,1.000000,post-hoc exploratory
+gpt_gateway,qwen_plus_json_mode,Additional member order,100,-0.0545,-0.2601,0.1635,1.000000,post-hoc exploratory
+gpt_gateway,qwen_plus_json_mode,Property order,100,0.0595,-0.1470,0.2582,1.000000,post-hoc exploratory
+deepseek_official,qwen_plus_official,Additional member order,160,0.1571,-0.0257,0.3258,0.870226,post-hoc exploratory
+deepseek_official,qwen_plus_official,Property order,160,0.0393,-0.1419,0.2193,1.000000,post-hoc exploratory
+deepseek_official,qwen_plus_json_mode,Additional member order,100,0.1263,-0.0955,0.3393,1.000000,post-hoc exploratory
+deepseek_official,qwen_plus_json_mode,Property order,100,-0.0048,-0.2236,0.2091,1.000000,post-hoc exploratory
+qwen_plus_official,qwen_plus_json_mode,Additional member order,100,0.6258,0.4090,0.8024,0.003999,post-hoc exploratory
+qwen_plus_official,qwen_plus_json_mode,Property order,100,0.6185,0.3828,0.7953,0.003999,post-hoc exploratory

@@ -1,0 +1,444 @@
+{
+  "analysis_status": "POST_HOC_ROBUSTNESS_ONLY",
+  "claim_boundary": "Concentration and transfer analyses do not alter any prospectively frozen model-level decision.",
+  "multiple_testing": "One global Holm family across all pairwise system-by-contrast record-concordance tests.",
+  "runs": {
+    "sonnet_gateway": {
+      "manifest": "protocol\\sob_decomposed_sonnet5_manifest.json",
+      "predictions": "results\\api\\sob_decomposed_sonnet5.jsonl",
+      "analysis_stage": "preregistered_decomposed_contrast_confirmation",
+      "model_alias": "claude-sonnet-5",
+      "record_count": 200,
+      "contrasts": {
+        "property_order": {
+          "mean": 0.05840000000000001,
+          "median": 0.0,
+          "symmetric_10pct_trimmed_mean": 0.015875000000000007,
+          "mean_after_removing_largest_10pct": 0.006777777777777783,
+          "largest_10pct_positive_mass_share": 0.8021472392638037,
+          "nonzero_record_fraction": 0.375,
+          "positive_record_fraction": 0.255,
+          "by_schema_complexity": {
+            "hard": 0.083,
+            "medium": 0.03380000000000001
+          }
+        },
+        "additional_keyword_order_given_reversed_properties": {
+          "mean": 0.07680000000000001,
+          "median": 0.0,
+          "symmetric_10pct_trimmed_mean": 0.026875000000000003,
+          "mean_after_removing_largest_10pct": 0.016555555555555556,
+          "largest_10pct_positive_mass_share": 0.7417615338526063,
+          "nonzero_record_fraction": 0.39,
+          "positive_record_fraction": 0.285,
+          "by_schema_complexity": {
+            "hard": 0.0981,
+            "medium": 0.05550000000000001
+          }
+        }
+      }
+    },
+    "gpt_gateway": {
+      "manifest": "protocol\\sob_decomposed_gpt55_manifest.json",
+      "predictions": "results\\api\\sob_decomposed_gpt55.jsonl",
+      "analysis_stage": "preregistered_decomposed_contrast_confirmation",
+      "model_alias": "gpt-5.5",
+      "record_count": 200,
+      "contrasts": {
+        "property_order": {
+          "mean": 0.032850000000000004,
+          "median": 0.0,
+          "symmetric_10pct_trimmed_mean": 0.0049375,
+          "mean_after_removing_largest_10pct": -0.005888888888888888,
+          "largest_10pct_positive_mass_share": 0.8384615384615385,
+          "nonzero_record_fraction": 0.39,
+          "positive_record_fraction": 0.205,
+          "by_schema_complexity": {
+            "hard": 0.0562,
+            "medium": 0.009500000000000003
+          }
+        },
+        "additional_keyword_order_given_reversed_properties": {
+          "mean": 0.037950000000000005,
+          "median": 0.0,
+          "symmetric_10pct_trimmed_mean": 0.004187500000000006,
+          "mean_after_removing_largest_10pct": -0.006555555555555551,
+          "largest_10pct_positive_mass_share": 0.8581213307240704,
+          "nonzero_record_fraction": 0.38,
+          "positive_record_fraction": 0.2,
+          "by_schema_complexity": {
+            "hard": 0.044700000000000004,
+            "medium": 0.031200000000000006
+          }
+        }
+      }
+    },
+    "deepseek_official": {
+      "manifest": "protocol\\sob_official_deepseek_v4_flash_manifest.json",
+      "predictions": "results\\api\\sob_official_deepseek_v4_flash.jsonl",
+      "analysis_stage": "preregistered_official_deepseek_replication",
+      "model_alias": "deepseek-v4-flash",
+      "record_count": 200,
+      "contrasts": {
+        "property_order": {
+          "mean": 0.01325,
+          "median": 0.0,
+          "symmetric_10pct_trimmed_mean": 0.0012499999999999966,
+          "mean_after_removing_largest_10pct": -0.01038888888888889,
+          "largest_10pct_positive_mass_share": 0.7197452229299364,
+          "nonzero_record_fraction": 0.525,
+          "positive_record_fraction": 0.25,
+          "by_schema_complexity": {
+            "hard": 0.017199999999999997,
+            "medium": 0.0093
+          }
+        },
+        "additional_keyword_order_given_reversed_properties": {
+          "mean": 0.018150000000000003,
+          "median": 0.0,
+          "symmetric_10pct_trimmed_mean": 0.0046250000000000015,
+          "mean_after_removing_largest_10pct": -0.006555555555555554,
+          "largest_10pct_positive_mass_share": 0.7200598802395208,
+          "nonzero_record_fraction": 0.52,
+          "positive_record_fraction": 0.285,
+          "by_schema_complexity": {
+            "hard": 0.011699999999999999,
+            "medium": 0.024600000000000004
+          }
+        }
+      }
+    },
+    "qwen_plus_official": {
+      "manifest": "protocol\\sob_official_qwen_plus_resource_full160_manifest.json",
+      "predictions": "results\\api\\sob_official_qwen_plus_resource.jsonl",
+      "analysis_stage": "prospective_qwen_plus_resource_confirmation_full_160",
+      "model_alias": "qwen-plus",
+      "record_count": 160,
+      "contrasts": {
+        "property_order": {
+          "mean": 0.1255,
+          "median": 0.0,
+          "symmetric_10pct_trimmed_mean": 0.059140625,
+          "mean_after_removing_largest_10pct": 0.04881944444444444,
+          "largest_10pct_positive_mass_share": 0.6328806983511154,
+          "nonzero_record_fraction": 0.35625,
+          "positive_record_fraction": 0.3125,
+          "by_schema_complexity": {
+            "hard": 0.186125,
+            "medium": 0.064875
+          }
+        },
+        "additional_keyword_order_given_reversed_properties": {
+          "mean": 0.1229375,
+          "median": 0.0,
+          "symmetric_10pct_trimmed_mean": 0.064296875,
+          "mean_after_removing_largest_10pct": 0.052569444444444446,
+          "largest_10pct_positive_mass_share": 0.5951795376291196,
+          "nonzero_record_fraction": 0.36875,
+          "positive_record_fraction": 0.3125,
+          "by_schema_complexity": {
+            "hard": 0.174125,
+            "medium": 0.07175000000000001
+          }
+        }
+      }
+    },
+    "qwen_plus_json_mode": {
+      "manifest": "protocol\\sob_official_qwen_plus_json_mode_100_manifest.json",
+      "predictions": "results\\api\\sob_official_qwen_plus_json_mode_100.jsonl",
+      "analysis_stage": "prospective_qwen_plus_json_mode_ablation_100",
+      "model_alias": "qwen-plus",
+      "record_count": 100,
+      "contrasts": {
+        "property_order": {
+          "mean": 0.1582,
+          "median": 0.0,
+          "symmetric_10pct_trimmed_mean": 0.085375,
+          "mean_after_removing_largest_10pct": 0.07522222222222222,
+          "largest_10pct_positive_mass_share": 0.5698992443324937,
+          "nonzero_record_fraction": 0.35,
+          "positive_record_fraction": 0.34,
+          "by_schema_complexity": {
+            "hard": 0.18460000000000001,
+            "medium": 0.1318
+          }
+        },
+        "additional_keyword_order_given_reversed_properties": {
+          "mean": 0.1219,
+          "median": 0.0,
+          "symmetric_10pct_trimmed_mean": 0.054625,
+          "mean_after_removing_largest_10pct": 0.044333333333333336,
+          "largest_10pct_positive_mass_share": 0.6523468575974541,
+          "nonzero_record_fraction": 0.35,
+          "positive_record_fraction": 0.3,
+          "by_schema_complexity": {
+            "hard": 0.149,
+            "medium": 0.09480000000000001
+          }
+        }
+      }
+    }
+  },
+  "cross_system_concordance": [
+    {
+      "left": "sonnet_gateway",
+      "right": "gpt_gateway",
+      "contrast": "additional_keyword_order_given_reversed_properties",
+      "shared_record_count": 200,
+      "spearman_rho": -0.13238495071273773,
+      "rho_ci95": [
+        -0.2889845281398626,
+        0.03040863897262836
+      ],
+      "permutation_p": 0.0647870425914817,
+      "holm_p": 1.0
+    },
+    {
+      "left": "sonnet_gateway",
+      "right": "gpt_gateway",
+      "contrast": "property_order",
+      "shared_record_count": 200,
+      "spearman_rho": -0.03003283127647362,
+      "rho_ci95": [
+        -0.19931484094650656,
+        0.14166402250010554
+      ],
+      "permutation_p": 0.6632673465306939,
+      "holm_p": 1.0
+    },
+    {
+      "left": "sonnet_gateway",
+      "right": "deepseek_official",
+      "contrast": "additional_keyword_order_given_reversed_properties",
+      "shared_record_count": 200,
+      "spearman_rho": 0.09285597705467727,
+      "rho_ci95": [
+        -0.07845089378780074,
+        0.2619659273963834
+      ],
+      "permutation_p": 0.19896020795840832,
+      "holm_p": 1.0
+    },
+    {
+      "left": "sonnet_gateway",
+      "right": "deepseek_official",
+      "contrast": "property_order",
+      "shared_record_count": 200,
+      "spearman_rho": 0.09185723369417353,
+      "rho_ci95": [
+        -0.0724067038234615,
+        0.2554531856388507
+      ],
+      "permutation_p": 0.1877624475104979,
+      "holm_p": 1.0
+    },
+    {
+      "left": "sonnet_gateway",
+      "right": "qwen_plus_official",
+      "contrast": "additional_keyword_order_given_reversed_properties",
+      "shared_record_count": 160,
+      "spearman_rho": 0.17176168661301675,
+      "rho_ci95": [
+        -0.0021627086619613696,
+        0.3392650639634779
+      ],
+      "permutation_p": 0.030193961207758448,
+      "holm_p": 0.5434913017396521
+    },
+    {
+      "left": "sonnet_gateway",
+      "right": "qwen_plus_official",
+      "contrast": "property_order",
+      "shared_record_count": 160,
+      "spearman_rho": 0.058087310399678564,
+      "rho_ci95": [
+        -0.12372621105214067,
+        0.23855818447570093
+      ],
+      "permutation_p": 0.46850629874025196,
+      "holm_p": 1.0
+    },
+    {
+      "left": "sonnet_gateway",
+      "right": "qwen_plus_json_mode",
+      "contrast": "additional_keyword_order_given_reversed_properties",
+      "shared_record_count": 100,
+      "spearman_rho": 0.1032539072530922,
+      "rho_ci95": [
+        -0.10863828356231893,
+        0.3107812894934397
+      ],
+      "permutation_p": 0.3117376524695061,
+      "holm_p": 1.0
+    },
+    {
+      "left": "sonnet_gateway",
+      "right": "qwen_plus_json_mode",
+      "contrast": "property_order",
+      "shared_record_count": 100,
+      "spearman_rho": 0.1253227444730497,
+      "rho_ci95": [
+        -0.10471206459106316,
+        0.34394756734005916
+      ],
+      "permutation_p": 0.21215756848630274,
+      "holm_p": 1.0
+    },
+    {
+      "left": "gpt_gateway",
+      "right": "deepseek_official",
+      "contrast": "additional_keyword_order_given_reversed_properties",
+      "shared_record_count": 200,
+      "spearman_rho": -0.023978961253861432,
+      "rho_ci95": [
+        -0.18760525264885983,
+        0.13827263453408808
+      ],
+      "permutation_p": 0.732253549290142,
+      "holm_p": 1.0
+    },
+    {
+      "left": "gpt_gateway",
+      "right": "deepseek_official",
+      "contrast": "property_order",
+      "shared_record_count": 200,
+      "spearman_rho": 0.023553494992700055,
+      "rho_ci95": [
+        -0.1312744993013128,
+        0.179882949902775
+      ],
+      "permutation_p": 0.7386522695460908,
+      "holm_p": 1.0
+    },
+    {
+      "left": "gpt_gateway",
+      "right": "qwen_plus_official",
+      "contrast": "additional_keyword_order_given_reversed_properties",
+      "shared_record_count": 160,
+      "spearman_rho": 0.08903195620466677,
+      "rho_ci95": [
+        -0.08832503586249996,
+        0.2600858177759637
+      ],
+      "permutation_p": 0.25934813037392523,
+      "holm_p": 1.0
+    },
+    {
+      "left": "gpt_gateway",
+      "right": "qwen_plus_official",
+      "contrast": "property_order",
+      "shared_record_count": 160,
+      "spearman_rho": 0.08605003590279574,
+      "rho_ci95": [
+        -0.09014574343860839,
+        0.2630192595372924
+      ],
+      "permutation_p": 0.2709458108378324,
+      "holm_p": 1.0
+    },
+    {
+      "left": "gpt_gateway",
+      "right": "qwen_plus_json_mode",
+      "contrast": "additional_keyword_order_given_reversed_properties",
+      "shared_record_count": 100,
+      "spearman_rho": -0.054471971559405544,
+      "rho_ci95": [
+        -0.2601471639926055,
+        0.16350359430980965
+      ],
+      "permutation_p": 0.594881023795241,
+      "holm_p": 1.0
+    },
+    {
+      "left": "gpt_gateway",
+      "right": "qwen_plus_json_mode",
+      "contrast": "property_order",
+      "shared_record_count": 100,
+      "spearman_rho": 0.059545959342912506,
+      "rho_ci95": [
+        -0.14704250695735355,
+        0.258175968467386
+      ],
+      "permutation_p": 0.5574885022995401,
+      "holm_p": 1.0
+    },
+    {
+      "left": "deepseek_official",
+      "right": "qwen_plus_official",
+      "contrast": "additional_keyword_order_given_reversed_properties",
+      "shared_record_count": 160,
+      "spearman_rho": 0.1570536086081479,
+      "rho_ci95": [
+        -0.025667291396151294,
+        0.32576476165351126
+      ],
+      "permutation_p": 0.05118976204759048,
+      "holm_p": 0.8702259548090382
+    },
+    {
+      "left": "deepseek_official",
+      "right": "qwen_plus_official",
+      "contrast": "property_order",
+      "shared_record_count": 160,
+      "spearman_rho": 0.039255726436661684,
+      "rho_ci95": [
+        -0.1418782592085651,
+        0.2192716900096283
+      ],
+      "permutation_p": 0.6234753049390122,
+      "holm_p": 1.0
+    },
+    {
+      "left": "deepseek_official",
+      "right": "qwen_plus_json_mode",
+      "contrast": "additional_keyword_order_given_reversed_properties",
+      "shared_record_count": 100,
+      "spearman_rho": 0.1263412669075806,
+      "rho_ci95": [
+        -0.09554432895160798,
+        0.33931614371153973
+      ],
+      "permutation_p": 0.21515696860627875,
+      "holm_p": 1.0
+    },
+    {
+      "left": "deepseek_official",
+      "right": "qwen_plus_json_mode",
+      "contrast": "property_order",
+      "shared_record_count": 100,
+      "spearman_rho": -0.004836250803537943,
+      "rho_ci95": [
+        -0.2235500173666269,
+        0.20907057014985791
+      ],
+      "permutation_p": 0.9592081583683263,
+      "holm_p": 1.0
+    },
+    {
+      "left": "qwen_plus_official",
+      "right": "qwen_plus_json_mode",
+      "contrast": "additional_keyword_order_given_reversed_properties",
+      "shared_record_count": 100,
+      "spearman_rho": 0.6258099573296668,
+      "rho_ci95": [
+        0.40898541314833026,
+        0.802389973776403
+      ],
+      "permutation_p": 0.0001999600079984003,
+      "holm_p": 0.003999200159968006
+    },
+    {
+      "left": "qwen_plus_official",
+      "right": "qwen_plus_json_mode",
+      "contrast": "property_order",
+      "shared_record_count": 100,
+      "spearman_rho": 0.6184883480340335,
+      "rho_ci95": [
+        0.382781595573071,
+        0.7952941042518566
+      ],
+      "permutation_p": 0.0001999600079984003,
+      "holm_p": 0.003999200159968006
+    }
+  ]
+}
