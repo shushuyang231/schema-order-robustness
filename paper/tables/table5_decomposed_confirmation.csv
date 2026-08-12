@@ -7,3 +7,9 @@ DeepSeek official endpoint,Property order,0.0132,0.0014,0.0254,0.013197,no,-0.00
 DeepSeek official endpoint,Additional member order,0.0182,0.0057,0.0322,0.001600,no,0.0071,-0.0073,0.0222,0.720256
 Qwen-Plus official endpoint,Property order,0.1255,0.0861,0.1674,0.000400,yes,-0.0177,-0.0392,0.0003,0.160768
 Qwen-Plus official endpoint,Additional member order,0.1229,0.0853,0.1624,0.000400,yes,0.0063,-0.0142,0.0251,0.552290
+SJTU Zhiyuan-1 deepseek-chat (recovery),Property order,0.0168,0.0023,0.0331,0.005199,no,-0.0225,-0.0404,-0.0067,0.014397
+SJTU Zhiyuan-1 deepseek-chat (recovery),Additional member order,0.0160,0.0036,0.0298,0.005199,no,0.0131,-0.0022,0.0292,0.103779
+SJTU Zhiyuan-1 deepseek-reasoner,Property order,-0.0005,-0.0111,0.0114,0.615077,no,0.0065,-0.0085,0.0220,0.527894
+SJTU Zhiyuan-1 deepseek-reasoner,Additional member order,0.0028,-0.0070,0.0129,0.615077,no,-0.0080,-0.0221,0.0057,0.527894
+TokenRhythm deepseek-v4-flash,Property order,0.0039,-0.0064,0.0163,0.475905,no,-0.0080,-0.0204,0.0035,0.371526
+TokenRhythm deepseek-v4-flash,Additional member order,-0.0027,-0.0112,0.0064,0.710058,no,-0.0006,-0.0154,0.0140,0.942412

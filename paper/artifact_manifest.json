@@ -44,6 +44,22 @@
     {
       "path": "results\\analysis\\sob_decomposed_cross_model.json",
       "sha256": "bd5081628a426bfaad3a1a5fbfb646e90ffed7bb65820431426993e2f71eebaa"
+    },
+    {
+      "path": "results\\api\\sob_sjtu_deepseek_chat_report.json",
+      "sha256": "7b553c16e31aeec96bb58db8455c7d76b1a5efdf15bdb0143a9dc6f97d0d511f"
+    },
+    {
+      "path": "results\\api\\sob_sjtu_deepseek_reasoner_report.json",
+      "sha256": "3262e415ecaedb363496811df6a177c351f62f0307b9693ddf633ff1846a6c44"
+    },
+    {
+      "path": "results\\api\\sob_tokenrhythm_deepseek_v4_flash_report.json",
+      "sha256": "39b9803e2c6226120621d93fe2f5eb1f676672b821b7f4bebc4a4e021672ad80"
+    },
+    {
+      "path": "results\\api\\sob_endpoint_panel_summary.json",
+      "sha256": "dcb0b667dd26ef0fc84a7ad7551acab945b2c2c0a16909a28fbaf9deb2f298f9"
     }
   ],
   "frozen_results_recomputed": false,
@@ -70,8 +86,8 @@
     },
     {
       "path": "paper\\tables\\table5_decomposed_confirmation.csv",
-      "sha256": "44613caab47d4a8619340a028184cd6bb9016074949fa0a86fa9775f5e3ef9e5",
-      "bytes": 1089
+      "sha256": "6f402e7d1d4d3316505615696957b25d16d67b00258e91cd0d3f1aa81d1de84b",
+      "bytes": 1813
     },
     {
       "path": "paper\\tables\\table6_decomposed_cross_model.csv",
@@ -105,8 +121,8 @@
     },
     {
       "path": "paper\\figures\\figure3_decomposed_confirmation.png",
-      "sha256": "9871d4785d17dbe4da7c40da333a0f496d779fa7bcf24b8274a4c325b4c9354b",
-      "bytes": 44799
+      "sha256": "c4e8a6b07bc3a3a9706ede90e86de8f78a1e7c8113dde7bd8d84d2c55ddb166d",
+      "bytes": 44903
     },
     {
       "path": "paper\\figures\\figure4_qwen_mode_interaction.png",

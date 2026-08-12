@@ -81,16 +81,17 @@ Schema equivalence checker.
 
 Three separately labelled deployments traversed their frozen 3,000-request
 job lists: SJTU Zhiyuan-1 `deepseek-chat`, SJTU Zhiyuan-1
-`deepseek-reasoner`, and TokenRhythm `deepseek-v4-flash`. An aggregate
-completion audit found 8,989/9,000 unique successful request keys. The logs
-retain 28 top-level transport-error rows; 11 frozen keys remain to be retried
-without changing records, prompts, request parameters, or analysis rules.
+`deepseek-reasoner`, and TokenRhythm `deepseek-v4-flash`. The final aggregate
+completion audit found 9,000/9,000 unique successful request keys. The logs
+retain 28 top-level transport-error rows; all 11 previously missing keys were
+recovered without changing records, prompts, request parameters, or analysis
+rules.
 
 The runner previously returned success after traversing all job positions even
 when isolated errors remained. It now returns nonzero unless every frozen key
 has a successful row. `src/audit_endpoint_panel_runs.py` is the offline
-completion/provenance gate. No endpoint-panel distributional effect has been
-computed yet.
+completion/provenance gate. The completed panel was then evaluated offline
+under the frozen six-test Holm family.
 
 The analysis and reporting boundary is frozen in
 `protocol/35_endpoint_panel_completion_and_analysis_amendment.md`: the original
@@ -102,20 +103,21 @@ active deployment-by-contrast tests.
 
 ## Completed paper package
 
-- Authoritative manuscript: `paper/manuscript.md` (8,540 audited words).
+- Authoritative manuscript: `paper/manuscript.md` (9,454 audited words).
 - Flat editable source: `paper/emse/main.tex` plus `references.bib` and four
   flat figure files.
-- Review PDF: `output/pdf/schema_order_emse_promptse_revision.pdf` (18 A4 pages;
-  generated because the original output path was locked by an open viewer).
+- Review PDF: `output/pdf/schema_order_emse_promptse.pdf` (20 A4 pages).
 - Online Resource 1: `output/artifact/schema_order_emse_online_resource1.zip`
-  (137 allowlisted material files, no raw provider outputs, credentials,
+  (154 allowlisted material files, no raw provider outputs, credentials,
   restricted gold, or downloaded benchmark contexts).
 - Cover letter: `paper/emse/cover_letter.md`.
 - Standalone EMSE title page: `output/pdf/schema_order_emse_title_page.pdf`.
 - Submission checklist: `paper/emse/submission_checklist.md`.
 - Claim audit: `paper/claim_evidence_audit.md`.
 
-The PDF was rendered to PNG at 110 dpi and every page was visually inspected.
+The PDF was rendered to PNG at 110 dpi and representative pages covering the
+abstract, execution-settings table, endpoint-panel results table, equations,
+discussion, and references were visually inspected.
 There are no clipped figures, broken tables, blank pages, or unresolved
 citations. Figures use both color and marker shape and have external captions.
 
@@ -125,13 +127,13 @@ citations. Figures use both color and marker shape and have external captions.
 `OFFLINE_REPRODUCTION_PASS`:
 
 - Python compilation: pass.
-- Private working-tree tests: 43/43 pass.
+- Private working-tree tests: 45/45 pass.
 - Frozen figure/table rebuild: pass.
 - Manuscript citation/headline/section audit: pass.
 - Flat EMSE source build: pass.
 - EMSE review PDF build: pass.
 - Online Resource ZIP allowlist, secret scan, and integrity test: pass.
-- Fresh extraction self-test: 33/33 redistributable-input tests and the full
+- Fresh extraction self-test: 35/35 redistributable-input tests and the full
   seven-step offline reproduction pass. The private working tree additionally
   has 10 protocol-construction tests whose benchmark contexts/raw-response
   inputs are intentionally not redistributed.
@@ -170,34 +172,18 @@ identifying information.
 ## Final hashes
 
 - Manuscript SHA-256:
-  `A6A81C190BCB2B6612DE78DCEA40D07F6515CDDD9A51BDE4801D1281D572C596`
+  `86303C0462C56974DF9FA469BA8506A60D862102FDB218D533EB7017E8EA6726`
 - EMSE `main.tex` SHA-256:
-  `03AC83C5FE960EE05163162F8E96C406E93810C20230CCD673B017446BB8669B`
+  `0104D9ACCFF9872BB5DF1A713310F978BB328683202AC4700001348700AC6D69`
 - Review PDF SHA-256:
-  `02A3A60AAAB4370854CC2B1697035441EEBF758CF6883648389028C59C0CF817`
+  `32BCB639BD935B186860BB104CEB886674F7B725A545B4A5A6EB561C1366672F`
 - Online Resource 1 SHA-256:
-  `4C391191D232C022C63076E01712257077F76850DB64A19A3D981986D00C3F5A`
+  `7F921BC6AB702DEB4874381B950F51AAE786D3479FD0A833FA39EE1310605491`
 
 ## Exact next local command
 
-Complete only the 11 missing successful request keys. In one fresh PowerShell
-window, run the SJTU command and enter the SJTU key once. It handles both SJTU
-interfaces in that same window and prints only the missing requests, not the
-5,996 already-successful keys:
-
-```powershell
-& ".\scripts\finish_sjtu_deepseek_runs.ps1"
-```
-
-Then, in one fresh PowerShell window, run the TokenRhythm command and enter its
-key once:
-
-```powershell
-& ".\scripts\run_tokenrhythm_deepseek_v4_flash.ps1"
-```
-
-After both commands report complete, do not call another API. Run the frozen
-offline analysis with:
+No further API calls are needed. The endpoint panel is complete and the
+offline audit/evaluation has been run:
 
 ```powershell
 & ".\scripts\evaluate_endpoint_panel_offline.ps1"

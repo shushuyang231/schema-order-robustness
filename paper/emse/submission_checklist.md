@@ -14,7 +14,7 @@
   data availability, and human-subject status.
 - Generative-AI assistance disclosed in the methods/reproducibility section;
   human accountability stated.
-- Four externally captioned figures and four numbered in-paper tables.
+- Four externally captioned figures and six numbered in-paper tables.
 - Editable Markdown and flat LaTeX sources, BibTeX database, and review PDF.
 - Offline claim, citation, dialect, figure, and result-table audit passed.
 

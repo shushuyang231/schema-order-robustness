@@ -52,9 +52,11 @@ request keys for `deepseek-chat`, 2,997 for `deepseek-reasoner`, and 2,993 for
 the separately labelled TokenRhythm deployment. Thus 11 of 9,000 frozen keys
 still lacked a successful response. All error rows are retained.
 
-This is an execution-status bug, not an analysis change. The runner has been
+This is an execution-status bug, not an analysis change. The runner was
 amended to return a nonzero exit code unless every frozen request key has a
-successful row. Identical-key continuation may retry only the 11 unsuccessful
+successful row. Identical-key continuation retried only the 11 unsuccessful
 keys; successful keys, records, conditions, prompts, thresholds, and analysis
-rules remain frozen. No inferential result is computed until the aggregate
-completion audit passes.
+rules remained frozen. The final aggregate audit passed with 3,000 unique
+successful keys for each deployment (9,000/9,000 overall), retaining 28
+top-level transport-error rows. Only after this PASS was the frozen offline
+effect analysis run.

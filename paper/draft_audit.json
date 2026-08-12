@@ -1,6 +1,6 @@
 {
   "status": "PASS",
-  "word_count": 8540,
+  "word_count": 9454,
   "citation_key_count": 25,
   "missing_bibliography_keys": [],
   "unused_bibliography_keys": [],
@@ -40,7 +40,9 @@
     "qwen_mode_rows": true,
     "concentration_rows": true,
     "qualitative_case_count": true,
-    "practical_threshold_yes_count": true
+    "practical_threshold_yes_count": true,
+    "endpoint_panel_complete": true,
+    "endpoint_panel_summary_complete": true
   },
   "dialect_robustness_passed": true,
   "failures": []

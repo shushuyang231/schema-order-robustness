@@ -1,6 +1,6 @@
 # Claim-evidence audit — EMSE rewrite
 
-Date: 2026-08-02
+Date: 2026-08-12
 Status: offline manuscript gate passes
 
 ## Headline inventory
@@ -19,6 +19,9 @@ Status: offline manuscript gate passes
 | All 200 stored triples canonicalize identically | `sob_schema_canonicalization_audit.json` | verified | Conservative intervention, not a general Schema-equivalence checker |
 | Core transport audit: 17,900 successes, 20 retained top-level error rows, 28 successful rows with internal retries | `sob_core_retry_audit.json` | verified | Every frozen key completed; permanent availability failures remain outside the estimand |
 | Three maximum-effect Qwen cases show omission, factual substitution, and surface normalization | `sob_qwen_high_effect_cases.json` | verified post-hoc | Deliberately contrasting examples, not a frequency estimate or harm estimate |
+| Supplemental endpoint panel contains 9,000 successful responses with no new 0.05 practical confirmation | `sob_endpoint_panel_completion_audit.json`; `sob_endpoint_panel_summary.json`; three endpoint reports | verified supplemental | Post-submission evidence; SJTU chat is detectable but subthreshold, reasoner and TokenRhythm are near zero; not pooled as independent model samples |
+| Supplemental endpoint effects are 0.0168/0.0160 (SJTU chat), -0.0005/0.0028 (SJTU reasoner), and 0.0039/-0.0027 (TokenRhythm) | endpoint report JSON files | verified supplemental | Six-test panel Holm p-values are reported; no hardware-causal or upstream-checkpoint claim |
+| Supplemental endpoint completion retains 28 top-level transport-error rows and has 9,000 unique successful request keys | `sob_endpoint_panel_completion_audit.json` | verified | All previously missing keys were recovered by identical-key continuation before effect analysis |
 
 ## Counting and provenance checks
 
@@ -28,6 +31,10 @@ Status: offline manuscript gate passes
 - The Qwen JSON-Mode log contains 1,500 successful unique keys and 1,500 rows
   with the frozen `response_format` request contract.
 - Formal Qwen text plus JSON Mode usage is 6,820,229 provider-recorded tokens.
+- The supplemental endpoint panel used 17,051,515 provider-reported tokens and is
+  reported separately from the core evidence.
+- The endpoint completion audit passed at 9,000/9,000 unique successful keys;
+  the retained 28 transport-error rows are not silently discarded.
 - The mode ablation was designed after viewing the Qwen text interim; the
   manuscript states this selection in the introduction, methods, and threats.
 
@@ -52,6 +59,6 @@ Status: offline manuscript gate passes
 - Figure 4 separates within-interface effects from the JSON-minus-text
   interaction and marks the +/-0.03 boundary.
 - Figure captions are outside the images in the review PDF.
-- Five in-paper tables and nine generated CSV tables trace back to frozen JSON
+- Six in-paper tables and nine generated CSV tables trace back to frozen JSON
   reports.
 - All 25 bibliography entries are cited; there are no unresolved citation keys.

@@ -54,7 +54,7 @@ GRID = colors.HexColor("#CCD4DF")
 TABLE_CAPTIONS = (
     "Study stages, record panels, interfaces, and formal status",
     "Execution windows, endpoint provenance, and request settings",
-    "Decomposed text-mode effects and frozen deployment-level decisions",
+    "Decomposed text-mode effects, supplemental endpoint results, and deployment-level decisions",
     "Leaf-value accuracy contrasts for the decomposed studies",
     "Post-hoc effect-concentration stress tests",
     "Selected high-effect Qwen text-mode cases; post-hoc and non-representative",

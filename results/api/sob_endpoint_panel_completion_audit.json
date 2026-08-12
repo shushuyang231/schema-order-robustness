@@ -1,21 +1,19 @@
 {
-  "status": "FAIL",
+  "status": "PASS",
   "analysis_scope": "post-submission endpoint-panel completion and provenance audit",
   "contains_response_content": false,
   "runs": {
     "sjtu_deepseek_chat": {
       "manifest": "protocol/sob_sjtu_deepseek_chat_manifest.json",
       "predictions": "results/api/sob_sjtu_deepseek_chat.jsonl",
-      "predictions_sha256": "0fe7d4df3751d149882c1f8ac641395ac2e15717c150eb08c3db9ba2cdc489f8",
+      "predictions_sha256": "c281e6cdc016aa1e3ae9c4108a88d889f66ce6eaf2d07f6c1c2a420c7bddc309",
       "expected_successful_requests": 3000,
-      "raw_line_count": 3005,
-      "successful_line_count": 2999,
-      "unique_successful_request_key_count": 2999,
+      "raw_line_count": 3006,
+      "successful_line_count": 3000,
+      "unique_successful_request_key_count": 3000,
       "top_level_error_line_count": 6,
-      "missing_successful_pair_count": 1,
-      "missing_by_condition": {
-        "keywords_reversed__r3": 1
-      },
+      "missing_successful_pair_count": 0,
+      "missing_by_condition": {},
       "extra_successful_pair_count": 0,
       "duplicate_successful_line_count": 0,
       "top_level_errors_by_class": {
@@ -23,33 +21,29 @@
         "RemoteProtocolError": 1
       },
       "returned_model_counts": {
-        "deepseek-chat": 2999
+        "deepseek-chat": 3000
       },
       "system_fingerprint_counts": {
-        "vllm-0.21.0-tp8-ep-d873796e": 2999
+        "vllm-0.21.0-tp8-ep-d873796e": 3000
       },
       "smoke_record_sha256_counts": {
-        "7545b118890a8400adec754ef10734fc6ca5d540622a850715d7a8f9d5ad5cd9": 2999
+        "7545b118890a8400adec754ef10734fc6ca5d540622a850715d7a8f9d5ad5cd9": 3000
       },
       "provenance_consistent": true,
-      "schema_pass_rate": 0.9883294431477159,
-      "complete": false
+      "schema_pass_rate": 0.9883333333333333,
+      "complete": true
     },
     "sjtu_deepseek_reasoner": {
       "manifest": "protocol/sob_sjtu_deepseek_reasoner_manifest.json",
       "predictions": "results/api/sob_sjtu_deepseek_reasoner.jsonl",
-      "predictions_sha256": "c0effaf5f48e515c65dcb66bb8c3e848286167d3b62030d0fa02223c5e80024c",
+      "predictions_sha256": "d5de4ac513619bd46db0ead4c16df808d9514060724f5b4a1575fe2baeb58605",
       "expected_successful_requests": 3000,
-      "raw_line_count": 3012,
-      "successful_line_count": 2997,
-      "unique_successful_request_key_count": 2997,
+      "raw_line_count": 3015,
+      "successful_line_count": 3000,
+      "unique_successful_request_key_count": 3000,
       "top_level_error_line_count": 15,
-      "missing_successful_pair_count": 3,
-      "missing_by_condition": {
-        "keywords_reversed__r3": 1,
-        "keywords_reversed__r5": 1,
-        "original__r2": 1
-      },
+      "missing_successful_pair_count": 0,
+      "missing_by_condition": {},
       "extra_successful_pair_count": 0,
       "duplicate_successful_line_count": 0,
       "top_level_errors_by_class": {
@@ -59,57 +53,52 @@
         "RuntimeError": 2
       },
       "returned_model_counts": {
-        "deepseek-reasoner": 2997
+        "deepseek-reasoner": 3000
       },
       "system_fingerprint_counts": {
-        "vllm-0.21.0-tp8-ep-d873796e": 2997
+        "vllm-0.21.0-tp8-ep-d873796e": 3000
       },
       "smoke_record_sha256_counts": {
-        "45f7effad3366cb3b734a9fe570de6bd385747f0a38bc9dc43fe2e50f3cdc6ef": 2997
+        "45f7effad3366cb3b734a9fe570de6bd385747f0a38bc9dc43fe2e50f3cdc6ef": 3000
       },
       "provenance_consistent": true,
-      "schema_pass_rate": 0.9973306639973306,
-      "complete": false
+      "schema_pass_rate": 0.9973333333333333,
+      "complete": true
     },
     "tokenrhythm_deepseek_v4_flash": {
       "manifest": "protocol/sob_tokenrhythm_deepseek_v4_flash_manifest.json",
       "predictions": "results/api/sob_tokenrhythm_deepseek_v4_flash.jsonl",
-      "predictions_sha256": "a3122cbede746ab14796e969ed71456a3ab71be938ff72e6af6f1ba5e60a9e2a",
+      "predictions_sha256": "ef89c216807e141f4162e9f2d8533e37ed15cfaad18add259b6766cb15b51bb6",
       "expected_successful_requests": 3000,
-      "raw_line_count": 3000,
-      "successful_line_count": 2993,
-      "unique_successful_request_key_count": 2993,
+      "raw_line_count": 3007,
+      "successful_line_count": 3000,
+      "unique_successful_request_key_count": 3000,
       "top_level_error_line_count": 7,
-      "missing_successful_pair_count": 7,
-      "missing_by_condition": {
-        "keywords_reversed__r3": 1,
-        "original__r3": 1,
-        "properties_reversed__r2": 4,
-        "properties_reversed__r5": 1
-      },
+      "missing_successful_pair_count": 0,
+      "missing_by_condition": {},
       "extra_successful_pair_count": 0,
       "duplicate_successful_line_count": 0,
       "top_level_errors_by_class": {
         "RemoteProtocolError": 7
       },
       "returned_model_counts": {
-        "deepseek-v4-flash": 2993
+        "deepseek-v4-flash": 3000
       },
       "system_fingerprint_counts": {
-        "None": 2993
+        "None": 3000
       },
       "smoke_record_sha256_counts": {
-        "69245617816e35edb9872b508e3204c8205c260e4cb21eb17b41ace7201d1ea8": 2993
+        "69245617816e35edb9872b508e3204c8205c260e4cb21eb17b41ace7201d1ea8": 3000
       },
       "provenance_consistent": true,
-      "schema_pass_rate": 0.9966588706982961,
-      "complete": false
+      "schema_pass_rate": 0.9966666666666667,
+      "complete": true
     }
   },
   "totals": {
     "expected_successful_requests": 9000,
-    "unique_successful_request_keys": 8989,
-    "missing_successful_pairs": 11,
+    "unique_successful_request_keys": 9000,
+    "missing_successful_pairs": 0,
     "retained_top_level_error_rows": 28
   }
 }

@@ -37,6 +37,15 @@ def main() -> int:
     sonnet = load_json(ROOT / "results/api/sob_sonnet5_confirmatory_report.json")
     gpt = load_json(ROOT / "results/api/sob_gpt55_cross_model_report.json")
     qwen = load_json(ROOT / "results/api/sob_official_qwen_plus_resource_full160_report.json")
+    endpoint_chat = load_json(ROOT / "results/api/sob_sjtu_deepseek_chat_report.json")
+    endpoint_reasoner = load_json(ROOT / "results/api/sob_sjtu_deepseek_reasoner_report.json")
+    endpoint_tokenrhythm = load_json(
+        ROOT / "results/api/sob_tokenrhythm_deepseek_v4_flash_report.json"
+    )
+    endpoint_summary = load_json(ROOT / "results/api/sob_endpoint_panel_summary.json")
+    endpoint_audit = load_json(
+        ROOT / "results/api/sob_endpoint_panel_completion_audit.json"
+    )
     interaction = load_json(
         ROOT / "results/api/sob_official_qwen_plus_mode_interaction_100_report.json"
     )
@@ -77,6 +86,12 @@ def main() -> int:
         f"{qwen['contrasts']['property_order']['normalized_excess_disagreement']:.4f}",
         f"{qwen['contrasts']['additional_keyword_order_given_reversed_properties']['normalized_excess_disagreement']:.4f}",
         f"{interaction['contrasts']['property_order']['mode_change']:+.4f}",
+        "9,000 successful responses",
+        f"{endpoint_chat['contrasts']['property_order']['normalized_excess_disagreement']:.4f}",
+        f"{endpoint_reasoner['contrasts']['property_order']['normalized_excess_disagreement']:.4f}",
+        f"{endpoint_tokenrhythm['contrasts']['property_order']['normalized_excess_disagreement']:.4f}",
+        "post-submission endpoint panel",
+        "panel-wide Holm",
         "not evidence of equivalence",
         "200/200 audit pass",
         f"{retry_audit['totals']['top_level_error_rows']} standalone top-level error rows",
@@ -96,7 +111,7 @@ def main() -> int:
     table_checks = {
         "distribution_effect_rows": len(effects) == 8,
         "quality_metric_rows": len(quality) == 10,
-        "decomposed_rows": len(decomposed) == 8,
+        "decomposed_rows": len(decomposed) == 14,
         "qwen_mode_rows": len(mode_interaction) == 2,
         "concentration_rows": len(concentration) == 10,
         "qualitative_case_count": len(qualitative_cases["cases"]) == 3,
@@ -104,6 +119,16 @@ def main() -> int:
             row["meets_0_05_practical_threshold"] == "yes" for row in effects
         )
         == 2,
+        "endpoint_panel_complete": endpoint_audit.get("status") == "PASS"
+        and endpoint_audit.get("totals", {}).get("expected_successful_requests") == 9000
+        and endpoint_audit.get("totals", {}).get("unique_successful_request_keys") == 9000,
+        "endpoint_panel_summary_complete": endpoint_summary.get("analysis_status")
+        == "SUPPLEMENTAL_POST_SUBMISSION_EVIDENCE"
+        and sum(
+            deployment.get("successful_response_count", 0)
+            for deployment in endpoint_summary.get("deployments", {}).values()
+        )
+        == 9000,
     }
 
     required_sections = (

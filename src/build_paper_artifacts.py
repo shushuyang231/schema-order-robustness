@@ -30,6 +30,12 @@ DECOMP_DEEPSEEK_REPORT = (
 DECOMP_QWEN_REPORT = (
     ROOT / "results/api/sob_official_qwen_plus_resource_full160_report.json"
 )
+ENDPOINT_CHAT_REPORT = ROOT / "results/api/sob_sjtu_deepseek_chat_report.json"
+ENDPOINT_REASONER_REPORT = ROOT / "results/api/sob_sjtu_deepseek_reasoner_report.json"
+ENDPOINT_TOKENRHYTHM_REPORT = (
+    ROOT / "results/api/sob_tokenrhythm_deepseek_v4_flash_report.json"
+)
+ENDPOINT_PANEL_SUMMARY = ROOT / "results/api/sob_endpoint_panel_summary.json"
 QWEN_JSON_REPORT = (
     ROOT / "results/api/sob_official_qwen_plus_json_mode_100_report.json"
 )
@@ -420,7 +426,7 @@ def build_decomposed_figure(reports: dict[str, dict[str, Any]]) -> None:
         top=160,
         bottom=750,
         title_value="A. Noise-adjusted distribution contrast",
-        subtitle="Only model-specific effects at or above 0.05 meet the preregistered practical rule",
+        subtitle="Only model-specific effects at or above 0.05 meet the prospectively specified practical rule",
         field="normalized_excess_disagreement",
         ci_field="normalized_excess_ci95",
         domain=(-0.01, 0.19),
@@ -636,7 +642,9 @@ def build_tables(reports: dict[str, dict[str, Any]], exploratory: dict[str, Any]
 
 
 def build_decomposed_tables(
-    reports: dict[str, dict[str, Any]], cross_model: dict[str, Any]
+    reports: dict[str, dict[str, Any]],
+    cross_model: dict[str, Any],
+    endpoint_reports: dict[str, dict[str, Any]] | None = None,
 ) -> None:
     rows: list[dict[str, Any]] = []
     for model_label, key in (
@@ -664,6 +672,32 @@ def build_decomposed_tables(
                     "leaf_accuracy_holm_p": f"{item['leaf_accuracy_holm_p']:.6f}",
                 }
             )
+    if endpoint_reports:
+        for model_label, key in (
+            ("SJTU Zhiyuan-1 deepseek-chat (recovery)", "chat"),
+            ("SJTU Zhiyuan-1 deepseek-reasoner", "reasoner"),
+            ("TokenRhythm deepseek-v4-flash", "tokenrhythm"),
+        ):
+            report = endpoint_reports[key]
+            for contrast in DECOMP_CONTRASTS:
+                item = report["contrasts"][contrast]
+                nlow, nhigh = item["normalized_excess_ci95"]
+                alow, ahigh = item["leaf_accuracy_ci95"]
+                rows.append(
+                    {
+                        "system": model_label,
+                        "contrast": DECOMP_DISPLAY[contrast],
+                        "normalized_excess": f"{item['normalized_excess_disagreement']:.4f}",
+                        "normalized_ci95_low": f"{nlow:.4f}",
+                        "normalized_ci95_high": f"{nhigh:.4f}",
+                        "normalized_holm_p": f"{item['normalized_energy_holm_p']:.6f}",
+                        "meets_preregistered_rule": "yes" if item["confirmed"] else "no",
+                        "leaf_accuracy_difference": f"{item['leaf_value_accuracy_difference']:.4f}",
+                        "leaf_accuracy_ci95_low": f"{alow:.4f}",
+                        "leaf_accuracy_ci95_high": f"{ahigh:.4f}",
+                        "leaf_accuracy_holm_p": f"{item['leaf_accuracy_holm_p']:.6f}",
+                    }
+                )
     write_csv(TABLES / "table5_decomposed_confirmation.csv", list(rows[0]), rows)
 
     cross_rows: list[dict[str, Any]] = []
@@ -764,12 +798,18 @@ def main() -> int:
         "deepseek": load_json(DECOMP_DEEPSEEK_REPORT),
         "qwen": load_json(DECOMP_QWEN_REPORT),
     }
+    endpoint_reports = {
+        "chat": load_json(ENDPOINT_CHAT_REPORT),
+        "reasoner": load_json(ENDPOINT_REASONER_REPORT),
+        "tokenrhythm": load_json(ENDPOINT_TOKENRHYTHM_REPORT),
+    }
     decomposed_cross = load_json(DECOMP_CROSS_REPORT)
+    endpoint_panel_summary = load_json(ENDPOINT_PANEL_SUMMARY)
     qwen_json = load_json(QWEN_JSON_REPORT)
     qwen_interaction = load_json(QWEN_INTERACTION_REPORT)
     robustness = load_json(ROBUSTNESS_REPORT)
     build_tables(reports, exploratory)
-    build_decomposed_tables(decomposed_reports, decomposed_cross)
+    build_decomposed_tables(decomposed_reports, decomposed_cross, endpoint_reports)
     build_qwen_mode_tables(qwen_json, qwen_interaction, robustness)
     build_method_figure()
     build_forest_figure(reports)
@@ -792,6 +832,10 @@ def main() -> int:
                 QWEN_INTERACTION_REPORT,
                 ROBUSTNESS_REPORT,
                 DECOMP_CROSS_REPORT,
+                ENDPOINT_CHAT_REPORT,
+                ENDPOINT_REASONER_REPORT,
+                ENDPOINT_TOKENRHYTHM_REPORT,
+                ENDPOINT_PANEL_SUMMARY,
             )
         ],
         "frozen_results_recomputed": False,
