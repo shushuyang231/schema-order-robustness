@@ -10,7 +10,7 @@ Status: offline manuscript gate passes
 | 17,900 successful core responses | 5,000 initial + 6,000 disjoint gateways + 3,000 DeepSeek + 2,400 Qwen text + 1,500 Qwen JSON Mode | verified | The separate 600-response Qwen3.7 pilot is excluded and disclosed |
 | Sonnet decomposed effects are 0.0584 and 0.0768 | `sob_decomposed_sonnet5_report.json` | verified | Informal operator communication supports an Anthropic commercial-API route, but no documentary evidence was available and the checkpoint, wrapper, and per-request route were not independently verified |
 | GPT decomposed effects are 0.0329 and 0.0380 | `sob_decomposed_gpt55_report.json` | verified | Detectable but below the frozen 0.05 practical threshold; informal operator communication supports an OpenAI commercial-API route subject to the same documentary and authentication limits |
-| DeepSeek effects are 0.0133 and 0.0182 | `sob_official_deepseek_v4_flash_report.json` | verified | Negative practical replication, not “no effect” |
+| DeepSeek effects are 0.0133 and 0.0182 | `sob_official_deepseek_v4_flash_report.json` | verified | Subthreshold replication: positive estimates below the frozen 0.05 practical screen |
 | Qwen text effects are 0.1255 and 0.1229 | `sob_official_qwen_plus_resource_full160_report.json` | verified | Real-time `qwen-plus` deployment over the frozen 160 records |
 | JSON-Mode effects are 0.1582 and 0.1219 | `sob_official_qwen_plus_json_mode_100_report.json` | verified | JSON object mode, not strict JSON Schema constrained decoding |
 | Matched JSON-minus-text changes are +0.0191 and -0.0249 | `sob_official_qwen_plus_mode_interaction_100_report.json` | verified | Neither material interaction confirmed; not an equivalence result |

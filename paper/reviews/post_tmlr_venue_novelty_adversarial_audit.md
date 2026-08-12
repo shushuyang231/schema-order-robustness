@@ -123,7 +123,7 @@ The located literature does not combine all of the following:
 4. an excess-disagreement estimator that subtracts within-representation
    stochasticity from cross-representation disagreement;
 5. separate distribution, schema-validity, and gold-value oracles;
-6. cross-system practical-threshold evidence including negative practical
+6. cross-system practical-threshold evidence including subthreshold
    replications; and
 7. a matched provider JSON Mode boundary test plus a deployable
    canonicalization/regression guard.

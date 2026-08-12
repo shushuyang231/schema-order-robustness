@@ -7,7 +7,7 @@ generation. Its novelty is not that language models are sensitive to prompt
 formatting. The contribution is the combination of specification-derived
 metamorphic relations, automatic equivalence guards, repeated stochastic
 baselines, separate distribution and correctness oracles, and an auditable
-multi-stage study with an official-endpoint negative practical replication.
+multi-stage study with an official-endpoint subthreshold replication.
 
 ## Recommendation: borderline to weak accept
 
@@ -30,7 +30,7 @@ case study with only one benchmark and no native structured-decoding tests.
    tool schemas, or constrained decoding. The revised manuscript consistently
    uses “prompt-based schema-guided JSON generation/extraction.”
 
-3. **The negative practical replications increase credibility.** GPT and
+3. **The subthreshold replications increase credibility.** GPT and
    official DeepSeek do not cross 0.05. Retaining them supports a
    system-contingent boundary and makes the study more useful than a
    positive-only case report. They should not be hidden in the supplement.

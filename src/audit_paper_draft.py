@@ -92,7 +92,7 @@ def main() -> int:
         f"{endpoint_tokenrhythm['contrasts']['property_order']['normalized_excess_disagreement']:.4f}",
         "post-submission endpoint panel",
         "panel-wide Holm",
-        "not evidence of equivalence",
+        "do not resolve a material mode interaction",
         "200/200 audit pass",
         f"{retry_audit['totals']['top_level_error_rows']} standalone top-level error rows",
         f"{retry_audit['totals']['successful_rows_with_internal_retry']} successful rows",

@@ -21,7 +21,7 @@ The corresponding leaf-value accuracy differences were -0.00543
 ([-0.02175, 0.01044], Holm p = 0.72026) and 0.00710
 ([-0.00735, 0.02219], Holm p = 0.72026). Neither supports an accuracy change.
 
-The result is retained as a negative practical replication. It strengthens
+The result is retained as a subthreshold replication with positive estimates. It strengthens
 endpoint provenance and provider diversity, but it does not establish a
 between-model susceptibility difference.
 

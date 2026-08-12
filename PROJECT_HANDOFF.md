@@ -40,7 +40,7 @@ from the formal Qwen-Plus inference and from the 17,900 total.
 | Qwen-Plus official endpoint | 0.1255 | 0.1229 | both confirmed |
 
 The GPT and DeepSeek estimates are detectable but below the frozen practical
-threshold; they are negative practical replications, not null effects. Direct
+threshold; they are subthreshold replications with positive estimates. Direct
 Sonnet-versus-GPT differences did not survive multiplicity correction, so the
 paper does not claim a confirmed provider/model ranking.
 
@@ -103,7 +103,7 @@ active deployment-by-contrast tests.
 
 ## Completed paper package
 
-- Authoritative manuscript: `paper/manuscript.md` (9,454 audited words).
+- Authoritative manuscript: `paper/manuscript.md` (9,319 audited words).
 - Flat editable source: `paper/emse/main.tex` plus `references.bib` and four
   flat figure files.
 - Review PDF: `output/pdf/schema_order_emse_promptse.pdf` (20 A4 pages).
@@ -172,13 +172,13 @@ identifying information.
 ## Final hashes
 
 - Manuscript SHA-256:
-  `86303C0462C56974DF9FA469BA8506A60D862102FDB218D533EB7017E8EA6726`
+  `184FF9E760D9422A83107136A0A37CB74DC28991407A2EAEC9459108E2D0CAE4`
 - EMSE `main.tex` SHA-256:
-  `0104D9ACCFF9872BB5DF1A713310F978BB328683202AC4700001348700AC6D69`
+  `C29983AA3602A2E18547B733CCF6EA7D699EA0CEFF64495DEB31B9C182C7097C`
 - Review PDF SHA-256:
-  `69AB4F1AF54DD51853F18FC32520EE3EF031BEFD61417D002078B53738EABBD8`
+  `F37D4AEB2A3E502B88473FF319DCDFF1A12C490D983BA0FEA664764FC8932ED4`
 - Online Resource 1 SHA-256:
-  `0E62B5ADFBEB6E4D6609A4AC466EFEEAA459FDE412FF308690A8DAFDBE13B47E`
+  `C4859A7B4CA2BFFD2B9341848C021F9C2EB93B37BAB2B8071B0903E50ECF2D9D`
 
 ## Exact next local command
 

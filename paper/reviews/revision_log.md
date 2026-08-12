@@ -26,7 +26,7 @@
 - Added a dedicated stochastic/black-box distributional evaluation subsection.
 - Repeatedly distinguished prompt-based Schema guidance from native structured
   output and constrained decoding.
-- Retained the GPT and DeepSeek negative practical replications in the abstract,
+- Retained the GPT and DeepSeek subthreshold replications in the abstract,
   answer-first results, discussion, and conclusion.
 - Added Ethics and Broader Impact.
 - Corrected the artifact claim to distinguish local raw archives from the

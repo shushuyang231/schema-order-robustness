@@ -6,7 +6,7 @@ is closed; no build or audit command calls a model API.
 
 ## Main submission files
 
-- `manuscript.md` — authoritative English manuscript (9,454 audited words).
+- `manuscript.md` — authoritative English manuscript (9,319 audited words).
 - `references.bib` — bibliography; every entry is cited and every citation is
   defined.
 - `emse/main.tex` — flat editable LaTeX review source.

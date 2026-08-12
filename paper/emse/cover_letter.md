@@ -20,7 +20,8 @@ of structured instruction artifacts.
 
 The manuscript contributes (1) a JSON-Schema-semantics-derived metamorphic
 testing method; (2) a stochasticity-adjusted distributional estimator with
-record-cluster inference; (3) positive and negative practical replications
+record-cluster inference; (3) practical confirmations and subthreshold
+replications
 across gateway and official provider deployments; (4) a matched Qwen-Plus
 text-versus-JSON-Mode boundary experiment; and (5) a conservative
 canonicalizer and CI regression workflow. The core evidence comprises 17,900

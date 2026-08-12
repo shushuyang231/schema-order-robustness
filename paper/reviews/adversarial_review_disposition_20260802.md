@@ -82,7 +82,7 @@ comments were assessed independently of that error.
 ## Revised objective assessment
 
 The manuscript is now a credible journal submission with unusually close topic
-fit, broad black-box evidence, honest negative practical replications, and a
+fit, broad black-box evidence, honest subthreshold replications, and a
 usable testing intervention. Its main remaining weaknesses are one benchmark,
 mutable hosted deployments, no fixed open-weight checkpoint, and no direct
 production-utility endpoint. Acceptance is plausible but not predictable; the

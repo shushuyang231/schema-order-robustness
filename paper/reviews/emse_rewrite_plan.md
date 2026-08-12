@@ -41,8 +41,8 @@ Qwen text-mode interim and must carry that selection disclosure.
 1. A JSON-Schema-semantics-derived metamorphic testing method.
 2. A stochasticity-adjusted excess-disagreement estimator with record-cluster
    inference and a prespecified practical threshold.
-3. Positive and negative practical replications across gateway aliases and
-   official DeepSeek/Qwen endpoints.
+3. Practical confirmations and subthreshold replications across gateway
+   aliases and official DeepSeek/Qwen endpoints.
 4. A matched Qwen text-vs-JSON-Mode boundary showing that syntax enforcement
    did not demonstrate attenuation of semantic distribution shifts.
 5. A conservative canonicalizer and CI regression guard that remove the tested
