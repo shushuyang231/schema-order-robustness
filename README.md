@@ -12,7 +12,7 @@ JSON Schema 的序列化顺序改变、但验证语义不变时，它作为大�
 Schema 工件的行为回归判据**；效应取决于具体部署，不能据此提出“字段永远
 应该排在前面”的通用规则。
 
-**Repository snapshot:** 6 August 2026
+**Repository snapshot:** 12 August 2026
 **Submission target:** Empirical Software Engineering, PROMPT-SE 2026
 **Author:** Shengyao Sun, Shanghai Jiao Tong University
 **ORCID:** [0009-0008-9175-8226](https://orcid.org/0009-0008-9175-8226)
@@ -59,6 +59,19 @@ identities were not independently verified.
 上述结论只针对记录时实际调用的部署，不是模型家族排名，也不是所有模型都
 对顺序敏感的普遍定律。网关上游 checkpoint 没有被独立验证，因此仓库按
 “Sonnet gateway alias / GPT gateway alias”报告，而不是把它们写成官方模型。
+
+### 新端点扩展状态（尚未查看效应）
+
+SJTU“致远一号”的 `deepseek-chat`、`deepseek-reasoner` 与
+TokenRhythm 的 `deepseek-v4-flash` 已分别走完 3,000 个计划位置，但离线审计
+发现其中 11 个请求只有传输错误、尚无成功响应：当前为 **8,989/9,000** 个
+唯一成功 request key。原错误行全部保留，补跑程序只重试这 11 个缺口。
+
+这批数据尚未计算序列化效应，也不会被包装成三个独立模型的“投票”。原来的
+17,900 个响应仍是论文核心；新端点只是投稿后的部署稳健性证据。完整性审计与
+预先冻结的后续分析边界见
+`results/api/sob_endpoint_panel_completion_audit.md` 和
+`protocol/35_endpoint_panel_completion_and_analysis_amendment.md`。
 
 ## Repository contents
 

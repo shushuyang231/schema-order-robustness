@@ -14,7 +14,10 @@ from smoke_official_provider import (  # noqa: E402
     evaluate_gate,
     sanitized_completion,
 )
-from run_sob_metamorphic import validate_smoke_record  # noqa: E402
+from run_sob_metamorphic import (  # noqa: E402
+    missing_successful_request_keys,
+    validate_smoke_record,
+)
 from evaluate_sob_decomposed_confirmation import (  # noqa: E402
     validate_decomposed_manifest,
 )
@@ -215,8 +218,20 @@ class OfficialProviderPanelTests(unittest.TestCase):
         validate_decomposed_manifest(
             {"analysis_stage": "preregistered_decomposed_contrast_confirmation"}
         )
+        validate_decomposed_manifest(
+            {"analysis_stage": "prospective_endpoint_panel"}
+        )
         with self.assertRaises(ValueError):
             validate_decomposed_manifest({"analysis_stage": "unrelated_analysis"})
+
+    def test_runner_completion_uses_successful_keys_not_attempted_positions(
+        self,
+    ) -> None:
+        successes = {"a": {"status": "ok"}, "c": {"status": "ok"}}
+        self.assertEqual(
+            missing_successful_request_keys({"a", "b", "c"}, successes),
+            ["b"],
+        )
 
 
 if __name__ == "__main__":

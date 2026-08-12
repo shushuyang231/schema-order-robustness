@@ -1,0 +1,115 @@
+{
+  "status": "FAIL",
+  "analysis_scope": "post-submission endpoint-panel completion and provenance audit",
+  "contains_response_content": false,
+  "runs": {
+    "sjtu_deepseek_chat": {
+      "manifest": "protocol/sob_sjtu_deepseek_chat_manifest.json",
+      "predictions": "results/api/sob_sjtu_deepseek_chat.jsonl",
+      "predictions_sha256": "0fe7d4df3751d149882c1f8ac641395ac2e15717c150eb08c3db9ba2cdc489f8",
+      "expected_successful_requests": 3000,
+      "raw_line_count": 3005,
+      "successful_line_count": 2999,
+      "unique_successful_request_key_count": 2999,
+      "top_level_error_line_count": 6,
+      "missing_successful_pair_count": 1,
+      "missing_by_condition": {
+        "keywords_reversed__r3": 1
+      },
+      "extra_successful_pair_count": 0,
+      "duplicate_successful_line_count": 0,
+      "top_level_errors_by_class": {
+        "ConnectError": 5,
+        "RemoteProtocolError": 1
+      },
+      "returned_model_counts": {
+        "deepseek-chat": 2999
+      },
+      "system_fingerprint_counts": {
+        "vllm-0.21.0-tp8-ep-d873796e": 2999
+      },
+      "smoke_record_sha256_counts": {
+        "7545b118890a8400adec754ef10734fc6ca5d540622a850715d7a8f9d5ad5cd9": 2999
+      },
+      "provenance_consistent": true,
+      "schema_pass_rate": 0.9883294431477159,
+      "complete": false
+    },
+    "sjtu_deepseek_reasoner": {
+      "manifest": "protocol/sob_sjtu_deepseek_reasoner_manifest.json",
+      "predictions": "results/api/sob_sjtu_deepseek_reasoner.jsonl",
+      "predictions_sha256": "c0effaf5f48e515c65dcb66bb8c3e848286167d3b62030d0fa02223c5e80024c",
+      "expected_successful_requests": 3000,
+      "raw_line_count": 3012,
+      "successful_line_count": 2997,
+      "unique_successful_request_key_count": 2997,
+      "top_level_error_line_count": 15,
+      "missing_successful_pair_count": 3,
+      "missing_by_condition": {
+        "keywords_reversed__r3": 1,
+        "keywords_reversed__r5": 1,
+        "original__r2": 1
+      },
+      "extra_successful_pair_count": 0,
+      "duplicate_successful_line_count": 0,
+      "top_level_errors_by_class": {
+        "ConnectError": 4,
+        "HTTPStatusError": 4,
+        "RemoteProtocolError": 5,
+        "RuntimeError": 2
+      },
+      "returned_model_counts": {
+        "deepseek-reasoner": 2997
+      },
+      "system_fingerprint_counts": {
+        "vllm-0.21.0-tp8-ep-d873796e": 2997
+      },
+      "smoke_record_sha256_counts": {
+        "45f7effad3366cb3b734a9fe570de6bd385747f0a38bc9dc43fe2e50f3cdc6ef": 2997
+      },
+      "provenance_consistent": true,
+      "schema_pass_rate": 0.9973306639973306,
+      "complete": false
+    },
+    "tokenrhythm_deepseek_v4_flash": {
+      "manifest": "protocol/sob_tokenrhythm_deepseek_v4_flash_manifest.json",
+      "predictions": "results/api/sob_tokenrhythm_deepseek_v4_flash.jsonl",
+      "predictions_sha256": "a3122cbede746ab14796e969ed71456a3ab71be938ff72e6af6f1ba5e60a9e2a",
+      "expected_successful_requests": 3000,
+      "raw_line_count": 3000,
+      "successful_line_count": 2993,
+      "unique_successful_request_key_count": 2993,
+      "top_level_error_line_count": 7,
+      "missing_successful_pair_count": 7,
+      "missing_by_condition": {
+        "keywords_reversed__r3": 1,
+        "original__r3": 1,
+        "properties_reversed__r2": 4,
+        "properties_reversed__r5": 1
+      },
+      "extra_successful_pair_count": 0,
+      "duplicate_successful_line_count": 0,
+      "top_level_errors_by_class": {
+        "RemoteProtocolError": 7
+      },
+      "returned_model_counts": {
+        "deepseek-v4-flash": 2993
+      },
+      "system_fingerprint_counts": {
+        "None": 2993
+      },
+      "smoke_record_sha256_counts": {
+        "69245617816e35edb9872b508e3204c8205c260e4cb21eb17b41ace7201d1ea8": 2993
+      },
+      "provenance_consistent": true,
+      "schema_pass_rate": 0.9966588706982961,
+      "complete": false
+    }
+  },
+  "totals": {
+    "expected_successful_requests": 9000,
+    "unique_successful_request_keys": 8989,
+    "missing_successful_pairs": 11,
+    "retained_top_level_error_rows": 28
+  }
+}

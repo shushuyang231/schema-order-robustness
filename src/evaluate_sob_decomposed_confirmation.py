@@ -27,6 +27,7 @@ DECOMPOSED_CONFIRMATION_STAGES = frozenset(
         "prospective_qwen_staged_confirmation_full_200",
         "prospective_qwen_plus_resource_confirmation_full_160",
         "prospective_qwen_plus_json_mode_ablation_100",
+        "prospective_endpoint_panel",
     }
 )
 
@@ -162,20 +163,37 @@ def main() -> int:
         )
 
     raw_rows = load_jsonl(args.predictions)
-    successful_rows = [
+    successful_line_rows = [
         row
         for row in raw_rows
         if row.get("status") == "ok"
         and str(row.get("record_id")) in manifest_record_ids
     ]
+    successful_by_key: dict[str, dict[str, Any]] = {}
+    for row in successful_line_rows:
+        successful_by_key[str(row.get("request_key"))] = row
+    successful_rows = list(successful_by_key.values())
     returned_models = Counter(str(row.get("returned_model")) for row in successful_rows)
+    smoke_hashes = {
+        str(row.get("smoke_record_sha256"))
+        for row in successful_rows
+        if row.get("smoke_record_sha256") is not None
+    }
+    non_null_fingerprints = {
+        str(row.get("system_fingerprint"))
+        for row in successful_rows
+        if row.get("system_fingerprint") is not None
+    }
     response_ids = [str(row["response_id"]) for row in successful_rows if row.get("response_id")]
     schema_pass_rate = statistics.fmean(
         bool(row.get("schema_valid")) for row in successful_rows
     )
     operational_gate = (
         len(successful_rows) == int(manifest["expected_requests"])
+        and len(successful_line_rows) == int(manifest["expected_requests"])
         and len(returned_models) == 1
+        and len(smoke_hashes) == 1
+        and len(non_null_fingerprints) <= 1
         and schema_pass_rate >= 0.95
         and (not response_ids or len(response_ids) == len(set(response_ids)))
     )
@@ -209,13 +227,13 @@ def main() -> int:
         "successful_response_count": len(successful_rows),
         "overall_schema_pass_rate": schema_pass_rate,
         "returned_model_counts": dict(returned_models),
+        "smoke_record_sha256_count": len(smoke_hashes),
+        "non_null_system_fingerprint_count": len(non_null_fingerprints),
         "source_log_audit": {
             "raw_line_count": len(raw_rows),
-            "successful_line_count": sum(row.get("status") == "ok" for row in raw_rows),
+            "successful_line_count": len(successful_line_rows),
             "error_line_count": sum(row.get("status") != "ok" for row in raw_rows),
-            "unique_successful_request_key_count": len(
-                {str(row.get("request_key")) for row in successful_rows}
-            ),
+            "unique_successful_request_key_count": len(successful_by_key),
         },
         "token_usage": token_usage,
         "operational_gate": operational_gate,

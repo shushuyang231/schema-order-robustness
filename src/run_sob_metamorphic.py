@@ -242,6 +242,15 @@ def latest_successes(path: Path) -> dict[str, dict[str, Any]]:
     return successes
 
 
+def missing_successful_request_keys(
+    expected_keys: set[str],
+    successes: dict[str, dict[str, Any]],
+) -> list[str]:
+    """Return frozen request keys that still lack a successful response."""
+
+    return sorted(expected_keys - set(successes))
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--public-input", type=Path, required=True)
@@ -413,7 +422,38 @@ def main() -> int:
 
     if len(jobs) != int(manifest["expected_requests"]):
         raise ValueError("Job count differs from frozen manifest")
+    expected_keys = {job[-1] for job in jobs}
     existing = latest_successes(args.output)
+    initially_remaining = missing_successful_request_keys(expected_keys, existing)
+    print(
+        f"Resume status: {len(expected_keys) - len(initially_remaining)}/"
+        f"{len(expected_keys)} frozen request keys already successful; "
+        f"{len(initially_remaining)} will be attempted.",
+        flush=True,
+    )
+    existing_returned_models = {
+        str(row.get("returned_model"))
+        for row in existing.values()
+        if row.get("returned_model") is not None
+    }
+    if expected_returned_model is not None and existing_returned_models not in (
+        set(),
+        {expected_returned_model},
+    ):
+        raise FatalProvenanceError(
+            "Existing successful rows contain a returned-model identity that "
+            "differs from the passed smoke gate."
+        )
+    existing_fingerprints = {
+        str(row.get("system_fingerprint"))
+        for row in existing.values()
+        if row.get("system_fingerprint") is not None
+    }
+    if len(existing_fingerprints) > 1:
+        raise FatalProvenanceError(
+            "Existing successful rows contain multiple non-null system fingerprints."
+        )
+    expected_fingerprint = next(iter(existing_fingerprints), None)
     client = (
         None
         if args.mock
@@ -436,10 +476,6 @@ def main() -> int:
         ) in enumerate(jobs, start=1):
             fatal_error: FatalRunError | None = None
             if key in existing:
-                print(
-                    f"[{index}/{len(jobs)}] SKIP "
-                    f"{row['record_id'][:8]} {condition_name}"
-                )
                 continue
             started = time.perf_counter()
             try:
@@ -463,6 +499,16 @@ def main() -> int:
                         "Returned model differs from the passed smoke gate: "
                         f"{result['returned_model']!r} != "
                         f"{expected_returned_model!r}"
+                    )
+                if (
+                    expected_fingerprint is not None
+                    and result["system_fingerprint"] is not None
+                    and str(result["system_fingerprint"]) != expected_fingerprint
+                ):
+                    raise FatalProvenanceError(
+                        "System fingerprint differs from the existing successful "
+                        f"deployment rows: {result['system_fingerprint']!r} != "
+                        f"{expected_fingerprint!r}"
                     )
                 parsed, parse_status = parse_json_object(result["raw_response"])
                 schema = json.loads(row["schema_variants"][schema_variant])
@@ -566,6 +612,22 @@ def main() -> int:
     finally:
         if client is not None:
             client.close()
+    final_successes = latest_successes(args.output)
+    remaining = missing_successful_request_keys(expected_keys, final_successes)
+    if remaining:
+        completed = len(expected_keys) - len(remaining)
+        print(
+            f"Run incomplete: {completed}/{len(expected_keys)} frozen request "
+            f"keys have successful responses; {len(remaining)} remain. "
+            "Rerun the identical command to retry only those keys.",
+            file=sys.stderr,
+        )
+        return 1
+    print(
+        f"Run complete: {len(expected_keys)}/{len(expected_keys)} frozen request "
+        "keys have successful responses.",
+        flush=True,
+    )
     return 0
 
 

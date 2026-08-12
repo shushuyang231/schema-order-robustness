@@ -42,3 +42,19 @@ The original official Qwen/DeepSeek evidence remains the main scientific core.
 No channel is counted as an independent model sample, no NPU-versus-GPU causal
 claim is made, and no panel-level “at least one model confirms” claim is made
 without correction across the complete panel family.
+
+## Post-run completion audit (2026-08-12)
+
+The first traversal of each active 3,000-request log reached the final planned
+position, but the runner originally returned success even when isolated
+transport failures remained. An aggregate audit found 2,999 unique successful
+request keys for `deepseek-chat`, 2,997 for `deepseek-reasoner`, and 2,993 for
+the separately labelled TokenRhythm deployment. Thus 11 of 9,000 frozen keys
+still lacked a successful response. All error rows are retained.
+
+This is an execution-status bug, not an analysis change. The runner has been
+amended to return a nonzero exit code unless every frozen request key has a
+successful row. Identical-key continuation may retry only the 11 unsuccessful
+keys; successful keys, records, conditions, prompts, thresholds, and analysis
+rules remain frozen. No inferential result is computed until the aggregate
+completion audit passes.

@@ -1,6 +1,6 @@
 # Project handoff — JSON Schema instruction-artifact robustness paper
 
-Last updated: 2026-08-06
+Last updated: 2026-08-12
 
 ## Current objective
 
@@ -76,6 +76,29 @@ unique `required` arrays, preserving all other arrays. All stored
 `original`/`properties_reversed`/`keywords_reversed` triples collapse for all
 200 decomposed records. This is a conservative intervention, not a general JSON
 Schema equivalence checker.
+
+## Post-submission endpoint expansion
+
+Three separately labelled deployments traversed their frozen 3,000-request
+job lists: SJTU Zhiyuan-1 `deepseek-chat`, SJTU Zhiyuan-1
+`deepseek-reasoner`, and TokenRhythm `deepseek-v4-flash`. An aggregate
+completion audit found 8,989/9,000 unique successful request keys. The logs
+retain 28 top-level transport-error rows; 11 frozen keys remain to be retried
+without changing records, prompts, request parameters, or analysis rules.
+
+The runner previously returned success after traversing all job positions even
+when isolated errors remained. It now returns nonzero unless every frozen key
+has a successful row. `src/audit_endpoint_panel_runs.py` is the offline
+completion/provenance gate. No endpoint-panel distributional effect has been
+computed yet.
+
+The analysis and reporting boundary is frozen in
+`protocol/35_endpoint_panel_completion_and_analysis_amendment.md`: the original
+17,900 responses remain the scientific core; the three new runs are
+supplemental deployment evidence, are not pooled as independent model samples,
+and cannot support a hardware-causal claim. Deployment-local two-contrast Holm
+decisions are retained, while any panel-level claim uses Holm across all six
+active deployment-by-contrast tests.
 
 ## Completed paper package
 
@@ -157,8 +180,25 @@ identifying information.
 
 ## Exact next local command
 
-Do not call another model API. Review the completed submission checklist:
+Complete only the 11 missing successful request keys. In one fresh PowerShell
+window, run the SJTU command and enter the SJTU key once. It handles both SJTU
+interfaces in that same window and prints only the missing requests, not the
+5,996 already-successful keys:
 
 ```powershell
-Get-Content -Raw paper\emse\submission_checklist.md
+& ".\scripts\finish_sjtu_deepseek_runs.ps1"
+```
+
+Then, in one fresh PowerShell window, run the TokenRhythm command and enter its
+key once:
+
+```powershell
+& ".\scripts\run_tokenrhythm_deepseek_v4_flash.ps1"
+```
+
+After both commands report complete, do not call another API. Run the frozen
+offline analysis with:
+
+```powershell
+& ".\scripts\evaluate_endpoint_panel_offline.ps1"
 ```
